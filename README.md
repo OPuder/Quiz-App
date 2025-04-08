@@ -1,13 +1,17 @@
 # Quiz-App
 
+Diese Angular-basierte Quiz-App zeigt Fragen, ermöglicht Antworten, springt weiter und zeigt am Ende eine Auswertung.  
+Die Hauptkomponente befindet sich unter:
 
-Eine modulare Angular-Quiz-App mit Fragen, Auswertung und Neustart-Funktion.  
-Unten findest du den kompletten Code der `quiz-snipped.component`, die das UI und Verhalten des Quiz steuert.
+```
+C:\Projecte\Quiz-App\src\app\quiz\quiz-snipped
+```
+
+Unten ist der komplette Code der `quiz-snipped.component` mit allen zugehörigen Dateien dokumentiert.
 
 ## 📦 Komponenten-Code
 
 ### TypeScript (Component)
-
 ```ts
 import { Component, OnInit } from '@angular/core';                                             // Import von Component und OnInit aus dem Angular-Core
 import { CommonModule } from '@angular/common';                                                // Import des CommonModule aus Angular für die gemeinsame Verwendung
@@ -59,9 +63,7 @@ export class QuizSnippedComponent implements OnInit {                           
   }
 }
 ```
-
 ### HTML (Template)
-
 ```html
 <!-- Einbindung von Bootstrap -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
@@ -111,9 +113,7 @@ export class QuizSnippedComponent implements OnInit {                           
 </div>
 
 ```
-
 ### CSS (Styles)
-
 ```css
 /* Allgemeine Styles für den Quiz-Container */
 .container {
@@ -144,9 +144,7 @@ export class QuizSnippedComponent implements OnInit {                           
     }
   
 ```
-
 ### TypeScript (Test)
-
 ```ts
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
@@ -173,3 +171,10 @@ describe('QuizSnippedComponent', () => {
 });
 
 ```
+
+
+## 📝 Lizenz
+
+MIT License
+
+**Autor:** [OPuder](https://github.com/OPuder)
