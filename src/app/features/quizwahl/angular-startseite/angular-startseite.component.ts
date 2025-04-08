@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { QuizlogicService } from '../../quiz/services/quizlogic.service';
 
 @Component({
   selector: 'app-angular-startseite',
@@ -10,11 +11,9 @@ import { RouterLink } from '@angular/router';
   styleUrl: './angular-startseite.component.css',
 })
 export class AngularStartseiteComponent {
-  showQuiz: boolean = false;
-  showStartseite: boolean = false;
 
-  toggleQuiz(event: Event) {
-    event.preventDefault();
-    this.showQuiz = !this.showQuiz;
-  }
+  constructor(private QuizlogicService: QuizlogicService) {}
+  toggleQuiz(selectedCase: number) {
+    this.QuizlogicService.toggleQuiz(selectedCase);
+   }
 }
