@@ -1,27 +1,26 @@
-import { QuizlogicService } from '../../features/quiz/services/quizlogic.service';                                  // Import der Service-Klasse
-import { RouterLink, RouterLinkActive } from '@angular/router';                                   // Import der Router-Klassen
-import { CommonModule } from '@angular/common';                                                   // Import des CommonModule
-import { Component } from '@angular/core';                                                        // Import der Komponenten-Klasse
-import { QuizSnippedComponent } from '../../features/quiz/quiz-snipped/quiz-snipped.component';            // Import der QuizSnipped-Komponente
+import { QuizlogicService } from '../../features/quiz/services/quizlogic.service';
+import { RouterLink, RouterLinkActive } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
+import { QuizSnippedComponent } from '../../features/quiz/quiz-snipped/quiz-snipped.component';
 
-@Component({                                                                                      // Deklaration der Startseite-Komponente
-  selector: 'app-startseite',                                                                     // Selector für die Startseite-Komponente
-  standalone: true,                                                                               // Standalone True oder False bestimmt ob sie eine Module und Routing Datei / Pfad braucht
-  templateUrl: './startseite.component.html',                                                     // Pfad zur HTML-Datei für das Template der Startseite
-  styleUrl: './startseite.component.css',                                                         // Pfad zur CSS-Datei für das Styling der Startseite
-  imports: [CommonModule, QuizSnippedComponent]                                                   // Einbindung des CommonModule, RouterLink und der QuizSnippedComponent
+@Component({
+  selector: 'app-startseite',
+  standalone: true,
+  templateUrl: './startseite.component.html',
+  styleUrl: './startseite.component.css',
+  imports: [CommonModule, QuizSnippedComponent],
 })
-export class StartseiteComponent {                                                                // Klasse der Startseite-Komponente 
-title = 'get started';                                                                            // Titel für die Startseite
-startSeite: boolean = true;                                                                       // Variable für die Startseiten-Anzeige
-showQuiz: boolean = false;                                                                        // Variable zum Anzeigen des Quiz
+export class StartseiteComponent {
+  title = 'get started';
+  startSeite: boolean = true;
+  showQuiz: boolean = false;
 
-constructor(private QuizlogicService: QuizlogicService) {}                                        // Konstruktor der Startseite-Komponente
+  constructor(private QuizlogicService: QuizlogicService) {}
 
-// Methode zum Umschalten des Quiz
-toggleQuiz(event: Event, selectedCase: number) {                                                  // Methode zum Umschalten des Quiz
- event.preventDefault();                                                                          // Verhindert das Standardverhalten des Ereignisses
- this.showQuiz = !this.showQuiz;                                                                  // Wechselt den Zustand des Quiz (Anzeigen/Ausblenden)
- this.QuizlogicService.toggleQuiz(selectedCase);                                                  // Ruft die Methode zum Starten des Quiz mit dem ausgewählten Fall auf
-}
+  toggleQuiz(event: Event, selectedCase: number) {
+    event.preventDefault();
+    this.showQuiz = !this.showQuiz;
+    this.QuizlogicService.toggleQuiz(selectedCase);
+  }
 }

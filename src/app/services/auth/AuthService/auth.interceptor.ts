@@ -1,24 +1,24 @@
-import { HttpInterceptorFn } from '@angular/common/http';                                      // Import der HttpInterceptorFn-Klasse
-export const authInterceptor: HttpInterceptorFn = (req, next) => {                             // Interceptor-Funktion, die die Authentifizierungsmethode angibt
-  const jwtToken = getJwtToken();                                                              // Auslesen des JWT Tokens aus dem LocalStorage
-  if (jwtToken) {                                                                              // Prüfen, ob der JWT Token vorhanden ist
-    const clonedReg = req.clone({                                                              // Kopie des Request-Objekts erstellen
-      setHeaders: {                                                                            // Setzen der HTTP-Headers
-        Authorization: `Bearer ${jwtToken}`,                                                   // Setzen des HTTP-Headers mit dem JWT Token
+import { HttpInterceptorFn } from '@angular/common/http';
+export const authInterceptor: HttpInterceptorFn = (req, next) => {
+  const jwtToken = getJwtToken();
+  if (jwtToken) {
+    const clonedReg = req.clone({
+      setHeaders: {
+        Authorization: `Bearer ${jwtToken}`,
       },
     });
-    return next(clonedReg);                                                                    // Verwendung der next-Methode mit der Kopie des Request-Objekts
+    return next(clonedReg);
   }
-  return next(req);                                                                            // Verwendung der next-Methode mit dem Original-Request-Objekt
+  return next(req);
 };
-function getJwtToken(): string | null {                                                        // Methode, die den JWT Token aus dem LocalStorage liest
-  if (typeof window === 'undefined' || typeof localStorage === 'undefined') {                  // Prüfen, ob der LocalStorage verfügbar ist
-    return null;                                                                               // Wenn der LocalStorage nicht verfügbar ist, wird null zurückgeliefert
+function getJwtToken(): string | null {
+  if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
+    return null;
   }
-  const tokens: any = localStorage.getItem('JWT_TOKEN');                                       // Auslesen des JWT Tokens aus dem LocalStorage
-  if (!tokens) {                                                                               // Prüfen, ob der LocalStorage verfügbar ist
-    return null;                                                                               // Wenn der LocalStorage nicht verfügbar ist, wird null zurückgeliefert
+  const tokens: any = localStorage.getItem('JWT_TOKEN');
+  if (!tokens) {
+    return null;
   }
-  const token = JSON.parse(tokens).access_token;                                               // Parsen des JWT Tokens
-  return token;                                                                                // Ausgabe des JWT Tokens
-};
+  const token = JSON.parse(tokens).access_token;
+  return token;
+}
