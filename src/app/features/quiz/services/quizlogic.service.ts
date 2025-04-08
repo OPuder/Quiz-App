@@ -2,108 +2,77 @@ import { Injectable } from '@angular/core';
 import { TranslationService } from '../../../services/translation/translation-service.service';
 import { map } from 'rxjs/operators';
 import { Fragen } from './../../../../app/features/quiz/models/fragen';
-import { testFragen } from '../../../../assets/fragenSammlung/TestFragen';
-import { jMidd } from '../../../../assets/fragenSammlung/JavaScriptMittel';
-import { jEasy } from '../../../../assets/fragenSammlung/JavaScriptLeicht';
-import { jHard } from '../../../../assets/fragenSammlung/JavaScriptSchwer';
-import { jZufall } from '../../../../assets/fragenSammlung/JavaScriptZufall';
-import { tEasy } from '../../../../assets/fragenSammlung/TypeScriptLeicht';
-import { tMidd } from '../../../../assets/fragenSammlung/TypeScriptMittel';
-import { tHard } from '../../../../assets/fragenSammlung/TypeScriptSchwer';
-import { tZufall } from '../../../../assets/fragenSammlung/TypeScriptZufall';
-import { aEasy } from '../../../../assets/fragenSammlung/AngularLeicht';
-import { aMidd } from '../../../../assets/fragenSammlung/AngularMittel';
-import { aHard } from '../../../../assets/fragenSammlung/AngularSchwer';
-import { aZufall } from '../../../../assets/fragenSammlung/AngularZufall';
+import {
+  testFragen, jEasy, jMidd, jHard, jZufall,
+  tEasy, tMidd, tHard, tZufall,
+  aEasy, aMidd, aHard, aZufall
+} from '../../../shared/data/fragenSammlung';
 
 @Injectable({
   providedIn: 'root',
 })
 export class QuizlogicService {
-  zufälligeFragen15: Fragen[] = [];
+  fragen: Fragen[] = [];
   zufallsFragen: Fragen[] = [];
-  Fragen: Fragen[] = [];
   unbeantworteteFragen: Fragen[] = [];
-  quizAbgeschlossen: boolean = false;
-  skipRunde: boolean = false;
-  selectedCase: number = 0;
-  punktzahl: number = 0;
-  aktuelleFrageIndex: number = 0;
-  skipFragenIndex: number = 0;
-  antwortIndex: number = 0;
   aktuelleAntwort: string[] = [];
-  skipAntwort: string[] = [];
   aktuelleFrage: string = '';
+  skipAntwort: string[] = [];
   skipFrage: string = '';
+
+  punktzahl = 0;
+  aktuelleFrageIndex = 0;
+  skipFragenIndex = 0;
+  antwortIndex = 0;
+  quizAbgeschlossen = false;
+  skipRunde = false;
 
   constructor(private translationService: TranslationService) {}
 
-  toggleQuiz(selectedCase: number) {
-    let selectedArray: Fragen[];
+toggleQuiz(selectedCase: number) {
+    let fragenSet: Fragen[] = [];
 
-    switch (selectedCase) {
-      case 15:
-        this.translationService
-          .getTranslation('qSnipped')
-          .pipe(
-            map((fragen: Fragen[]) => {
-              selectedArray = fragen ?? [];
-              const zufallsFragen = [...selectedArray];
-              this.zufallsFragen = zufallsFragen;
-            })
-          )
-          .subscribe(
-            () => {},
-            (error) =>
-              console.error('Fehler beim Laden der Übersetzungen:', error)
-          );
-        break;
-      case 0:
-        selectedArray = testFragen;
-        break;
-      case 1:
-        selectedArray = jEasy;
-        break;
-      case 2:
-        selectedArray = jMidd;
-        break;
-      case 3:
-        selectedArray = jHard;
-        break;
-      case 4:
-        selectedArray = jZufall;
-        break;
-      case 5:
-        selectedArray = tEasy;
-        break;
-      case 6:
-        selectedArray = tMidd;
-        break;
-      case 7:
-        selectedArray = tHard;
-        break;
-      case 8:
-        selectedArray = tZufall;
-        break;
-      case 9:
-        selectedArray = aEasy;
-        break;
-      case 10:
-        selectedArray = aMidd;
-        break;
-      case 11:
-        selectedArray = aHard;
-        break;
-      case 12:
-        selectedArray = aZufall;
-        break;
-      default:
-        throw new Error('Ungültiger Fall ausgewählt');
+    if (selectedCase === 15) {
+      this.translationService.getTranslation('qSnipped')
+        .pipe(map((fragen: Fragen[]) => fragen ?? []))
+        .subscribe({
+          next: (fragen) => {
+            this.zufallsFragen = [...fragen];
+            this.prepareQuiz();
+          },
+          error: (err) => console.error('Fehler beim Laden der Übersetzungen:', err)
+        });
+      return;
     }
 
+    fragenSet = this.getFragenSetByCase(selectedCase);
+    this.zufallsFragen = [...fragenSet];
+    this.prepareQuiz();
+  }
+
+  private getFragenSetByCase(selectedCase: number): Fragen[] {
+    switch (selectedCase) {
+      case 0: return testFragen;
+      case 1: return jEasy;
+      case 2: return jMidd;
+      case 3: return jHard;
+      case 4: return jZufall;
+      case 5: return tEasy;
+      case 6: return tMidd;
+      case 7: return tHard;
+      case 8: return tZufall;
+      case 9: return aEasy;
+      case 10: return aMidd;
+      case 11: return aHard;
+      case 12: return aZufall;
+      default: throw new Error('Ungültiger Fall ausgewählt');
+    }
+  }
+
+  private prepareQuiz() {
     this.zufallsFragen.sort(() => Math.random() - 0.5);
-    const zufälligeFragen15 = this.zufallsFragen.slice(0, 15);
-    this.Fragen = zufälligeFragen15;
+    this.fragen = this.zufallsFragen.slice(0, 15);
+    this.initializeQuiz();
   }
 
   initializeQuiz() {
@@ -117,109 +86,67 @@ export class QuizlogicService {
   }
 
   ladeFrage() {
-    try {
-      if (this.Fragen.length > this.aktuelleFrageIndex) {
-        this.aktuelleFrage = this.Fragen[this.aktuelleFrageIndex].frage;
-        this.aktuelleAntwort = this.Fragen[this.aktuelleFrageIndex].antwort;
-      }
-      if (this.aktuelleFrageIndex === this.Fragen.length) {
-        if (this.unbeantworteteFragen.length === this.skipFragenIndex) {
-          this.quizAbgeschlossen = true;
-        } else {
-          this.skipRunde = true;
-          this.skipFragen();
-        }
-      }
-    } catch (error) {
-      console.error('Fehler beim Laden der Fragen:', this.Fragen, error);
+    if (this.fragen.length > this.aktuelleFrageIndex) {
+      const frage = this.fragen[this.aktuelleFrageIndex];
+      this.aktuelleFrage = frage.frage;
+      this.aktuelleAntwort = frage.antwort;
+    } else if (this.aktuelleFrageIndex === this.fragen.length) {
+      this.skipRunde = true;
+      this.skipFragenIndex < this.unbeantworteteFragen.length
+        ? this.skipFragen()
+        : this.quizAbgeschlossen = true;
     }
   }
 
-  fragenNummer(): number | string {
-    try {
-      const gesamtanzahlFragen = this.Fragen.length;
-      const aktuelleFragennummer = this.aktuelleFrageIndex + 1;
-      if (aktuelleFragennummer <= gesamtanzahlFragen) {
-        return 'Frage:' + aktuelleFragennummer;
-      } else {
-        return 'Übersprungende Fragen';
-      }
-    } catch (error) {
-      console.error('Ungültige aktuelle Fragennummer:');
-      return -1;
-    }
-  }
+  pruefeAntwort(index: number) {
+    this.antwortIndex = index;
+    const istSkip = this.skipRunde;
+    const frage = istSkip
+      ? this.unbeantworteteFragen[this.skipFragenIndex]
+      : this.fragen[this.aktuelleFrageIndex];
 
-  pruefeAntwort(antwortIndex: number) {
-    try {
-      this.antwortIndex = antwortIndex;
-      if (this.Fragen.length > this.aktuelleFrageIndex) {
-        if (
-          this.Fragen[this.aktuelleFrageIndex].correctAntwort === antwortIndex
-        ) {
-          this.punktzahl++;
-        }
-        this.aktuelleFrageIndex++;
-        this.ladeFrage();
-      } else {
-        if (
-          this.unbeantworteteFragen[this.skipFragenIndex].correctAntwort ===
-          antwortIndex
-        ) {
-          this.punktzahl++;
-        }
-        this.skipFragenIndex++;
-        this.skipFragen();
-      }
-    } catch (error) {
-      console.error('Fehler bei der Auswahl der Antworten', error);
-    }
+    if (frage.correctAntwort === index) this.punktzahl++;
+
+    istSkip ? this.skipFragenIndex++ : this.aktuelleFrageIndex++;
+    istSkip ? this.skipFragen() : this.ladeFrage();
   }
 
   nextFrage() {
-    try {
-      if (!this.Fragen[this.aktuelleFrageIndex].uebersprungen) {
-        this.Fragen[this.aktuelleFrageIndex].uebersprungen = true;
-        this.unbeantworteteFragen.push(this.Fragen[this.aktuelleFrageIndex]);
-      }
-      if (this.aktuelleFrageIndex < this.Fragen.length) {
-        this.aktuelleFrageIndex++;
-        this.ladeFrage();
-      }
-    } catch (error) {
-      console.error('Fehler beim Anzeigen der nächsten Frage:', error);
+    const frage = this.fragen[this.aktuelleFrageIndex];
+    if (!frage.uebersprungen) {
+      frage.uebersprungen = true;
+      this.unbeantworteteFragen.push(frage);
     }
+    this.aktuelleFrageIndex++;
+    this.ladeFrage();
   }
 
   skipFragen() {
-    try {
-      if (this.skipFragenIndex === this.unbeantworteteFragen.length) {
-        this.quizAbgeschlossen = true;
-      }
-      if (this.unbeantworteteFragen.length > this.skipFragenIndex) {
-        this.skipFrage = this.unbeantworteteFragen[this.skipFragenIndex].frage;
-        this.skipAntwort =
-          this.unbeantworteteFragen[this.skipFragenIndex].antwort;
-        this.aktuelleFrage = this.skipFrage;
-        this.aktuelleAntwort = this.skipAntwort;
-        this.skipRunde = true;
-      }
-    } catch (error) {
-      console.error('Fehler beim Anzeigen der übersprungenen Fragen:', error);
+    if (this.skipFragenIndex >= this.unbeantworteteFragen.length) {
+      this.quizAbgeschlossen = true;
+      return;
     }
+    const frage = this.unbeantworteteFragen[this.skipFragenIndex];
+    this.skipFrage = frage.frage;
+    this.skipAntwort = frage.antwort;
+    this.aktuelleFrage = this.skipFrage;
+    this.aktuelleAntwort = this.skipAntwort;
+  }
+
+  fragenNummer(): number | string {
+    const num = this.aktuelleFrageIndex + 1;
+    return num <= this.fragen.length ? `Frage:${num}` : 'Übersprungene Fragen';
   }
 
   neustart() {
-    this.Fragen.forEach((frage: Fragen) => {
-      frage.uebersprungen = false;
-    });
+    this.fragen.forEach(f => f.uebersprungen = false);
     this.skipRunde = false;
     this.quizAbgeschlossen = false;
     this.unbeantworteteFragen = [];
     this.aktuelleFrageIndex = 0;
     this.skipFragenIndex = 0;
     this.punktzahl = 0;
-    this.Fragen = this.Fragen.sort(() => Math.random() - 0.5);
+    this.fragen = [...this.fragen].sort(() => Math.random() - 0.5);
     this.ladeFrage();
   }
 }
