@@ -1,15 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { QuizComponent } from '../../../quiz/quiz/quiz.component';
+import { QuizComponent } from '../../../features/quiz/quiz/quiz.component';
 import { RouterLink } from '@angular/router';
-import { QuizlogicService } from '../../../quiz/quizlogic.service';
+import { QuizlogicService } from '../../quiz/services/quizlogic.service';
 
 
 
 @Component({
   selector: 'app-java-script-startseite',
   standalone: true,
-  imports: [CommonModule, QuizComponent,RouterLink ],
+  imports: [CommonModule, RouterLink],
   templateUrl: './java-script-startseite.component.html',
   styleUrl: './java-script-startseite.component.css'
 })

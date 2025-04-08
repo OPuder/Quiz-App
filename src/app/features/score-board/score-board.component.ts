@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { AuthService } from '../../login/AuthService/auth.service';
+import { AuthService } from '../../services/auth/AuthService/auth.service';
 
 @Component({
   selector: 'app-score-board',
