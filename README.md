@@ -1,27 +1,99 @@
-# Quizapp
+# Quiz-App
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.3.
+Eine einfache, modulare **Quiz-App** mit Angular – zur Übung, für Lernplattformen oder als Mini-Spiel.  
+Dieses Projekt wurde im Rahmen einer Umschulung entwickelt.
 
-## Development server
+## ✨ Features
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+- Fragen mit mehreren Antwortmöglichkeiten
+- Fortschrittsanzeige (Fragenummer)
+- Punktestand am Ende des Quiz
+- Möglichkeit zum Überspringen von Fragen
+- Neustart-Funktion
+- Saubere UI mit Bootstrap
 
-## Code scaffolding
+## 🚀 Installation
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+```bash
+# Projekt klonen
+git clone https://github.com/OPuder/Quiz-App.git
+cd Quiz-App
 
-## Build
+# Abhängigkeiten installieren
+npm install
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+# Entwicklungsserver starten
+ng serve
+```
 
-## Running unit tests
+App läuft dann auf `http://localhost:4200`.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+---
 
-## Running end-to-end tests
+## 🧩 Quiz-Komponente
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+Die zentrale Darstellung des Quiz findet in der `quiz-snipped.component` statt. Hier wird gesteuert, wie Fragen angezeigt, beantwortet und übersprungen werden können. Bei Quizende wird die Punktzahl präsentiert.
 
-## Further help
+### 💡 Beispiel-Layout (HTML-Auszug)
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+```html
+<div class="card-header">
+  <div><h2>{{ fragenNummer() }}</h2></div>
+  <div><p>{{ aktuelleFrage() }}</p></div>
+</div>
+<div class="card-body">
+  <div *ngFor="let antwort of aktuelleAntwort(); let i = index">
+    <button (click)="pruefeAntwort(i)">{{ antwort }}</button>
+  </div>
+</div>
+<div class="card-footer">
+  <button (click)="nextFrage()" [disabled]="skipRunde">Nächste Frage</button>
+</div>
+```
+
+Bei Quiz-Ende:
+
+```html
+<div *ngIf="quizAbgeschlossen()">
+  <h1>Geschafft!!!</h1>
+  <p>Du hast {{ punktzahl() }} von 4 Fragen richtig beantwortet.</p>
+  <button (click)="neustart()">RESTART</button>
+</div>
+```
+
+### 🎨 Styling (CSS-Auszug)
+
+```css
+.container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 1px;
+  margin-right: 20px;
+  flex: 0 0 200px;
+}
+
+.card-header, .card-footer {
+  background-color: #f8f9fa;
+  text-align: center;
+  padding: 1.5rem;
+}
+```
+
+---
+
+## 🔧 Technologien
+
+- [Angular](https://angular.io/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Bootstrap 5](https://getbootstrap.com/)
+- HTML, CSS
+
+## 📝 Lizenz
+
+MIT License
+
+---
+
+**Autor:** [OPuder](https://github.com/OPuder)  
+Feedback, Ideen & Pull Requests sind jederzeit willkommen!
