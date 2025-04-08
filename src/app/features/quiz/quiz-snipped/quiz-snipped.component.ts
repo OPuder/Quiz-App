@@ -1,49 +1,58 @@
-import { Component, OnInit } from '@angular/core';                                             // Import von Component und OnInit aus dem Angular-Core
-import { CommonModule } from '@angular/common';                                                // Import des CommonModule aus Angular für die gemeinsame Verwendung
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { QuizlogicService } from '../../../features/quiz/services/quizlogic.service';
 
 @Component({
-  selector: 'app-quiz-Snipped',                                                                // Der Selctor Name zum Aufrufen der Komponente 
-  standalone: true,                                                                            // Standalone True oder False bestimmt ob sie eine Module und Routing Datei / Pfad brauch
-  imports: [CommonModule,],                                                                    // Einbindung des CommonModule
-  templateUrl: './quiz-snipped.component.html',                                                // Pfad zur HTML-Datei für das Template
-  styleUrl: './quiz-snipped.component.css'                                                     // Pfad zur CSS-Datei für das Styling
+  selector: 'app-quiz-Snipped',
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: './quiz-snipped.component.html',
+  styleUrl: './quiz-snipped.component.css'
 })
-export class QuizSnippedComponent implements OnInit {                                          // Implementierung des OnInit-Interfaces und Export der Komponentenklasse zum Importieren in anderen Komponenten 
-  constructor(private quizlogicService: QuizlogicService) {                                    // Konstruktor der QuizComponent-Klasse, der den FragenArrayService als Abhängigkeit injiziert
+export class QuizSnippedComponent implements OnInit {
+  constructor(private quizlogicService: QuizlogicService) {}
+
+  get skipRunde(): boolean {
+    return this.quizlogicService.skipRunde;
   }
-  // Getter-Funktion, um den aktuellen Wert von skipRunde aus dem Service abzurufen
-  get skipRunde(): boolean {                                                                   // Getter-Funktion, um den aktuellen Wert von skipRunde aus dem Service abzurufen (Ruft jedesmal den Status ab wenn skipRunde im Service aufgerufen wird)
-    return this.quizlogicService.skipRunde;                                                    // Return den Aktuellen Wert von skipRunde aus dem Service
+
+  ngOnInit(): void {
+    this.quizlogicService.initializeQuiz();
   }
-  ngOnInit(): void {                                                                           // Lifecycle-Funktion, die beim Laden der Komponente aufgerufen wird
-    this.quizlogicService.initializeQuiz();                                                    // Initialisierung des Quiz beim Laden der Komponente
+
+  punktzahl() {
+    return this.quizlogicService.punktzahl;
   }
-  punktzahl() {                                                                                // Methode um den aktuellen Punktzahl aus dem Service abzurufen
-    return this.quizlogicService.punktzahl;                                                    // Return den Aktuellen Wert von punktzahl aus dem Service
+
+  fragenNummer(): number | string {
+    return this.quizlogicService.fragenNummer();
   }
-  fragenNummer(): number | string {                                                            // Methode zum Abrufen der aktuellen Fragennummer
-    return this.quizlogicService.fragenNummer();                                               // Return den Aktuellen Wert von fragenNummer aus dem Service
+
+  aktuelleFrage() {
+    return this.quizlogicService.aktuelleFrage;
   }
-  aktuelleFrage() {                                                                            // Methode zum Abrufen der aktuellen Frage
-    return this.quizlogicService.aktuelleFrage;                                                // Return den Aktuellen Wert von aktuelleFrage aus dem Service
+
+  aktuelleAntwort() {
+    return this.quizlogicService.aktuelleAntwort;
   }
-  aktuelleAntwort() {                                                                          // Methode zum Abrufen der aktuellen Antwort der aktuellen Frage
-    return this.quizlogicService.aktuelleAntwort;                                              // Return den Aktuellen Wert von aktuelleAntwort aus dem Service
+
+  pruefeAntwort(i: number) {
+    this.quizlogicService.pruefeAntwort(i);
   }
-  pruefeAntwort(i: number) {                                                                   // Methode zum Prüfen der Antwort 
-    this.quizlogicService.pruefeAntwort(i);                                                    // Aufruf der Methode pruefeAntwort aus dem Service
+
+  nextFrage() {
+    this.quizlogicService.nextFrage();
   }
-  nextFrage() {                                                                                // Methode zum Wechseln zur nächsten Frage
-    this.quizlogicService.nextFrage();                                                         // Aufruf der Methode nextFrage aus dem Service
+
+  neustart() {
+    this.quizlogicService.neustart();
   }
-  neustart() {                                                                                 // Methode zum Neustarten des Quizzes
-    this.quizlogicService.neustart();                                                          // Aufruf der Methode neustart aus dem Service
+
+  ladeFrage() {
+    return this.quizlogicService.ladeFrage();
   }
-  ladeFrage() {                                                                                // Methode zum Laden der naechsten Frage
-    return this.quizlogicService.ladeFrage();                                                  // Aufruf der Methode ladeFrage aus dem Service
-  }
-  quizAbgeschlossen() {                                                                        // Methode zum Abrufen ob das Quiz abgeschlossen ist
-    return this.quizlogicService.quizAbgeschlossen;                                            // Aufruf der Methode quizAbgeschlossen aus dem Service
+
+  quizAbgeschlossen() {
+    return this.quizlogicService.quizAbgeschlossen;
   }
 }
