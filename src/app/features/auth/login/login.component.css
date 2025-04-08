@@ -53,3 +53,10 @@ html, body {
     background-color: #0056b3;
   }
   
+  .error-message {
+    color: red;
+    background-color: #f8d7da;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+  }

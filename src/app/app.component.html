@@ -3,25 +3,30 @@
 
 <main>
 <div class="Quiz" >
-  <h1 i18n >Willkommen auf einer Quizseite zum Lernen von JavaScript, TypeScript und Angular</h1>
-  <nav>
-    <ul id="menu">
-        <li><a  i18n routerLink="/app-startseite">Home</a></li>
-        <li><a  i18n routerLink="/app-wissenwertes">Wissenwertes</a></li>
-        <li class="dropdown">
-          <a  i18n class="dropdown-toggle" routerLink="/app-quizauswahl">Quiz Auswahl</a>
-          <ul class="dropdown-menu">
-              <li><a routerLink="/app-java-script-startseite" >JavaScript</a></li>
-              <li><a routerLink="/app-type-script-startseite">TypeScript</a></li>
-              <li><a routerLink="/app-angular-startseite">Angular</a></li>
-          </ul>
+  <h1 i18n class="gradient-title" >Willkommen auf einer Quizseite zum Lernen von JavaScript, TypeScript und Angular</h1>
+  <nav class="custom-navbar">
+    <div class="nav-left">
+      <a routerLink="/app-startseite">🏠 Home</a>
+      <a routerLink="/app-wissenwertes">📘 Wissen</a>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="quizDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          🧩 Quiz Auswahl
+        </a>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" routerLink="/app-java-script-startseite">📜 JavaScript</a></li>
+          <li><a class="dropdown-item" routerLink="/app-type-script-startseite">⚙️ TypeScript</a></li>
+          <li><a class="dropdown-item" routerLink="/app-angular-startseite">🅰️ Angular</a></li>
+        </ul>
       </li>
-      <li><a routerLink="/app-login">Login</a></li>
-      <li><a routerLink="/app-score-board">Scoreboard</a></li>
-      <li><a  i18n routerLink="/app-kontakt">Kontakt</a></li>
-      <li><button (click)="logout()">Logout</button></li>
-    </ul>
-</nav>
+      <a *ngIf="authService.isAdmin()" routerLink="/app-admin">🛠️ Admin</a>
+      <a *ngIf="authService.isLoggedIn()" routerLink="/app-score-board">🏆 Scoreboard</a>
+    </div>
+  
+    <div class="nav-right">
+      <a *ngIf="!authService.isLoggedIn()" routerLink="/app-login">🔐 Login</a>
+      <button *ngIf="authService.isLoggedIn()" (click)="logout()">🚪 Logout</button>
+    </div>
+  </nav>
 </div>
 </main>
 <router-outlet></router-outlet>
