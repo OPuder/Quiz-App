@@ -75,6 +75,20 @@ export class AuthService {
       );
   }
 
+  register(user: { vorname: string, nachname: string, spitzname: string, email: string, password: string, role: 'admin' | 'user' | 'banned', securityQuestion: string, securityAnswer: string }): Observable<any> {
+    return this.http
+      .post('http://localhost:5000/api/register', user)
+      .pipe(
+        tap((response) => {
+          console.log('Benutzer erfolgreich registriert:', response);
+        }),
+        catchError((error) => {
+          console.error('Fehler bei der Registrierung:', error);
+          return throwError(() => new Error('Registrierung fehlgeschlagen.'));
+        })
+      );
+  }
+  
   // Nach erfolgreichem Login wird der Benutzer eingeloggt
   private doLoginUser(email: string, tokens: any) {
     this.loggedUser = email;
@@ -96,7 +110,12 @@ export class AuthService {
     this.removeFromLocalStorageSafe(this.JWT_TOKEN);
     this.removeFromLocalStorageSafe(this.REFRESH_TOKEN);
     this.isAuthenticated.next(false);
-    this.Router.navigate(['/login']); // Navigiere zu Login-Seite nach Logout
+  
+    this.Router.navigate(['/login']).then(() => {
+      console.log('Erfolgreich zur Login-Seite weitergeleitet');
+    }).catch((error) => {
+      console.error('Fehler bei der Weiterleitung:', error);
+    });
   }
 
   // Hole das Profil des aktuellen Benutzers

@@ -4,6 +4,7 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { TranslationService } from './services/translation/translation-service.service';
 import { AuthService } from './services/auth/AuthService/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -19,7 +20,8 @@ export class AppComponent implements OnInit {
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private translationService: TranslationService,
-    private http: HttpClient
+    private http: HttpClient,
+    private router: Router
   ) {}
 
   sprache: string = '';
@@ -41,6 +43,12 @@ export class AppComponent implements OnInit {
   }
 
   logout() {
+    console.log('Logout-Klick erkannt');
     this.authService.logout();
+    this.router.navigate(['/login']).then(() => {
+      console.log('Erfolgreich zur Login-Seite weitergeleitet');
+    }).catch((error) => {
+      console.error('Fehler bei der Weiterleitung:', error);
+    });
   }
 }
