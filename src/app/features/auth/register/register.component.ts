@@ -1,9 +1,8 @@
-import { Component, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { UserManagementService } from '../../../services/admin/user-management.service';
-import { User } from '../../../shared/models/user.model';
+import { AuthService } from '../../../services/auth/AuthService/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -23,31 +22,43 @@ export class RegisterComponent {
   securityAnswer: string = '';
   errorMessage: string = '';
 
-  private userManagementService = inject(UserManagementService);
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private authService: AuthService) {}
 
   // Registrierungsmethode
   register(event: Event): void {
     event.preventDefault();
-
+  
     // Überprüfen, ob die Passwörter übereinstimmen
     if (this.password !== this.confirmPassword) {
       this.errorMessage = 'Die Passwörter stimmen nicht überein.';
       return;
     }
-
+  
     // Validierung der Felder
     if (!this.vorname || !this.nachname || !this.spitzname || !this.email || !this.password || !this.securityQuestion || !this.securityAnswer) {
       this.errorMessage = 'Bitte füllen Sie alle Felder aus.';
       return;
     }
-
-    if (!this.userManagementService.registerUser(this.email, this.password)) {
-      this.errorMessage = 'Benutzer mit dieser E-Mail-Adresse existiert bereits.';
-      return;
-    }
-    // Weiterleitung zur Login-Seite nach erfolgreicher Registrierung
-    this.router.navigate(['/app-login']);
+  
+    this.authService.register({
+      vorname: this.vorname,
+      nachname: this.nachname,
+      spitzname: this.spitzname,
+      email: this.email,
+      password: this.password,
+      role: 'user',
+      securityQuestion: this.securityQuestion,
+      securityAnswer: this.securityAnswer
+    }).subscribe({
+      next: (response) => {
+        console.log('Erfolgreich registriert', response);
+        this.router.navigate(['/app-login']);
+      },
+      error: (err) => {
+        console.error('Fehler bei der Registrierung:', err);
+        this.errorMessage = err.error?.message || 'Fehler bei der Registrierung, bitte versuche es später noch einmal.';
+      }
+    });
   }
 }

@@ -66,7 +66,8 @@ export class AuthService {
     );
   }
 
-  register(user: {
+  // API-Aufruf zur Registrierung
+  register(user: { 
     vorname: string;
     nachname: string;
     spitzname: string;
@@ -79,6 +80,8 @@ export class AuthService {
     return this.http.post('http://localhost:5000/api/register', user).pipe(
       tap((response) => {
         console.log('Benutzer erfolgreich registriert:', response);
+        // Erfolgreiche Registrierung: Weiterleitung zur Login-Seite
+        this.Router.navigate(['/app-login']);
       }),
       catchError((error) => {
         console.error('Fehler bei der Registrierung:', error);
@@ -86,7 +89,7 @@ export class AuthService {
       })
     );
   }
-
+  
   // Nach erfolgreichem Login wird der Benutzer eingeloggt
   private doLoginUser(email: string, tokens: any) {
     this.loggedUser = email;
