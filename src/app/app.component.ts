@@ -45,10 +45,5 @@ export class AppComponent implements OnInit {
   logout() {
     console.log('Logout-Klick erkannt');
     this.authService.logout();
-    this.router.navigate(['/login']).then(() => {
-      console.log('Erfolgreich zur Login-Seite weitergeleitet');
-    }).catch((error) => {
-      console.error('Fehler bei der Weiterleitung:', error);
-    });
   }
 }

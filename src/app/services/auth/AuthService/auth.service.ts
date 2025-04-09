@@ -5,6 +5,8 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { jwtDecode } from 'jwt-decode';
 import { Router } from '@angular/router';
 import { isPlatformBrowser } from '@angular/common';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 
 @Injectable({
   providedIn: 'root',
@@ -19,7 +21,7 @@ export class AuthService {
   private http = inject(HttpClient);
   private platformId = inject(PLATFORM_ID);
 
-  constructor() {}
+  constructor(private snackBar: MatSnackBar) {}
 
   private isBrowser(): boolean {
     return isPlatformBrowser(this.platformId);
@@ -42,34 +44,21 @@ export class AuthService {
     }
   }
 
-  // Login-Methode
-  login(user: { email: string; password: string }): Observable<any> {
-    return this.loginViaApi(user).pipe(
-      tap((tokens) => {
-        if (tokens) {
-          this.doLoginUser(user.email, tokens);
-        }
-      }),
-      catchError((error) => {
-        console.error('Login fehlgeschlagen:', error);
-        return of(null);
-      })
-    );
-  }
-
   // API-Aufruf für den Login
-  loginViaApi(user: { email: string; password: string }): Observable<any> {
+  login(user: { email: string; password: string }): Observable<any> {
     return this.http
-      .post('http://localhost:5000/api/login', user)  // Stellen Sie sicher, dass dies mit dem richtigen Backend-Endpoint übereinstimmt
+      .post('http://localhost:5000/api/login', user)
       .pipe(
         tap((tokens: any) => {
           if (tokens?.access_token) {
             this.storeJwtToken(tokens);
-            this.storeRefreshToken(tokens.refresh_token);  // Refresh-Token speichern
+            this.storeRefreshToken(tokens.refresh_token);
+            this.doLoginUser(user.email, tokens);
           }
         }),
         catchError((error) => {
           console.error('Fehler beim Login über API:', error);
+          this.snackBar.open('Login fehlgeschlagen. Bitte versuchen Sie es erneut.', 'Schließen', { duration: 3000 });
           return throwError(() => new Error('Login über API fehlgeschlagen.'));
         })
       );
@@ -111,11 +100,7 @@ export class AuthService {
     this.removeFromLocalStorageSafe(this.REFRESH_TOKEN);
     this.isAuthenticated.next(false);
   
-    this.Router.navigate(['/login']).then(() => {
-      console.log('Erfolgreich zur Login-Seite weitergeleitet');
-    }).catch((error) => {
-      console.error('Fehler bei der Weiterleitung:', error);
-    });
+    this.Router.navigate(['/login']);
   }
 
   // Hole das Profil des aktuellen Benutzers
