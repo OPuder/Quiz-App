@@ -11,9 +11,11 @@
       <button type="submit">Login</button>
       <button type="button" (click)="goToRegister()">Registrieren</button>
     </div>
+    <div class="forgot-password">
+      <a routerLink="/app-password-reset">Passwort vergessen?</a>  <!-- Der Link zu "Passwort vergessen" -->
+    </div>
     <div *ngIf="errorMessage" class="error-message">
       {{ errorMessage }}
     </div>
   </form>
 </div>
-

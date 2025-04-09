@@ -57,6 +57,10 @@ export const routes: Routes = [
         loadComponent: () => import('./features/admin/admin.component').then(m => m.AdminComponent),
         canActivate: [authGuard]  
     },
+    {
+        path: 'app-password-reset',
+        loadComponent: () => import('./features/auth/reset-password/reset-password.component').then(m => m.PasswordResetComponent),
+    },
 
 ];
 export class AppRoutingModule {}

@@ -101,4 +101,20 @@
   #login h1 {
     font-size: 1.5em;
   }
+
+  .forgot-password {
+    text-align: center;
+    margin-top: 10px;
+  }
+  
+  .forgot-password a {
+    font-size: 0.9rem;
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  .forgot-password a:hover {
+    text-decoration: underline;
+  }
+  
 }
