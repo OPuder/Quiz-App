@@ -18,12 +18,12 @@
           <li><a class="dropdown-item" routerLink="/app-angular-startseite">🅰️ Angular</a></li>
         </ul>
       </li>
-      <a *ngIf="authService.isAdmin()" routerLink="/app-admin">🛠️ Admin</a>
       <a *ngIf="authService.isLoggedIn()" routerLink="/app-score-board">🏆 Scoreboard</a>
     </div>
   
     <div class="nav-right">
-      <a *ngIf="!authService.isLoggedIn()" routerLink="/app-login">🔐 Login</a>
+      <a *ngIf="authService.isAdmin()" routerLink="/app-admin">🛠️ Admin</a>
+      <a *ngIf="!authService.isLoggedIn()" routerLink="/app-login">🔐 Login/Registrieren</a>
       <button *ngIf="authService.isLoggedIn()" (click)="logout()">🚪 Logout</button>
     </div>
   </nav>

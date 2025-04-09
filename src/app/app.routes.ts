@@ -49,8 +49,14 @@ export const routes: Routes = [
         loadComponent: () => import('./features/auth/login/login.component').then(m => m.LoginComponent),
     },
     {
-        path: 'app-quizauswahl',
-        loadComponent: () => import('./features/quizwahl/quizauswahl/quizauswahl.component').then(m => m.QuizauswahlComponent),
+        path: 'app-register',
+        loadComponent: () => import('./features/auth/register/register.component').then(m => m.RegisterComponent),
     },
+    {
+        path: 'app-admin',
+        loadComponent: () => import('./features/admin/admin.component').then(m => m.AdminComponent),
+        canActivate: [authGuard]  
+    },
+
 ];
 export class AppRoutingModule {}

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserManagementService } from '../../../services/admin/user-management.service';
+import { User } from '../../../shared/models/user.model';
 
 @Component({
   selector: 'app-register',
@@ -12,21 +13,41 @@ import { UserManagementService } from '../../../services/admin/user-management.s
   styleUrl: './register.component.css'
 })
 export class RegisterComponent {
-  private router = inject(Router);
-  private userService = inject(UserManagementService);
-
+  vorname: string = '';
+  nachname: string = '';
+  spitzname: string = '';
   email: string = '';
   password: string = '';
-  message: string = '';
+  confirmPassword: string = '';
+  securityQuestion: string = '';
+  securityAnswer: string = '';
+  errorMessage: string = '';
 
-  register(event: Event) {
+  private userManagementService = inject(UserManagementService);
+
+  constructor(private router: Router) {}
+
+  // Registrierungsmethode
+  register(event: Event): void {
     event.preventDefault();
-    const success = this.userService.registerUser(this.email, this.password);
-    if (success) {
-      this.message = 'Registrierung erfolgreich. Du wirst weitergeleitet.';
-      setTimeout(() => this.router.navigate(['/app-login']), 1500);
-    } else {
-      this.message = 'E-Mail existiert bereits.';
+
+    // Überprüfen, ob die Passwörter übereinstimmen
+    if (this.password !== this.confirmPassword) {
+      this.errorMessage = 'Die Passwörter stimmen nicht überein.';
+      return;
     }
+
+    // Validierung der Felder
+    if (!this.vorname || !this.nachname || !this.spitzname || !this.email || !this.password || !this.securityQuestion || !this.securityAnswer) {
+      this.errorMessage = 'Bitte füllen Sie alle Felder aus.';
+      return;
+    }
+
+    if (!this.userManagementService.registerUser(this.email, this.password)) {
+      this.errorMessage = 'Benutzer mit dieser E-Mail-Adresse existiert bereits.';
+      return;
+    }
+    // Weiterleitung zur Login-Seite nach erfolgreicher Registrierung
+    this.router.navigate(['/app-login']);
   }
 }

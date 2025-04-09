@@ -8,7 +8,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   private readonly JWT_TOKEN = 'JWT_TOKEN';
@@ -46,26 +46,36 @@ export class AuthService {
   private checkApiAvailability(): Observable<boolean> {
     return this.http.get('https://api.escuelajs.co/api/v1/auth/status').pipe(
       catchError(() => of(false)),
-      map(() => true) 
+      map(() => true)
     );
   }
 
   login(user: { email: string; password: string }): Observable<any> {
-    return this.checkApiAvailability().pipe(
-      tap((apiAvailable) => {
-        if (apiAvailable) {
-          this.loginViaApi(user);
-        } else {
-          this.loginLocal(user);
+    return this.loginLocal(user).pipe(
+      tap((localLoginSuccess) => {
+        if (!localLoginSuccess) {
+          this.checkApiAvailability().pipe(
+            tap((apiAvailable) => {
+              if (apiAvailable) {
+                this.loginViaApi(user);
+              } else {
+                console.error('API ist nicht verfügbar');
+              }
+            }),
+            catchError(() => {
+              console.error('Fehler bei der API-Verbindung');
+              return of(null);
+            })
+          ).subscribe();
         }
       }),
-      catchError(() => {
-        this.loginLocal(user);
+      catchError((error) => {
+        console.error('Fehler beim lokalen Login', error);
         return of(null);
       })
     );
   }
-
+  
   loginViaApi(user: { email: string; password: string }): void {
     this.http
       .post('https://api.escuelajs.co/api/v1/auth/login', user)
@@ -81,28 +91,30 @@ export class AuthService {
       .subscribe();
   }
 
-  loginLocal(user: { email: string; password: string }): boolean {
+  loginLocal(user: { email: string; password: string }): Observable<boolean> {
     const foundUser = this.userService.getUserByEmail(user.email);
 
     if (!foundUser) {
+      console.error('Benutzer existiert nicht');
       throw new Error('Benutzer existiert nicht.');
     }
 
     if (foundUser.password !== user.password) {
+      console.error('Falsches Passwort');
       throw new Error('Falsches Passwort.');
     }
 
     if (foundUser.role === 'banned') {
       alert('Zugang verweigert: Dein Konto ist gesperrt.');
       this.logout();
-      return false;
+      return of(false);
     }
 
     this.loggedUser = user.email;
     localStorage.setItem(this.JWT_TOKEN, JSON.stringify(foundUser)); // optional
     this.isAuthenticated.next(true);
 
-    return true;
+    return of(true);
   }
 
   private doLoginUser(email: string, token: any) {
@@ -155,11 +167,7 @@ export class AuthService {
       .post<any>('https://api.escuelajs.co/api/v1/auth/refresh-token', {
         refreshToken,
       })
-      .pipe(
-        tap((tokens: any) =>
-          this.storeJwtToken(JSON.stringify(tokens))
-        )
-      );
+      .pipe(tap((tokens: any) => this.storeJwtToken(JSON.stringify(tokens))));
   }
 
   getUserRole(): 'admin' | 'user' | 'banned' {

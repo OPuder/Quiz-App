@@ -8,10 +8,12 @@
       <input type="password" name="password" placeholder="Password" [(ngModel)]="password" />
     </div>
     <div>
-      <button>Login</button>
+      <button type="submit">Login</button>
+      <button type="button" (click)="goToRegister()">Registrieren</button>
     </div>
     <div *ngIf="errorMessage" class="error-message">
       {{ errorMessage }}
     </div>
   </form>
 </div>
+

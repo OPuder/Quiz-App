@@ -1,0 +1,104 @@
+/* Stellen Sie sicher, dass das Formular im Viewport zentriert wird */
+:host {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; 
+    height: 100%;          
+    margin: 0;
+    padding-top: 50px;  
+  }  
+  
+  #register {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #ccc;
+    padding: 40px 50px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    width: 100%;
+    max-width: 450px; /* Maximale Breite */
+    text-align: center;
+  }
+  
+  #register h1 {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  #register form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  #register div {
+    margin-bottom: 15px;
+  }
+  
+  #register input {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    width: 100%;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+  }
+  
+  #register input:focus {
+    border-color: #007bff; /* Blaue Umrandung beim Fokussieren */
+    outline: none;
+  }
+  
+  #register select {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    width: 100%;
+    font-size: 1rem;
+  }
+  
+  #register button {
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background-color: #007bff;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  #register button:hover {
+    background-color: #0056b3;
+  }
+  
+  .error-message {
+    color: #ff3333;
+    background-color: #f8d7da;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+  }
+  
+  /* Responsives Design für kleinere Bildschirme */
+  @media (max-width: 600px) {
+    #register {
+      padding: 30px 20px;
+      width: 90%;
+    }
+  
+    #register h1 {
+      font-size: 1.6rem;
+    }
+  
+    #register input,
+    #register select,
+    #register button {
+      font-size: 0.9rem;
+    }
+  }
+  

@@ -1,0 +1,13 @@
+<div>
+    <h1>Benutzerverwaltung</h1>
+    
+    <ul>
+      <li *ngFor="let user of userList">
+        {{ user.email }}
+        <button (click)="removeUser(user.email)">Entfernen</button>
+      </li>
+    </ul>
+    
+    <!-- Beispiel für das Hinzufügen eines neuen Benutzers -->
+    <button (click)="addUser({ email: 'neueruser@example.com', role: 'user' })">Benutzer Hinzufügen</button>
+  </div>
