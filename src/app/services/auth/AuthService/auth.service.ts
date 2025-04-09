@@ -7,7 +7,6 @@ import { Router } from '@angular/router';
 import { isPlatformBrowser } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-
 @Injectable({
   providedIn: 'root',
 })
@@ -16,6 +15,7 @@ export class AuthService {
   private readonly REFRESH_TOKEN = 'REFRESH_TOKEN'; // Token für den Refresh
   private loggedUser?: string;
   private isAuthenticated = new BehaviorSubject<boolean>(false);
+  public userRole: 'admin' | 'user' | 'banned' = 'user';
 
   private Router = inject(Router);
   private http = inject(HttpClient);
@@ -46,42 +46,57 @@ export class AuthService {
 
   // API-Aufruf für den Login
   login(user: { email: string; password: string }): Observable<any> {
-    return this.http
-      .post('http://localhost:5000/api/login', user)
-      .pipe(
-        tap((tokens: any) => {
-          if (tokens?.access_token) {
-            this.storeJwtToken(tokens);
-            this.storeRefreshToken(tokens.refresh_token);
-            this.doLoginUser(user.email, tokens);
-          }
-        }),
-        catchError((error) => {
-          console.error('Fehler beim Login über API:', error);
-          this.snackBar.open('Login fehlgeschlagen. Bitte versuchen Sie es erneut.', 'Schließen', { duration: 3000 });
-          return throwError(() => new Error('Login über API fehlgeschlagen.'));
-        })
-      );
+    return this.http.post('http://localhost:5000/api/login', user).pipe(
+      tap((tokens: any) => {
+        if (tokens?.access_token) {
+          this.storeJwtToken(tokens);
+          this.storeRefreshToken(tokens.refresh_token);
+          this.doLoginUser(user.email, tokens);
+        }
+      }),
+      catchError((error) => {
+        console.error('Fehler beim Login über API:', error);
+        this.snackBar.open(
+          'Login fehlgeschlagen. Bitte versuchen Sie es erneut.',
+          'Schließen',
+          { duration: 3000 }
+        );
+        return throwError(() => new Error('Login über API fehlgeschlagen.'));
+      })
+    );
   }
 
-  register(user: { vorname: string, nachname: string, spitzname: string, email: string, password: string, role: 'admin' | 'user' | 'banned', securityQuestion: string, securityAnswer: string }): Observable<any> {
-    return this.http
-      .post('http://localhost:5000/api/register', user)
-      .pipe(
-        tap((response) => {
-          console.log('Benutzer erfolgreich registriert:', response);
-        }),
-        catchError((error) => {
-          console.error('Fehler bei der Registrierung:', error);
-          return throwError(() => new Error('Registrierung fehlgeschlagen.'));
-        })
-      );
+  register(user: {
+    vorname: string;
+    nachname: string;
+    spitzname: string;
+    email: string;
+    password: string;
+    role: 'admin' | 'user' | 'banned';
+    securityQuestion: string;
+    securityAnswer: string;
+  }): Observable<any> {
+    return this.http.post('http://localhost:5000/api/register', user).pipe(
+      tap((response) => {
+        console.log('Benutzer erfolgreich registriert:', response);
+      }),
+      catchError((error) => {
+        console.error('Fehler bei der Registrierung:', error);
+        return throwError(() => new Error('Registrierung fehlgeschlagen.'));
+      })
+    );
   }
-  
+
   // Nach erfolgreichem Login wird der Benutzer eingeloggt
   private doLoginUser(email: string, tokens: any) {
     this.loggedUser = email;
     this.isAuthenticated.next(true);
+
+    // Extrahiere die Rolle direkt beim Login
+    const role = this.getUserRole();
+    console.log('Benutzer-Rolle:', role);
+
+    this.userRole = role;
   }
 
   // Speichern des JWT-Access-Tokens
@@ -96,11 +111,25 @@ export class AuthService {
 
   // Logout des Benutzers
   logout() {
+    // Entferne das Access-Token und den Refresh-Token aus dem localStorage
     this.removeFromLocalStorageSafe(this.JWT_TOKEN);
     this.removeFromLocalStorageSafe(this.REFRESH_TOKEN);
+
+    // Setze den Authentifizierungsstatus auf false zurück
     this.isAuthenticated.next(false);
-  
-    this.Router.navigate(['/login']);
+
+    // Optional: Setze die Benutzerrolle und andere Daten zurück
+    this.userRole = 'user'; // Setze die Rolle zurück
+    this.loggedUser = undefined; // Optional: Setze die gespeicherte E-Mail zurück
+
+    // Leite den Benutzer zur Login-Seite weiter
+    this.Router.navigate(['/app-login'])
+      .then(() => {
+        console.log('Erfolgreich zur Login-Seite weitergeleitet');
+      })
+      .catch((error) => {
+        console.error('Fehler bei der Weiterleitung:', error);
+      });
   }
 
   // Hole das Profil des aktuellen Benutzers
@@ -110,20 +139,27 @@ export class AuthService {
 
   // Überprüfen, ob der Benutzer eingeloggt ist
   isLoggedIn(): boolean {
-    return !!this.getFromLocalStorageSafe(this.JWT_TOKEN);
+    const token = this.getFromLocalStorageSafe(this.JWT_TOKEN);
+    const refreshToken = this.getFromLocalStorageSafe(this.REFRESH_TOKEN);
+
+    if (token && refreshToken && !this.isTokenExpired()) {
+      return true;
+    }
+
+    return false;
   }
 
   // Überprüfen, ob das Token abgelaufen ist
   isTokenExpired(): boolean {
-    const tokens = this.getFromLocalStorageSafe(this.JWT_TOKEN);
-    if (!tokens) {
-      return true;
-    }
-    const token = JSON.parse(tokens).access_token;
+    const token = this.getFromLocalStorageSafe(this.JWT_TOKEN);
+
+    if (!token) return true; // Kein Token vorhanden, also abgelaufen
+
     const decoded: any = jwtDecode(token);
-    const expirationDate = decoded.exp * 1000;
+    const expirationDate = decoded.exp * 1000; // Umwandlung in Millisekunden
     const now = new Date().getTime();
-    return expirationDate < now;
+
+    return expirationDate < now; // Rückgabe true, wenn das Token abgelaufen ist
   }
 
   // Token mit dem Refresh-Token erneuern
@@ -142,7 +178,9 @@ export class AuthService {
         }),
         catchError((error) => {
           console.error('Fehler beim Erneuern des Tokens:', error);
-          return throwError(() => new Error('Token-Erneuerung fehlgeschlagen.'));
+          return throwError(
+            () => new Error('Token-Erneuerung fehlgeschlagen.')
+          );
         })
       );
   }
@@ -154,8 +192,14 @@ export class AuthService {
       return 'user';
     }
 
-    const user = JSON.parse(tokens);
-    return user.role || 'user';
+    try {
+      // Dekodiere das JWT und extrahiere die Rolle
+      const decodedToken: any = jwtDecode(tokens);
+      return decodedToken.role || 'user';
+    } catch (error) {
+      console.error('Fehler beim Dekodieren des Tokens:', error);
+      return 'user';
+    }
   }
 
   // Prüft, ob der Benutzer Admin ist
