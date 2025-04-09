@@ -42,13 +42,6 @@ export class AuthService {
     }
   }
 
-  private checkApiAvailability(): Observable<boolean> {
-    return this.http.get('http://localhost:5000/api/status').pipe(
-      catchError(() => of(false)),
-      map(() => true)
-    );
-  }
-
   // Login-Methode
   login(user: { email: string; password: string }): Observable<any> {
     return this.loginViaApi(user).pipe(
@@ -81,7 +74,7 @@ export class AuthService {
         })
       );
   }
-  
+
   // Nach erfolgreichem Login wird der Benutzer eingeloggt
   private doLoginUser(email: string, tokens: any) {
     this.loggedUser = email;
