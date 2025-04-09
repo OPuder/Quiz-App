@@ -3,21 +3,20 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { jwtDecode } from 'jwt-decode';
-import { UserManagementService } from '../../admin/user-management.service';
-import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   private readonly JWT_TOKEN = 'JWT_TOKEN';
+  private readonly REFRESH_TOKEN = 'REFRESH_TOKEN'; // Token für den Refresh
   private loggedUser?: string;
   private isAuthenticated = new BehaviorSubject<boolean>(false);
 
   private Router = inject(Router);
   private http = inject(HttpClient);
-  private userService = inject(UserManagementService);
   private platformId = inject(PLATFORM_ID);
 
   constructor() {}
@@ -44,132 +43,114 @@ export class AuthService {
   }
 
   private checkApiAvailability(): Observable<boolean> {
-    return this.http.get('https://api.escuelajs.co/api/v1/auth/status').pipe(
+    return this.http.get('http://localhost:5000/api/status').pipe(
       catchError(() => of(false)),
       map(() => true)
     );
   }
 
+  // Login-Methode
   login(user: { email: string; password: string }): Observable<any> {
-    return this.loginLocal(user).pipe(
-      tap((localLoginSuccess) => {
-        if (!localLoginSuccess) {
-          this.checkApiAvailability().pipe(
-            tap((apiAvailable) => {
-              if (apiAvailable) {
-                this.loginViaApi(user);
-              } else {
-                console.error('API ist nicht verfügbar');
-              }
-            }),
-            catchError(() => {
-              console.error('Fehler bei der API-Verbindung');
-              return of(null);
-            })
-          ).subscribe();
+    return this.loginViaApi(user).pipe(
+      tap((tokens) => {
+        if (tokens) {
+          this.doLoginUser(user.email, tokens);
         }
       }),
       catchError((error) => {
-        console.error('Fehler beim lokalen Login', error);
+        console.error('Login fehlgeschlagen:', error);
         return of(null);
       })
     );
   }
-  
-  loginViaApi(user: { email: string; password: string }): void {
-    this.http
-      .post('https://api.escuelajs.co/api/v1/auth/login', user)
+
+  // API-Aufruf für den Login
+  loginViaApi(user: { email: string; password: string }): Observable<any> {
+    return this.http
+      .post('http://localhost:5000/api/login', user)  // Stellen Sie sicher, dass dies mit dem richtigen Backend-Endpoint übereinstimmt
       .pipe(
         tap((tokens: any) => {
-          this.doLoginUser(user.email, JSON.stringify(tokens));
+          if (tokens?.access_token) {
+            this.storeJwtToken(tokens);
+            this.storeRefreshToken(tokens.refresh_token);  // Refresh-Token speichern
+          }
         }),
         catchError((error) => {
-          console.error('API Login failed:', error);
-          return throwError(() => new Error('API Login failed'));
+          console.error('Fehler beim Login über API:', error);
+          return throwError(() => new Error('Login über API fehlgeschlagen.'));
         })
-      )
-      .subscribe();
+      );
   }
-
-  loginLocal(user: { email: string; password: string }): Observable<boolean> {
-    const foundUser = this.userService.getUserByEmail(user.email);
-
-    if (!foundUser) {
-      console.error('Benutzer existiert nicht');
-      throw new Error('Benutzer existiert nicht.');
-    }
-
-    if (foundUser.password !== user.password) {
-      console.error('Falsches Passwort');
-      throw new Error('Falsches Passwort.');
-    }
-
-    if (foundUser.role === 'banned') {
-      alert('Zugang verweigert: Dein Konto ist gesperrt.');
-      this.logout();
-      return of(false);
-    }
-
-    this.loggedUser = user.email;
-    localStorage.setItem(this.JWT_TOKEN, JSON.stringify(foundUser)); // optional
-    this.isAuthenticated.next(true);
-
-    return of(true);
-  }
-
-  private doLoginUser(email: string, token: any) {
+  
+  // Nach erfolgreichem Login wird der Benutzer eingeloggt
+  private doLoginUser(email: string, tokens: any) {
     this.loggedUser = email;
-    this.storeJwtToken(token);
     this.isAuthenticated.next(true);
   }
 
-  private storeJwtToken(jwt: string) {
-    this.setToLocalStorageSafe(this.JWT_TOKEN, jwt);
+  // Speichern des JWT-Access-Tokens
+  private storeJwtToken(jwt: any) {
+    this.setToLocalStorageSafe(this.JWT_TOKEN, JSON.stringify(jwt));
   }
 
+  // Speichern des Refresh-Tokens
+  private storeRefreshToken(refreshToken: string) {
+    this.setToLocalStorageSafe(this.REFRESH_TOKEN, refreshToken);
+  }
+
+  // Logout des Benutzers
   logout() {
     this.removeFromLocalStorageSafe(this.JWT_TOKEN);
+    this.removeFromLocalStorageSafe(this.REFRESH_TOKEN);
     this.isAuthenticated.next(false);
-    this.Router.navigate(['/app-login']);
+    this.Router.navigate(['/login']); // Navigiere zu Login-Seite nach Logout
   }
 
+  // Hole das Profil des aktuellen Benutzers
   getCurrentAuthUser(): Observable<any> {
-    return this.http.get('https://api.escuelajs.co/api/v1/auth/profile');
+    return this.http.get('http://localhost:5000/api/profile'); // API-Endpunkt für Benutzerprofil
   }
 
+  // Überprüfen, ob der Benutzer eingeloggt ist
   isLoggedIn(): boolean {
     return !!this.getFromLocalStorageSafe(this.JWT_TOKEN);
   }
 
-  isTokenExpired() {
+  // Überprüfen, ob das Token abgelaufen ist
+  isTokenExpired(): boolean {
     const tokens = this.getFromLocalStorageSafe(this.JWT_TOKEN);
     if (!tokens) {
       return true;
     }
     const token = JSON.parse(tokens).access_token;
     const decoded: any = jwtDecode(token);
-    if (!decoded.exp) {
-      return true;
-    }
     const expirationDate = decoded.exp * 1000;
     const now = new Date().getTime();
     return expirationDate < now;
   }
 
-  refreshToken() {
-    const tokens = this.getFromLocalStorageSafe(this.JWT_TOKEN);
-    if (!tokens) {
-      return;
+  // Token mit dem Refresh-Token erneuern
+  refreshToken(): Observable<any> {
+    const refreshToken = this.getFromLocalStorageSafe(this.REFRESH_TOKEN);
+    if (!refreshToken) {
+      return throwError(() => new Error('Kein Refresh-Token vorhanden.'));
     }
-    const parsed = JSON.parse(tokens);
-    const refreshToken = parsed.refresh_token;
+
     return this.http
-      .post<any>('https://api.escuelajs.co/api/v1/auth/refresh-token', {
-        refreshToken,
-      })
-      .pipe(tap((tokens: any) => this.storeJwtToken(JSON.stringify(tokens))));
+      .post<any>('http://localhost:5000/api/refresh-token', { refreshToken })
+      .pipe(
+        tap((tokens: any) => {
+          this.storeJwtToken(tokens.access_token); // Neuer Access-Token speichern
+          this.storeRefreshToken(tokens.refresh_token); // Neuer Refresh-Token speichern
+        }),
+        catchError((error) => {
+          console.error('Fehler beim Erneuern des Tokens:', error);
+          return throwError(() => new Error('Token-Erneuerung fehlgeschlagen.'));
+        })
+      );
   }
 
+  // Holt die Rolle des Benutzers aus dem gespeicherten Token
   getUserRole(): 'admin' | 'user' | 'banned' {
     const tokens = this.getFromLocalStorageSafe(this.JWT_TOKEN);
     if (!tokens) {
@@ -177,14 +158,15 @@ export class AuthService {
     }
 
     const user = JSON.parse(tokens);
-
-    return user.role;
+    return user.role || 'user';
   }
 
+  // Prüft, ob der Benutzer Admin ist
   isAdmin(): boolean {
     return this.getUserRole() === 'admin';
   }
 
+  // Prüft, ob der Benutzer gesperrt ist
   isBanned(): boolean {
     return this.getUserRole() === 'banned';
   }

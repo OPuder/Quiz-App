@@ -1,40 +1,22 @@
 import { inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 import { User } from '../../shared/models/user.model';
-import { initialUsers } from '../../shared/data/user';
+import { Observable, of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserManagementService {
-  private readonly USER_STORAGE_KEY = 'users';
-  private users: User[] = [];
+  private readonly USER_API_URL = 'http://localhost:5000/api/users';  // API-URL anpassen
   private platformId = inject(PLATFORM_ID);
+  private http = inject(HttpClient);
 
-  constructor() {
-    this.loadUsers();
-  }
+  constructor() {}
 
-  private loadUsers(): void {
-    if (!isPlatformBrowser(this.platformId)) return;
-
-    const storedUsers = localStorage.getItem(this.USER_STORAGE_KEY);
-    if (storedUsers) {
-      this.users = JSON.parse(storedUsers);
-    } else {
-      this.users = initialUsers;
-      this.saveUsers();
-      console.warn('Standard-Admin wurde automatisch erstellt:', initialUsers[0]);
-    }
-  }
-
-  private saveUsers(): void {
-    localStorage.setItem(this.USER_STORAGE_KEY, JSON.stringify(this.users));
-  }
-
-  registerUser(email: string, password: string): boolean {
-    if (this.getUserByEmail(email)) return false;
-
+  // Benutzer registrieren
+  registerUser(email: string, password: string): Observable<boolean> {
     const newUser: User = {
       id: crypto.randomUUID(),
       email,
@@ -46,38 +28,60 @@ export class UserManagementService {
       securityQuestion: '',
       securityAnswer: ''
     };
-    this.users.push(newUser);
-    this.saveUsers();
-    return true;
+
+    return this.http.post<boolean>(`${this.USER_API_URL}/register`, newUser).pipe(
+      catchError((error) => {
+        console.error('Fehler bei der Registrierung:', error);
+        return of(false); // Fehlerbehandlung
+      })
+    );
   }
 
-  getUsers(): User[] {
-    return [...this.users];
+  // Alle Benutzer abrufen
+  getUsers(): Observable<User[]> {
+    return this.http.get<User[]>(this.USER_API_URL).pipe(
+      catchError((error) => {
+        console.error('Fehler beim Abrufen der Benutzer:', error);
+        return of([]); // Fehlerbehandlung
+      })
+    );
   }
 
-  getUserByEmail(email: string): User | undefined {
-    return this.users.find(user => user.email === email);
+  // Benutzer nach E-Mail suchen
+  getUserByEmail(email: string): Observable<User | undefined> {
+    return this.http.get<User[]>(`${this.USER_API_URL}?email=${email}`).pipe(
+      catchError((error) => {
+        console.error('Fehler bei der Benutzersuche:', error);
+        return of([]); // Leeres Array zurückgeben, anstatt undefined
+      }),
+      map((users: User[]) => users?.[0]) // Optional Chaining für das sichere Zugreifen
+    );
+  }  
+
+  // Benutzerrolle basierend auf E-Mail abrufen
+  getUserRoleByEmail(email: string): Observable<'admin' | 'user' | 'banned' | undefined> {
+    return this.getUserByEmail(email).pipe(
+      map(user => user?.role)
+    );
   }
 
-  getUserRoleByEmail(email: string): 'admin' | 'user' | 'banned' | undefined {
-    return this.getUserByEmail(email)?.role;
+  // Benutzerrolle aktualisieren
+  updateUserRole(email: string, role: 'admin' | 'user' | 'banned'): Observable<void> {
+    return this.http.put<void>(`${this.USER_API_URL}/update-role`, { email, role }).pipe(
+      catchError((error) => {
+        console.error('Fehler beim Aktualisieren der Benutzerrolle:', error);
+        return of(undefined); // Fehlerbehandlung
+      })
+    );
   }
 
-  updateUserRole(email: string, role: 'admin' | 'user' | 'banned'): void {
-    const user = this.getUserByEmail(email);
-    if (user) {
-      user.role = role;
-      this.saveUsers();
-    }
-  }
-
-  addUser(user: User): void {
-    this.users.push(user);
-    this.saveUsers();
-  }
-
-  deleteUser(email: string): void {
-    this.users = this.users.filter(user => user.email !== email);
-    this.saveUsers();
+  // Benutzer löschen
+  deleteUser(email: string): Observable<void> {
+    return this.http.delete<void>(`${this.USER_API_URL}/delete?email=${email}`).pipe(
+      catchError((error) => {
+        console.error('Fehler beim Löschen des Benutzers:', error);
+        return of(undefined); // Fehlerbehandlung
+      })
+    );
   }
 }
