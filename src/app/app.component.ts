@@ -5,21 +5,23 @@ import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { TranslationService } from './services/translation/translation-service.service';
 import { AuthService } from './services/auth/AuthService/auth.service';
 import { Router } from '@angular/router';
+import { UserManagementService } from './services/admin/user-management.service'; 
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterModule, HttpClientModule],
+  imports: [CommonModule, RouterLink, RouterModule, HttpClientModule,],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
 export class AppComponent implements OnInit {
   title = 'get started';
-  authService = inject(AuthService);
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private translationService: TranslationService,
+    public authService: AuthService,
+    public userManagementService: UserManagementService,
     private http: HttpClient,
     private router: Router
   ) {}
@@ -40,10 +42,5 @@ export class AppComponent implements OnInit {
       this.sprache = userLanguage;
       this.translationService.setLanguage(this.sprache);
     }
-  }
-
-  logout() {
-    console.log('Logout-Klick erkannt');
-    this.authService.logout();
   }
 }

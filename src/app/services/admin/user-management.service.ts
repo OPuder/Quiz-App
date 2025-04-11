@@ -1,87 +1,50 @@
-import { inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
+import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { User } from '../../shared/models/user.model';
-import { Observable, of } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { jwtDecode } from 'jwt-decode';
+import { AuthService } from '../auth/AuthService/auth.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UserManagementService {
-  private readonly USER_API_URL = 'http://localhost:5000/api/users';  // API-URL anpassen
-  private platformId = inject(PLATFORM_ID);
-  private http = inject(HttpClient);
+  private apiUrl = 'http://localhost:5000/api';
+  private readonly JWT_TOKEN = 'JWT_TOKEN';
+  
+  constructor(
+    private authService: AuthService,
+    private http: HttpClient,
+  ) {}
 
-  constructor() {}
-
-  // Benutzer registrieren
-  registerUser(email: string, password: string): Observable<boolean> {
-    const newUser: User = {
-      id: crypto.randomUUID(),
-      email,
-      password,
-      role: 'user',
-      vorname: '',
-      nachname: '',
-      spitzname: '',
-      securityQuestion: '',
-      securityAnswer: ''
-    };
-
-    return this.http.post<boolean>(`${this.USER_API_URL}/register`, newUser).pipe(
-      catchError((error) => {
-        console.error('Fehler bei der Registrierung:', error);
-        return of(false); // Fehlerbehandlung
-      })
-    );
+  // Benutzerprofil abrufen
+  getUserProfile(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/profile`);
   }
 
-  // Alle Benutzer abrufen
-  getUsers(): Observable<User[]> {
-    return this.http.get<User[]>(this.USER_API_URL).pipe(
-      catchError((error) => {
-        console.error('Fehler beim Abrufen der Benutzer:', error);
-        return of([]); // Fehlerbehandlung
-      })
-    );
+  // Benutzerprofil aktualisieren
+  updateUserProfile(userData: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/profile`, userData);
   }
 
-  // Benutzer nach E-Mail suchen
-  getUserByEmail(email: string): Observable<User | undefined> {
-    return this.http.get<User[]>(`${this.USER_API_URL}?email=${email}`).pipe(
-      catchError((error) => {
-        console.error('Fehler bei der Benutzersuche:', error);
-        return of([]); // Leeres Array zurückgeben, anstatt undefined
-      }),
-      map((users: User[]) => users?.[0]) // Optional Chaining für das sichere Zugreifen
-    );
-  }  
-
-  // Benutzerrolle basierend auf E-Mail abrufen
-  getUserRoleByEmail(email: string): Observable<'admin' | 'user' | 'banned' | undefined> {
-    return this.getUserByEmail(email).pipe(
-      map(user => user?.role)
-    );
+  // Passwort ändern
+  changePassword(oldPassword: string, newPassword: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/change-password`, { oldPassword, newPassword });
   }
 
-  // Benutzerrolle aktualisieren
-  updateUserRole(email: string, role: 'admin' | 'user' | 'banned'): Observable<void> {
-    return this.http.put<void>(`${this.USER_API_URL}/update-role`, { email, role }).pipe(
-      catchError((error) => {
-        console.error('Fehler beim Aktualisieren der Benutzerrolle:', error);
-        return of(undefined); // Fehlerbehandlung
-      })
-    );
-  }
+  // Methode zur Überprüfung, ob der Benutzer ein Admin ist
+  isAdmin(): boolean {
+    const token = localStorage.getItem(this.JWT_TOKEN);
 
-  // Benutzer löschen
-  deleteUser(email: string): Observable<void> {
-    return this.http.delete<void>(`${this.USER_API_URL}/delete?email=${email}`).pipe(
-      catchError((error) => {
-        console.error('Fehler beim Löschen des Benutzers:', error);
-        return of(undefined); // Fehlerbehandlung
-      })
-    );
+    if (!token) {
+      return false; // Kein Token vorhanden, daher kein Admin
+    }
+
+    try {
+      const decodedToken: any = jwtDecode(token); // Token dekodieren
+      return decodedToken.role === 'admin'; // Rolle prüfen
+    } catch (error) {
+      console.error('Fehler beim Dekodieren des Tokens:', error);
+      return false; // Wenn das Dekodieren fehlschlägt, gehe davon aus, dass der Benutzer kein Admin ist
+    }
   }
 }

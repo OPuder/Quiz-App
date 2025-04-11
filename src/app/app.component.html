@@ -22,9 +22,9 @@
     </div>
   
     <div class="nav-right">
-      <a *ngIf="authService.isAdmin()" routerLink="/app-admin">🛠️ Admin</a>
+      <a *ngIf="userManagementService.isAdmin()" routerLink="/app-admin">🛠️ Admin</a>
       <a *ngIf="!authService.isLoggedIn()" routerLink="/app-login">🔐 Login/Registrieren</a>
-      <button *ngIf="authService.isLoggedIn()" (click)="logout()">🚪 Logout</button>
+      <button *ngIf="authService.isLoggedIn()" (click)="authService.logout()">🚪 Logout</button>
     </div>
   </nav>
 </div>

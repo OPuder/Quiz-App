@@ -1,7 +1,7 @@
 <!-- register.component.html -->
 <div id="register">
     <h1>Registrieren</h1>
-    <form (submit)="register($event)">
+    <form (submit)="onRegister($event)">
       <div>
         <input type="text" name="vorname" placeholder="Vorname" [(ngModel)]="vorname" required />
       </div>
