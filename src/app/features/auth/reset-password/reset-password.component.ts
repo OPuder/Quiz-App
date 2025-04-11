@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Component } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
+import { AuthService } from '../../../services/auth/AuthService/auth.service';
 
 @Component({
   selector: 'app-password-reset',
@@ -14,68 +15,83 @@ import { Router, RouterModule } from '@angular/router';
 export class PasswordResetComponent {
   step: number = 1;
   email: string = '';
-  firstName: string = '';
-  lastName: string = '';
   securityAnswer: string = '';
   newPassword: string = '';
   confirmPassword: string = '';
 
   emailError: string = '';
-  nameError: string = '';
   securityError: string = '';
   passwordError: string = '';
-
+  
   securityQuestion: string = 'Was ist der Name deines ersten Haustiers?';  // Beispiel Sicherheitsfrage
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private authService: AuthService) {}
 
+  // Schritt 1: E-Mail überprüfen
+  handleSubmit() {
+    switch (this.step) {
+      case 1:
+        this.checkEmail();
+        break;
+      case 2:
+        this.checkSecurityAnswer();
+        break;
+      case 3:
+        this.resetPassword();
+        break;
+    }
+  }
+
+  // Überprüfe die E-Mail-Adresse
   checkEmail() {
     this.emailError = '';
-    // Überprüfe, ob die E-Mail im localStorage existiert
-    const user = JSON.parse(localStorage.getItem('user')!);
-    if (user && user.email === this.email) {
-      this.step = 2;  // Gehe zum nächsten Schritt
-    } else {
-      this.emailError = 'E-Mail-Adresse nicht gefunden!';
-    }
+    this.authService.checkEmailExists(this.email).subscribe({
+      next: (response) => {
+        if (response.exists) {
+          this.step = 2;  // Gehe zu Schritt 2 (Sicherheitsfrage)
+        } else {
+          this.emailError = 'E-Mail-Adresse nicht gefunden!';
+        }
+      },
+      error: (error) => {
+        this.emailError = 'Fehler beim Überprüfen der E-Mail-Adresse';
+      },
+    });
   }
 
-  checkName() {
-    this.nameError = '';
-    // Überprüfe Vorname und Nachname im localStorage
-    const user = JSON.parse(localStorage.getItem('user')!);
-    if (user && user.firstName === this.firstName && user.lastName === this.lastName) {
-      this.step = 3;  // Gehe zum nächsten Schritt
-    } else {
-      this.nameError = 'Vorname oder Nachname stimmen nicht überein!';
-    }
-  }
-
+  // Überprüfe die Sicherheitsantwort
   checkSecurityAnswer() {
     this.securityError = '';
-    // Überprüfe die Antwort der Sicherheitsfrage im localStorage
-    const user = JSON.parse(localStorage.getItem('user')!);
-    if (user && user.securityAnswer === this.securityAnswer) {
-      this.step = 4;  // Gehe zum nächsten Schritt
-    } else {
-      this.securityError = 'Falsche Antwort!';
-    }
+    this.authService.verifySecurityAnswer(this.email, this.securityAnswer).subscribe({
+      next: (response) => {
+        if (response.valid) {
+          this.step = 3;  // Gehe zu Schritt 3 (Passwort zurücksetzen)
+        } else {
+          this.securityError = 'Falsche Antwort auf die Sicherheitsfrage!';
+        }
+      },
+      error: (error) => {
+        this.securityError = 'Fehler bei der Überprüfung der Sicherheitsantwort';
+      },
+    });
   }
 
+  // Neues Passwort zurücksetzen
   resetPassword() {
     this.passwordError = '';
-    // Überprüfe, ob die Passwörter übereinstimmen
     if (this.newPassword !== this.confirmPassword) {
       this.passwordError = 'Die Passwörter stimmen nicht überein!';
       return;
     }
 
-    // Setze das neue Passwort im localStorage
-    const user = JSON.parse(localStorage.getItem('user')!);
-    if (user) {
-      user.password = this.newPassword;  // Passwort im user-Objekt aktualisieren
-      localStorage.setItem('user', JSON.stringify(user));  // Speichere die Änderungen im localStorage
-      this.router.navigate(['/login']);  // Weiterleitung zur Login-Seite nach erfolgreichem Zurücksetzen
-    }
+    this.authService.resetPassword(this.email, this.newPassword).subscribe({
+      next: (response) => {
+        const returnUrl = this.router.routerState.snapshot.root.queryParams['returnUrl'] || '/';
+        this.router.navigate([returnUrl]); // Nach erfolgreichem Reset zur Login-Seite weiterleiten
+      },
+      error: (error) => {
+        this.passwordError = 'Fehler beim Zurücksetzen des Passworts';
+      },
+    });
   }
 }

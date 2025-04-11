@@ -39,7 +39,7 @@ export class AuthService {
         if (tokens?.access_token) {
           this.storeJwtToken(tokens);
           this.storeRefreshToken(tokens.refresh_token);
-          this.isAuthenticated.next(true); // Benutzer wird eingeloggt
+          this.isAuthenticated.next(true);
         }
       }),
       catchError((error) => {
@@ -108,6 +108,36 @@ export class AuthService {
     if (this.isBrowser()) {
       localStorage.removeItem(key);
     }
+  }
+
+  // E-Mailüberprüfung
+  checkEmailExists(email: string): Observable<any> {
+    return this.http.post<any>('http://localhost:5000/api/check-email', { email }).pipe(
+      catchError((error) => {
+        console.error('Fehler bei der Überprüfung der E-Mail:', error);
+        return throwError(() => new Error('Fehler bei der Überprüfung der E-Mail'));
+      })
+    );
+  }
+
+  // Sicherheitsfrageüberprüfen
+  verifySecurityAnswer(email: string, securityAnswer: string): Observable<any> {
+    return this.http.post<any>('http://localhost:5000/api/verify-security-answer', { email, securityAnswer }).pipe(
+      catchError((error) => {
+        console.error('Fehler bei der Überprüfung der Sicherheitsantwort:', error);
+        return throwError(() => new Error('Fehler bei der Überprüfung der Sicherheitsantwort'));
+      })
+    );
+  }
+  
+  // Passwort zurücksetzen
+  resetPassword(email: string, newPassword: string): Observable<any> {
+    return this.http.post<any>('http://localhost:5000/api/reset-password', { email, newPassword }).pipe(
+      catchError((error) => {
+        console.error('Fehler beim Zurücksetzen des Passworts:', error);
+        return throwError(() => new Error('Fehler beim Zurücksetzen des Passworts'));
+      })
+    );
   }
 
   // Logout des Benutzers
