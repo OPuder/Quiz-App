@@ -11,6 +11,7 @@ import { UserManagementService } from '../../services/admin/user-management.serv
 import { MatDialog } from '@angular/material/dialog';
 import { AddUserModalComponent } from '../../component/add-user-modal/add-user-modal.component';
 import { User } from '../../shared/models/user.model';
+import { EditUserModalComponent } from '../../component/edit-user-modal/edit-user-modal.component';
 
 @Component({
   selector: 'app-admin',
@@ -101,7 +102,7 @@ export class AdminComponent {
   }
 
   openEditUserModal(user: User): void {
-    const dialogRef = this.dialog.open(AddUserModalComponent, {
+    const dialogRef = this.dialog.open(EditUserModalComponent, {
       width: '400px',
       data: user,
     });

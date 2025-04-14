@@ -1,1 +1,49 @@
-<p>edit-user-modal-component works!</p>
+<h2>Benutzer bearbeiten</h2>
+
+<form [formGroup]="editUserForm" (ngSubmit)="submit()">
+  <mat-form-field appearance="fill">
+    <mat-label>Vorname</mat-label>
+    <input matInput formControlName="vorname" required>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Nachname</mat-label>
+    <input matInput formControlName="nachname" required>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Spitzname</mat-label>
+    <input matInput formControlName="spitzname" required>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Email</mat-label>
+    <input matInput formControlName="email" required type="email">
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Rolle</mat-label>
+    <mat-select formControlName="role">
+      <mat-option value="user">User</mat-option>
+      <mat-option value="admin">Admin</mat-option>
+      <mat-option value="banned">Banned</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Geheimfrage</mat-label>
+    <input matInput formControlName="securityQuestion" required>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Antwort</mat-label>
+    <input matInput formControlName="securityAnswer" required>
+  </mat-form-field>
+
+  <div class="button-row">
+    <button mat-raised-button color="primary" type="submit" [disabled]="editUserForm.invalid">
+      Speichern
+    </button>
+    <button mat-raised-button color="warn" (click)="cancel()">Abbrechen</button>
+  </div>
+</form>
