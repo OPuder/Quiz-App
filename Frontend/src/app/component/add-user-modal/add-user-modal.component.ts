@@ -9,6 +9,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { AuthService } from '../../services/auth/AuthService/auth.service';
 import { NewUser, User } from '../../shared/models/user.model';
+import { UserManagementService } from '../../services/admin/user-management.service';
 
 @Component({
   selector: 'app-add-user-modal',
@@ -28,26 +29,23 @@ import { NewUser, User } from '../../shared/models/user.model';
   styleUrl: './add-user-modal.component.css'
 })
 export class AddUserModalComponent {
-  defultUser: NewUser = {
+  newUser: NewUser = {
     vorname: '',
     nachname: '',
     spitzname: '',
     email: '',
     password: '',
+    confirmPassword: '',
     role: 'user',
     securityQuestion: '',
     securityAnswer: ''
   };
 
-  newUser: any = {
-    ...this.defultUser,
-    comfirmPassword: '',
-  }
-
   constructor(
     public dialogRef: MatDialogRef<AddUserModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private authService: AuthService
+    private authService: AuthService,
+    private userManagementService: UserManagementService
   ) {}
 
   submitForm() {
@@ -61,9 +59,11 @@ export class AddUserModalComponent {
       return;
     }
   
-    console.log('Benutzer wird registriert:', this.newUser);
+    const { confirmPassword, ...userData } = this.newUser;
   
-    this.authService.register(this.newUser).subscribe({
+    console.log('Benutzerdaten zu registrieren:', userData);
+
+    this.authService.createUserByAdmin(userData).subscribe({
       next: (response) => {
         console.log('Benutzer erfolgreich registriert', response);
         this.dialogRef.close(response);
@@ -72,7 +72,7 @@ export class AddUserModalComponent {
         console.error('Fehler bei der Registrierung:', err);
       }
     });
-  }
+  }  
   
   cancel(): void {
     this.dialogRef.close();

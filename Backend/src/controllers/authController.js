@@ -109,3 +109,48 @@ exports.register = async (req, res) => {
       });
   }
 };
+
+exports.createUserByAdmin = async (req, res) => {
+  const {
+    vorname,
+    nachname,
+    spitzname,
+    email,
+    password,
+    role,
+    securityQuestion,
+    securityAnswer,
+  } = req.body;
+
+  try {
+    if (!req.user || req.user.role !== "admin") {
+      return res.status(403).json({ message: "Nur Admins dürfen Benutzer anlegen." });
+    }
+
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: "Benutzer existiert bereits." });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedSecurityAnswer = await bcrypt.hash(securityAnswer, 10);
+
+    const newUser = new User({
+      vorname,
+      nachname,
+      spitzname,
+      email,
+      password: hashedPassword,
+      role,
+      securityQuestion,
+      securityAnswer: hashedSecurityAnswer,
+    });
+
+    await newUser.save();
+
+    res.status(201).json({ message: "Benutzer erfolgreich durch Admin erstellt" });
+  } catch (error) {
+    console.error("Fehler beim Admin-User-Erstellen:", error);
+    res.status(500).json({ message: "Fehler beim Erstellen des Benutzers." });
+  }
+};

@@ -28,7 +28,9 @@ export class UserManagementService {
   }
 
   addUser(newUser: any): Observable<any> {
-    return this.http.post('http://localhost:5000/api/auth/register', newUser).pipe(
+    const { confirmPassword, ...userData } = newUser;
+
+    return this.http.post('http://localhost:5000/api/auth/register', userData).pipe(
       catchError((error) => {
         console.error('Fehler beim Hinzufügen des Benutzers', error);
         return throwError(

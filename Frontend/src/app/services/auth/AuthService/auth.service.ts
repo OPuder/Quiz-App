@@ -45,6 +45,10 @@ export class AuthService {
     );
   }
 
+  createUserByAdmin(user: NewUser): Observable<any> {
+    return this.http.post('http://localhost:5000/api/auth/create', user);
+  }
+  
   login(user: { email: string; password: string }): Observable<any> {
     return this.http.post('http://localhost:5000/api/auth/login', user).pipe(
       tap((tokens: any) => {

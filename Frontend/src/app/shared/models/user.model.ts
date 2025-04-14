@@ -19,10 +19,10 @@ export interface User {
     spitzname: string;
     email: string;
     password: string;
+    confirmPassword?: string;
     role: 'user' | 'admin';
     securityQuestion: string;
     securityAnswer: string;
-    confirmPassword?: string;
     geloescht?: boolean;
     banned?: boolean;
   }
