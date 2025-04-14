@@ -34,7 +34,7 @@ export class AddUserModalComponent {
     spitzname: '',
     email: '',
     password: '',
-    role: 'admin',
+    role: 'user',
     securityQuestion: '',
     securityAnswer: ''
   };
