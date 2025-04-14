@@ -1,0 +1,112 @@
+main {
+  background-color: #6e2af7;
+  padding-top: 40px;
+}
+
+.gradient-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  text-align: center;
+
+  background: linear-gradient(90deg, #ec0f4b, #da1ddd, #6e2af7);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  animation: gradient-flow 30s ease infinite;
+  background-size: 300% 300%;
+}
+
+@keyframes gradient-flow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+nav.custom-navbar {
+  background-color: #1f2124;
+  width: 50%;
+  margin: 20px auto;
+  padding: 10px 20px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.custom-navbar a,
+.custom-navbar .dropdown-toggle {
+  padding: 6px 10px;
+  display: flex;
+  align-items: center;
+}
+
+.custom-navbar .dropdown-toggle {
+  display: inline-block;
+  vertical-align: middle;
+  padding: 6px 10px;
+  line-height: normal;
+  margin: 0;
+  height: 100%;
+}
+
+.nav-left,
+.nav-right {
+  display: flex;
+  gap: 30px; /* Abstand vergrößert für gleichmäßige Optik */
+  align-items: center;
+}
+
+.nav-left a,
+.nav-right a,
+.nav-right button {
+  background: none;
+  border: none;
+  color: #fff;
+  padding: 6px 10px;
+  font: inherit;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+}
+
+.nav-right button:hover {
+  background-color: #343a40;
+}
+
+.dropdown-menu {
+  background-color: #343a40;
+  border-radius: 10px;
+  padding: 5px 0;
+  min-width: 180px;
+  margin-top: 8px; /* Abstand zum Button ausgleichen */
+}
+
+.dropdown-item {
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 8px;
+}
+
+.dropdown-item:hover {
+  background-color: #495057;
+}

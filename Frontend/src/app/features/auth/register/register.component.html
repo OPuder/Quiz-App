@@ -1,0 +1,47 @@
+<!-- register.component.html -->
+<div id="register">
+    <h1>Registrieren</h1>
+    <form (submit)="onRegister($event)">
+      <div>
+        <input type="text" name="vorname" placeholder="Vorname" [(ngModel)]="vorname" required />
+      </div>
+      <div>
+        <input type="text" name="nachname" placeholder="Nachname" [(ngModel)]="nachname" required />
+      </div>
+      <div>
+        <input type="text" name="spitzname" placeholder="Spitzname" [(ngModel)]="spitzname" required />
+      </div>
+      <div>
+        <input type="text" name="email" placeholder="Email" [(ngModel)]="email" required />
+      </div>
+      <div>
+        <input type="password" name="password" placeholder="Passwort" [(ngModel)]="password" required />
+      </div>
+      <div>
+        <input type="password" name="confirmPassword" placeholder="Passwort bestätigen" [(ngModel)]="confirmPassword" required />
+      </div>
+      <!-- Sicherheitsfrage als Dropdown -->
+      <div>
+        <label for="securityQuestion">Wählen Sie eine Sicherheitsfrage:</label>
+        <select name="securityQuestion" [(ngModel)]="securityQuestion" required>
+          <option value="" disabled selected>Wählen Sie eine Frage</option>
+          <option value="Your first pet's name">Name Ihres ersten Haustiers</option>
+          <option value="Mother's name">Name der Mutter</option>
+          <option value="Favorite color">Lieblingsfarbe</option>
+          <option value="City of birth">Geburtsstadt</option>
+          <option value="First school name">Name der ersten Schule</option>
+        </select>
+      </div>
+      <!-- Sicherheitsantwort -->
+      <div>
+        <input type="text" name="securityAnswer" placeholder="Sicherheitsantwort" [(ngModel)]="securityAnswer" required />
+      </div>
+      <div>
+        <button type="submit">Registrieren</button>
+      </div>
+      <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
+      </div>
+    </form>
+  </div>
+  

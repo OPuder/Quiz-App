@@ -1,0 +1,15 @@
+{
+  "name": "quizapp",
+  "version": "0.0.0",
+  "scripts": {
+    "start": "concurrently \"npm run server\" \"npm run frontend\"",
+    "server": "cd backend/src && node server.js",
+    "frontend": "cd frontend && ng serve"
+  },
+  "dependencies": {
+    "concurrently": "^9.1.2"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.2"
+  }
+}

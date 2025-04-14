@@ -1,0 +1,61 @@
+<mat-dialog-content>
+  <form (ngSubmit)="submitForm()">
+    <mat-form-field>
+      <mat-label>Vorname</mat-label>
+      <input matInput [(ngModel)]="newUser.vorname" name="vorname" required />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Nachname</mat-label>
+      <input matInput [(ngModel)]="newUser.nachname" name="nachname" required />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Spitzname</mat-label>
+      <input matInput [(ngModel)]="newUser.spitzname" name="spitzname" required />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Email</mat-label>
+      <input matInput [(ngModel)]="newUser.email" name="email" required />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Passwort</mat-label>
+      <input matInput [(ngModel)]="newUser.password" name="password" type="password" required />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Passwort bestätigen</mat-label>
+      <input matInput [(ngModel)]="newUser.confirmPassword" name="confirmPassword" type="password" required />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Sicherheitsfrage</mat-label>
+      <mat-select [(ngModel)]="newUser.securityQuestion" name="securityQuestion" required>
+        <mat-option value="Your first pet's name">Name Ihres ersten Haustiers</mat-option>
+        <mat-option value="Mother's name">Name der Mutter</mat-option>
+        <mat-option value="Favorite color">Lieblingsfarbe</mat-option>
+        <mat-option value="City of birth">Geburtsstadt</mat-option>
+        <mat-option value="First school name">Name der ersten Schule</mat-option>
+      </mat-select>
+    </mat-form-field>
+    
+    <mat-form-field>
+      <mat-label>Sicherheitsantwort</mat-label>
+      <input matInput [(ngModel)]="newUser.securityAnswer" name="securityAnswer" required />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Rolle</mat-label>
+      <mat-select [(ngModel)]="newUser.role" name="role">
+        <mat-option value="user">User</mat-option>
+        <mat-option value="admin">Admin</mat-option>
+        <mat-option value="banned">Banned</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" type="submit">Benutzer speichern</button>
+    <button mat-button type="button" (click)="cancel()">Abbrechen</button>
+  </form>
+</mat-dialog-content>
