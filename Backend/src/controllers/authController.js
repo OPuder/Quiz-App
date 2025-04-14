@@ -13,17 +13,28 @@ exports.login = async (req, res) => {
 
   try {
     const user = await User.findOne({ email });
-    if (!user)
+
+    if (!user) {
       return res.status(401).json({ message: "Benutzer nicht gefunden" });
+    }
+
+    if (user.banned) {
+      return res
+        .status(403)
+        .json({ message: "Ihr Konto wurde gesperrt. Bitte wenden Sie sich an den Support." });
+    }
 
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(401).json({ message: "Falsches Passwort" });
+    if (!isMatch) {
+      return res.status(401).json({ message: "Falsches Passwort" });
+    }
 
     const token = jwt.sign(
       { userId: user._id, email: user.email, role: user.role },
       process.env.JWT_SECRET_KEY,
       { expiresIn: "1h" }
     );
+
     res.json({
       access_token: token,
       refresh_token: process.env.JWT_REFRESH_SECRET_KEY,
@@ -31,11 +42,9 @@ exports.login = async (req, res) => {
     });
   } catch (error) {
     console.error("Fehler beim Login:", error);
-    res
-      .status(500)
-      .json({
-        message: "Fehler beim Login. Bitte versuchen Sie es später erneut.",
-      });
+    res.status(500).json({
+      message: "Fehler beim Login. Bitte versuchen Sie es später erneut.",
+    });
   }
 };
 
