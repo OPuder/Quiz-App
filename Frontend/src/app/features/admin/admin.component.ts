@@ -80,14 +80,18 @@ export class AdminComponent {
   }
 
   removeUser(id: string): void {
-    this.userManagementService.deleteUser(id).subscribe(
-      (response: any) => {
+    const confirmed = confirm('Möchten Sie diesen Benutzer wirklich löschen?');
+  
+    if (!confirmed) return;
+  
+    this.userManagementService.deleteUser(id).subscribe({
+      next: (response) => {
         this.loadUserList();
       },
-      (error) => {
+      error: (error) => {
         console.error('Fehler beim Löschen des Benutzers', error);
       }
-    );
+    });
   }
 
   editUser(user: any): void {

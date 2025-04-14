@@ -49,7 +49,7 @@ export class UserManagementService {
   }
 
   deleteUser(id: string): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}/user/${id}`).pipe(
+    return this.http.patch<any>(`/api/auth/${id}/soft-delete`, {}).pipe(
       catchError((error) => {
         console.error('Fehler beim Löschen des Benutzers', error);
         return throwError(() => new Error('Fehler beim Löschen des Benutzers'));

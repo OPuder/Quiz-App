@@ -154,3 +154,21 @@ exports.createUserByAdmin = async (req, res) => {
     res.status(500).json({ message: "Fehler beim Erstellen des Benutzers." });
   }
 };
+
+exports.softDeleteUser = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    console.log('Soft-Delete aufgerufen mit ID:', userId);
+
+    const user = await User.findByIdAndUpdate(userId, { geloescht: true }, { new: true });
+
+    if (!user) {
+      return res.status(404).json({ message: "Benutzer nicht gefunden" });
+    }
+
+    res.status(200).json({ message: "Benutzer wurde als gelöscht markiert" });
+  } catch (error) {
+    console.error("Fehler beim Soft-Delete:", error);
+    res.status(500).json({ message: "Interner Serverfehler beim Löschen" });
+  }
+};
