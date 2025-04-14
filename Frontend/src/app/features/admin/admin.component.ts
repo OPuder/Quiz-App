@@ -12,6 +12,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AddUserModalComponent } from '../../component/add-user-modal/add-user-modal.component';
 import { User } from '../../shared/models/user.model';
 import { EditUserModalComponent } from '../../component/edit-user-modal/edit-user-modal.component';
+import { AuthService } from '../../services/auth/AuthService/auth.service';
 
 @Component({
   selector: 'app-admin',
@@ -47,6 +48,7 @@ export class AdminComponent {
   errorMessage: string = '';
 
   constructor(
+    private authService: AuthService,
     private userManagementService: UserManagementService,
     private dialog: MatDialog,
   ) {}
@@ -61,15 +63,7 @@ export class AdminComponent {
   
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.userManagementService.addUser(result).subscribe({
-          next: (response) => {
-            this.loadUserList();
-          },
-          error: (err) => {
-            console.error('Fehler beim Hinzufügen des Benutzers:', err);
-            alert('Fehler beim Hinzufügen des Benutzers');
-          }
-        });
+        this.loadUserList(); // ✅ nur Liste neu laden
       }
     });
   }

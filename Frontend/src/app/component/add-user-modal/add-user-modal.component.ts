@@ -58,14 +58,9 @@ export class AddUserModalComponent {
       console.error('Es fehlen erforderliche Felder.');
       return;
     }
-  
-    const { confirmPassword, ...userData } = this.newUser;
-  
-    console.log('Benutzerdaten zu registrieren:', userData);
 
-    this.authService.createUserByAdmin(userData).subscribe({
+    this.authService.createUserByAdmin(this.newUser).subscribe({
       next: (response) => {
-        console.log('Benutzer erfolgreich registriert', response);
         this.dialogRef.close(response);
       },
       error: (err) => {

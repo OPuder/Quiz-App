@@ -57,6 +57,7 @@ export class RegisterComponent {
         spitzname: this.spitzname,
         email: this.email,
         password: this.password,
+        confirmPassword: this.confirmPassword,
         role: this.role,
         securityQuestion: this.securityQuestion,
         securityAnswer: this.securityAnswer,
