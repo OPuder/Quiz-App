@@ -30,6 +30,15 @@ import { User } from '../../shared/models/user.model';
   styleUrls: ['./admin.component.css']
 })
 export class AdminComponent {
+  displayedColumns: string[] = [
+    'vorname',
+    'nachname',
+    'spitzname',
+    'email',
+    'securityQuestion',
+    'role',
+    'aktionen'
+  ];
   userList: any[] = [];
   selectedUser: any = {};
   newUser: any = {}

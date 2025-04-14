@@ -1,5 +1,4 @@
 export interface User {
-    id?: string;
     vorname: string;
     nachname: string;
     spitzname: string;

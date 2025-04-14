@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, Inject } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -8,7 +7,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
-import { UserManagementService } from '../../services/admin/user-management.service';
 import { AuthService } from '../../services/auth/AuthService/auth.service';
 import { User } from '../../shared/models/user.model';
 
@@ -42,19 +40,11 @@ export class AddUserModalComponent {
     securityAnswer: '',
   };
 
-  isEditMode = false; 
-
   constructor(
     public dialogRef: MatDialogRef<AddUserModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private userManagementService: UserManagementService,
     private authService: AuthService
-  ) {
-    if (data) {
-      this.isEditMode = true;
-      this.newUser = { ...data };
-    }
-  }
+  ) {}
 
   submitForm() {
     if (this.newUser.password !== this.newUser.confirmPassword) {
@@ -69,30 +59,17 @@ export class AddUserModalComponent {
   
     console.log('Benutzer wird registriert:', this.newUser);
   
-    if (this.isEditMode) {
-      this.userManagementService.updateUserProfile(this.newUser).subscribe({
-        next: (response) => {
-          console.log('Benutzer aktualisiert', response);
-          this.dialogRef.close(response);
-        },
-        error: (err) => {
-          console.error('Fehler beim Aktualisieren des Benutzers:', err);
-        }
-      });
-    } else {
-      this.authService.register(this.newUser).subscribe({
-        next: (response) => {
-          console.log('Benutzer erfolgreich registriert', response);
-          this.dialogRef.close(response);
-        },
-        error: (err) => {
-          console.error('Fehler bei der Registrierung:', err);
-        }
-      });
-    }
+    this.authService.register(this.newUser).subscribe({
+      next: (response) => {
+        console.log('Benutzer erfolgreich registriert', response);
+        this.dialogRef.close(response);
+      },
+      error: (err) => {
+        console.error('Fehler bei der Registrierung:', err);
+      }
+    });
   }
   
-
   cancel(): void {
     this.dialogRef.close();
   }

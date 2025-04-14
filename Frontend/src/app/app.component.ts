@@ -24,7 +24,9 @@ export class AppComponent implements OnInit {
     public userManagementService: UserManagementService,
     private http: HttpClient,
     private router: Router
-  ) {}
+  ) {
+    this.userManagementService.loadUserFromToken();
+  }
 
   sprache: string = '';
 

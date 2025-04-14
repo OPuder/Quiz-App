@@ -1,9 +1,15 @@
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { catchError, Observable, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, map, Observable, throwError } from 'rxjs';
 import { jwtDecode } from 'jwt-decode';
 import { AuthService } from '../auth/AuthService/auth.service';
 import { isPlatformBrowser } from '@angular/common';
+
+export interface User {
+  id: string;
+  email: string;
+  role: 'Admin' | 'User' | 'Ban';
+}
 
 @Injectable({
   providedIn: 'root',
@@ -11,12 +17,15 @@ import { isPlatformBrowser } from '@angular/common';
 export class UserManagementService {
   private apiUrl = 'http://localhost:5000/api/user';
   private readonly JWT_TOKEN = 'JWT_TOKEN';
+  private currentUserSubject = new BehaviorSubject<any | null>(null);
+  public currentUser$ = this.currentUserSubject.asObservable();
 
   constructor(
-    private authService: AuthService,
     private http: HttpClient,
     @Inject(PLATFORM_ID) private platformId: Object
-  ) {}
+  ) {
+    this.loadUserFromToken();
+  }
 
   addUser(newUser: any): Observable<any> {
     return this.http.post('http://localhost:5000/api/auth/register', newUser).pipe(
@@ -29,12 +38,12 @@ export class UserManagementService {
     );
   }
 
-  updateUserProfile(updatedUser: any): Observable<any> {
-    const token = localStorage.getItem(this.JWT_TOKEN);
+  updateUserProfile(userId: string, updatedData: any): Observable<any> {
+    const token = localStorage.getItem('JWT_TOKEN');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-
-    const url = `${this.apiUrl}/update-profile`;
-    return this.http.put(url, updatedUser, { headers });
+    const url = `${this.apiUrl}/user/${userId}`;
+  
+    return this.http.put(url, updatedData, { headers });
   }
 
   deleteUser(id: string): Observable<any> {
@@ -70,18 +79,38 @@ export class UserManagementService {
       );
   }
 
-  isAdmin(): boolean {
-    if (isPlatformBrowser(this.platformId)) {
-      const token = localStorage.getItem('JWT_TOKEN');
-      if (token) {
-        const decodedToken: any = jwtDecode(token);
-        return decodedToken.role === 'admin';
-      }
-    }
-    return false;
-  }
-
   getUsers(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/get-AllUsers`);
+  }
+
+  getCurrentUser(): any | null {
+    return this.currentUserSubject.value;
+  }
+
+  isAdmin$ = this.currentUser$.pipe(
+    map(user => user?.role === 'Admin')
+  );
+
+  loadUserFromToken(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      const token = localStorage.getItem(this.JWT_TOKEN);
+      if (token) {
+        try {
+          const decodedToken: any = jwtDecode(token);
+          const user: User = {
+            id: decodedToken.id,
+            email: decodedToken.email,
+            role: decodedToken.role,
+          };
+          this.currentUserSubject.next(user);
+        } catch (error) {
+          console.error('Fehler beim Dekodieren des Tokens', error);
+        }
+      }
+    }
+  }
+
+  setCurrentUser(user: User): void {
+    this.currentUserSubject.next(user);
   }
 }

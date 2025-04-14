@@ -6,6 +6,7 @@ import { jwtDecode } from 'jwt-decode';
 import { Router } from '@angular/router';
 import { isPlatformBrowser } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { UserManagementService } from '../../admin/user-management.service';
 
 @Injectable({
   providedIn: 'root',
@@ -18,12 +19,13 @@ export class AuthService {
   private loggedUser: string | undefined;
 
   constructor(
+    private userManagementService: UserManagementService,
     private snackBar: MatSnackBar,
     private http: HttpClient,
     private router: Router
   ) {}
 
-  register(user:{
+  register(user: {
     vorname: string;
     nachname: string;
     spitzname: string;
@@ -60,6 +62,13 @@ export class AuthService {
           this.isAuthenticated.next(true);
           this.loggedUser = user.email;
 
+          const decodedToken: any = jwtDecode(tokens.access_token);
+          this.userManagementService.setCurrentUser({
+            id: decodedToken.id,
+            email: decodedToken.email,
+            role: decodedToken.role
+          });
+
           const returnUrl =
             this.router.routerState.snapshot.root.queryParams['returnUrl'] ||
             '/';
@@ -88,6 +97,18 @@ export class AuthService {
     if (isPlatformBrowser(this.platformId)) {
       const token = localStorage.getItem('JWT_TOKEN');
       return token !== null && !this.isTokenExpired();
+    }
+    return false;
+  }
+
+  isAdminLoggedIn(): boolean {
+    if (isPlatformBrowser(this.platformId)) {
+      const token = localStorage.getItem('JWT_TOKEN');
+      if (token && !this.isTokenExpired()) {
+        const decodedToken: any = jwtDecode(token);
+        const role = decodedToken.role;
+        return role && role.toLowerCase() === 'admin';
+      }
     }
     return false;
   }

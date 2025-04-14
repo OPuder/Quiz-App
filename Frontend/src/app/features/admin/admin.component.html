@@ -9,33 +9,58 @@
     {{ errorMessage }}
   </div>
 
-  <table *ngIf="userList.length > 0" mat-table class="user-table mat-elevation-z2">
-    <thead>
-      <tr>
-        <th>Vorname</th>
-        <th>Nachname</th>
-        <th>Spitzname</th>
-        <th>Email</th>
-        <th>Geheimfrage</th>
-        <th>Rolle</th>
-        <th>Aktionen</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let user of userList">
-        <td>{{ user.vorname }}</td>
-        <td>{{ user.nachname }}</td>
-        <td>{{ user.spitzname }}</td>
-        <td>{{ user.email }}</td>
-        <td>{{ user.securityQuestion }}</td>
-        <td>{{ user.role }}</td>
-        <td class="actions">
-          <button mat-stroked-button color="accent" (click)="editUser(user)">Bearbeiten</button>
-          <button mat-stroked-button color="warn" (click)="removeUser(user._id)">Löschen</button>
-        </td>
-      </tr>
-    </tbody>
+  <table mat-table [dataSource]="userList" class="user-table mat-elevation-z2">
+
+    <!-- Vorname Column -->
+    <ng-container matColumnDef="vorname">
+      <th mat-header-cell *matHeaderCellDef> Vorname </th>
+      <td mat-cell *matCellDef="let user"> {{ user.vorname }} </td>
+    </ng-container>
+  
+    <!-- Nachname Column -->
+    <ng-container matColumnDef="nachname">
+      <th mat-header-cell *matHeaderCellDef> Nachname </th>
+      <td mat-cell *matCellDef="let user"> {{ user.nachname }} </td>
+    </ng-container>
+  
+    <!-- Spitzname Column -->
+    <ng-container matColumnDef="spitzname">
+      <th mat-header-cell *matHeaderCellDef> Spitzname </th>
+      <td mat-cell *matCellDef="let user"> {{ user.spitzname }} </td>
+    </ng-container>
+  
+    <!-- Email Column -->
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef> Email </th>
+      <td mat-cell *matCellDef="let user"> {{ user.email }} </td>
+    </ng-container>
+  
+    <!-- Geheimfrage Column -->
+    <ng-container matColumnDef="securityQuestion">
+      <th mat-header-cell *matHeaderCellDef> Geheimfrage </th>
+      <td mat-cell *matCellDef="let user"> {{ user.securityQuestion }} </td>
+    </ng-container>
+  
+    <!-- Rolle Column -->
+    <ng-container matColumnDef="role">
+      <th mat-header-cell *matHeaderCellDef> Rolle </th>
+      <td mat-cell *matCellDef="let user"> {{ user.role }} </td>
+    </ng-container>
+  
+    <!-- Aktionen Column -->
+    <ng-container matColumnDef="aktionen">
+      <th mat-header-cell *matHeaderCellDef> Aktionen </th>
+      <td mat-cell *matCellDef="let user">
+        <button mat-stroked-button color="accent" (click)="editUser(user)">Bearbeiten</button>
+        <button mat-stroked-button color="warn" (click)="removeUser(user._id)">Löschen</button>
+      </td>
+    </ng-container>
+  
+    <!-- Header / Row -->
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
+  
 
   <div *ngIf="userList.length === 0" class="no-users mat-elevation-z1">
     Keine Benutzer gefunden.

@@ -12,20 +12,13 @@ exports.updateProfile = async (req, res) => {
     req.body.password = await bcrypt.hash(password, 10);
   }
 
-  if (email) {
-    const existingUserWithEmail = await User.findOne({ email });
-    if (existingUserWithEmail && existingUserWithEmail._id.toString() !== req.userId.toString()) {
-      return res.status(400).json({ message: 'Diese E-Mail-Adresse wird bereits verwendet.' });
-    }
-  }
-
   if (!vorname || !nachname || !spitzname) {
     return res.status(400).json({ message: 'Vorname, Nachname und Spitzname sind erforderlich' });
   }
 
   try {
     const updatedUser = await User.findByIdAndUpdate(
-      req.userId,
+      req.params.id,
       {
         vorname: vorname || undefined,
         nachname: nachname || undefined,

@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './services/auth/authGuard/auth.guard';
+import { adminGuard } from './services/auth/authGuard/admin.guard';
 
 export const routes: Routes = [
     {
@@ -55,7 +56,7 @@ export const routes: Routes = [
     {
         path: 'app-admin',
         loadComponent: () => import('./features/admin/admin.component').then(m => m.AdminComponent),
-        canActivate: [authGuard]  
+        canActivate: [authGuard, adminGuard]  
     },
     {
         path: 'app-password-reset',
