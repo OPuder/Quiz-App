@@ -1,39 +1,43 @@
-<div>
-  <h1>Admin Dashboard</h1>
+<div class="admin-dashboard-container">
+  <h1 class="dashboard-title">Admin Dashboard</h1>
+
+  <div class="button-container">
+    <button mat-raised-button color="primary" (click)="openAddUserDialog()">+ Neuen Benutzer hinzufügen</button>
+  </div>
+
+  <div *ngIf="errorMessage" class="error-message mat-elevation-z2">
+    {{ errorMessage }}
+  </div>
+
+  <table *ngIf="userList.length > 0" mat-table class="user-table mat-elevation-z2">
+    <thead>
+      <tr>
+        <th>Vorname</th>
+        <th>Nachname</th>
+        <th>Spitzname</th>
+        <th>Email</th>
+        <th>Geheimfrage</th>
+        <th>Rolle</th>
+        <th>Aktionen</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of userList">
+        <td>{{ user.vorname }}</td>
+        <td>{{ user.nachname }}</td>
+        <td>{{ user.spitzname }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.securityQuestion }}</td>
+        <td>{{ user.role }}</td>
+        <td class="actions">
+          <button mat-stroked-button color="accent" (click)="editUser(user)">Bearbeiten</button>
+          <button mat-stroked-button color="warn" (click)="removeUser(user._id)">Löschen</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="userList.length === 0" class="no-users mat-elevation-z1">
+    Keine Benutzer gefunden.
+  </div>
 </div>
-
-<div>
-  <button mat-raised-button (click)="openAddUserDialog()">Neuen Benutzer hinzufügen</button>
-</div>
-
-<div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
-
-<table *ngIf="userList.length > 0">
-  <thead>
-    <tr>
-      <th>Vorname</th>
-      <th>Nachname</th>
-      <th>Spitzname</th>
-      <th>Email</th>
-      <th>Geheimfrage</th>
-      <th>Rolle</th>
-      <th>Aktionen</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let user of userList">
-      <td>{{ user.vorname }}</td>
-      <td>{{ user.nachname }}</td>
-      <td>{{ user.spitzname }}</td>
-      <td>{{ user.email }}</td>
-      <td>{{ user.securityQuestion }}</td>
-      <td>{{ user.role }}</td>
-      <td>
-        <button (click)="editUser(user)">Bearbeiten</button>
-        <button (click)="removeUser(user._id)">Löschen</button>
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-<div *ngIf="userList.length === 0">Keine Benutzer gefunden.</div>
