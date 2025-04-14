@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { isPlatformBrowser } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UserManagementService } from '../../admin/user-management.service';
+import { NewUser } from '../../../shared/models/user.model';
 
 @Injectable({
   providedIn: 'root',
@@ -25,16 +26,7 @@ export class AuthService {
     private router: Router
   ) {}
 
-  register(user: {
-    vorname: string;
-    nachname: string;
-    spitzname: string;
-    email?: string;
-    password: string;
-    role: 'admin' | 'user' | 'banned';
-    securityQuestion: string;
-    securityAnswer: string;
-  }): Observable<any> {
+  register(user: NewUser): Observable<any> {
     return this.http.post('http://localhost:5000/api/auth/register', user).pipe(
       tap((tokens: any) => {
         if (tokens?.access_token) {

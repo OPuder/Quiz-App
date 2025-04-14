@@ -8,7 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { AuthService } from '../../services/auth/AuthService/auth.service';
-import { User } from '../../shared/models/user.model';
+import { NewUser, User } from '../../shared/models/user.model';
 
 @Component({
   selector: 'app-add-user-modal',
@@ -28,17 +28,21 @@ import { User } from '../../shared/models/user.model';
   styleUrl: './add-user-modal.component.css'
 })
 export class AddUserModalComponent {
-  newUser: User = {
+  defultUser: NewUser = {
     vorname: '',
     nachname: '',
     spitzname: '',
     email: '',
     password: '',
-    confirmPassword: '',
-    role: 'user',
+    role: 'admin',
     securityQuestion: '',
-    securityAnswer: '',
+    securityAnswer: ''
   };
+
+  newUser: any = {
+    ...this.defultUser,
+    comfirmPassword: '',
+  }
 
   constructor(
     public dialogRef: MatDialogRef<AddUserModalComponent>,
