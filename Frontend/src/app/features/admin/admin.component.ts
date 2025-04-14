@@ -6,13 +6,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { MatTableModule } from '@angular/material/table';  
+import { MatTableModule } from '@angular/material/table';
 import { UserManagementService } from '../../services/admin/user-management.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AddUserModalComponent } from '../../component/add-user-modal/add-user-modal.component';
 import { User } from '../../shared/models/user.model';
 import { EditUserModalComponent } from '../../component/edit-user-modal/edit-user-modal.component';
 import { AuthService } from '../../services/auth/AuthService/auth.service';
+import { BanUserModalComponent } from '../../component/bann-user-modal/bann-user-modal.component';
 
 @Component({
   selector: 'app-admin',
@@ -26,10 +27,10 @@ import { AuthService } from '../../services/auth/AuthService/auth.service';
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
-    MatTableModule
+    MatTableModule,
   ],
   templateUrl: './admin.component.html',
-  styleUrls: ['./admin.component.css']
+  styleUrls: ['./admin.component.css'],
 })
 export class AdminComponent {
   displayedColumns: string[] = [
@@ -38,29 +39,30 @@ export class AdminComponent {
     'spitzname',
     'email',
     'securityQuestion',
+    'banned',
     'role',
-    'aktionen'
+    'aktionen',
   ];
   userList: any[] = [];
   selectedUser: any = {};
-  newUser: any = {}
+  newUser: any = {};
   showAddUserForm!: boolean;
   errorMessage: string = '';
 
   constructor(
     private authService: AuthService,
     private userManagementService: UserManagementService,
-    private dialog: MatDialog,
+    private dialog: MatDialog
   ) {}
   ngOnInit() {
-    this.loadUserList(); 
+    this.loadUserList();
   }
 
   openAddUserDialog(): void {
     const dialogRef = this.dialog.open(AddUserModalComponent, {
       width: '400px',
     });
-  
+
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.loadUserList(); // ✅ nur Liste neu laden
@@ -68,6 +70,18 @@ export class AdminComponent {
     });
   }
 
+  openEditUserModal(user: User): void {
+    const dialogRef = this.dialog.open(EditUserModalComponent, {
+      width: '400px',
+      data: user,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.loadUserList();
+      }
+    });
+  }
   loadUserList(): void {
     this.userManagementService.getUsers().subscribe({
       next: (response) => {
@@ -75,22 +89,22 @@ export class AdminComponent {
       },
       error: (error) => {
         this.errorMessage = 'Fehler beim Laden der Benutzer';
-      }
+      },
     });
   }
 
   removeUser(id: string): void {
     const confirmed = confirm('Möchten Sie diesen Benutzer wirklich löschen?');
-  
+
     if (!confirmed) return;
-  
+
     this.userManagementService.deleteUser(id).subscribe({
       next: (response) => {
         this.loadUserList();
       },
       error: (error) => {
         console.error('Fehler beim Löschen des Benutzers', error);
-      }
+      },
     });
   }
 
@@ -99,10 +113,10 @@ export class AdminComponent {
     this.openEditUserModal(this.selectedUser);
   }
 
-  openEditUserModal(user: User): void {
-    const dialogRef = this.dialog.open(EditUserModalComponent, {
+  openBanDialog(user: any): void {
+    const dialogRef = this.dialog.open(BanUserModalComponent, {
       width: '400px',
-      data: user,
+      data: { user }
     });
   
     dialogRef.afterClosed().subscribe(result => {

@@ -27,19 +27,6 @@ export class UserManagementService {
     this.loadUserFromToken();
   }
 
-  addUser(newUser: any): Observable<any> {
-    const { confirmPassword, ...userData } = newUser;
-
-    return this.http.post('http://localhost:5000/api/auth/register', userData).pipe(
-      catchError((error) => {
-        console.error('Fehler beim Hinzufügen des Benutzers', error);
-        return throwError(
-          () => new Error('Fehler beim Hinzufügen des Benutzers')
-        );
-      })
-    );
-  }
-
   updateUserProfile(userId: string, updatedData: any): Observable<any> {
     const token = localStorage.getItem('JWT_TOKEN');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
@@ -85,6 +72,10 @@ export class UserManagementService {
     return this.http.get<any[]>(`${this.apiUrl}/get-AllUsers`);
   }
 
+  updateUserBan(id: string, banData: any): Observable<any> {
+    return this.http.patch(`/api/auth/${id}/ban`, banData);
+  }
+  
   getCurrentUser(): any | null {
     return this.currentUserSubject.value;
   }

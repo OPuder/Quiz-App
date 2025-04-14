@@ -172,3 +172,19 @@ exports.softDeleteUser = async (req, res) => {
     res.status(500).json({ message: "Interner Serverfehler beim Löschen" });
   }
 };
+
+exports.banUser = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const { ban } = req.body;
+
+    const updatedUser = await User.findByIdAndUpdate(userId, { ban }, { new: true });
+
+    if (!updatedUser) return res.status(404).json({ message: 'User nicht gefunden' });
+
+    res.status(200).json({ message: 'User wurde gebannt' });
+  } catch (error) {
+    console.error('Fehler beim Bann:', error);
+    res.status(500).json({ message: 'Interner Serverfehler beim Bann' });
+  }
+};

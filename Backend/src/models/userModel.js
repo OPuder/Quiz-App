@@ -10,7 +10,11 @@ const userSchema = new mongoose.Schema({
   securityQuestion: { type: String, required: true },
   securityAnswer: { type: String, required: true },
   geloescht: { type: Boolean, default: false },
-  banned: { type: Boolean, default: false },
+  banned: {
+    isBanned: { type: Boolean, default: false },
+    reason: { type: String, default: '' },
+    until: { type: Date, default: null }
+  },
 }, {
   versionKey: false,
   strict: true

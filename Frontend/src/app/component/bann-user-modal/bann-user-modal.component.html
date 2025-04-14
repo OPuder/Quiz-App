@@ -1,0 +1,35 @@
+<h2 mat-dialog-title>Nutzer verwalten</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="banForm" (ngSubmit)="submitBan()">
+
+    <mat-slide-toggle formControlName="isBanned">
+      {{ banForm.value.isBanned ? 'Benutzer bannen' : 'Benutzer entbannen' }}
+    </mat-slide-toggle>
+
+    <div *ngIf="banForm.value.isBanned" class="ban-fields">
+
+      <mat-form-field appearance="fill">
+        <mat-label>Grund für Bann</mat-label>
+        <input matInput formControlName="reason" required>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Gebannt bis</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="until">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-hint>Leer lassen für permanenten Bann</mat-hint>
+      </mat-form-field>
+
+    </div>
+
+    <mat-dialog-actions align="end">
+      <button mat-button type="button" (click)="dialogRef.close()">Abbrechen</button>
+      <button mat-raised-button color="primary" type="submit">
+        {{ banForm.value.isBanned ? 'Bannen' : 'Entbannen' }}
+      </button>
+    </mat-dialog-actions>
+
+  </form>
+</mat-dialog-content>

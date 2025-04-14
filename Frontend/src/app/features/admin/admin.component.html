@@ -40,7 +40,21 @@
       <th mat-header-cell *matHeaderCellDef> Geheimfrage </th>
       <td mat-cell *matCellDef="let user"> {{ user.securityQuestion }} </td>
     </ng-container>
-  
+    
+    <!-- Banned Column -->
+    <ng-container matColumnDef="banned">
+      <th mat-header-cell *matHeaderCellDef> Gebannt </th>
+      <td mat-cell *matCellDef="let user">
+        <span *ngIf="user.ban?.isBanned" style="color: red; font-weight: bold;">
+          Ja
+          <span *ngIf="user.ban.reason">({{ user.ban.reason }})</span>
+          <span *ngIf="user.ban.until">
+            – bis {{ user.ban.until | date: 'shortDate' }}
+          </span>
+        </span>
+      </td>
+    </ng-container>
+
     <!-- Rolle Column -->
     <ng-container matColumnDef="role">
       <th mat-header-cell *matHeaderCellDef> Rolle </th>
@@ -53,6 +67,23 @@
       <td mat-cell *matCellDef="let user">
         <button mat-stroked-button color="accent" (click)="editUser(user)">Bearbeiten</button>
         <button mat-stroked-button color="warn" (click)="removeUser(user._id)">Löschen</button>
+    
+        <button
+          mat-stroked-button
+          color="warn"
+          *ngIf="!user.ban?.isBanned"
+          (click)="openBanDialog(user)"
+        >
+          Bann
+        </button>
+    
+        <button
+          mat-stroked-button
+          color="primary"
+          *ngIf="user.ban?.isBanned"
+        >
+          Entbannen
+        </button>
       </td>
     </ng-container>
   
