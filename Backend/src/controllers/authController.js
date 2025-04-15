@@ -18,10 +18,13 @@ exports.login = async (req, res) => {
       return res.status(401).json({ message: "Benutzer nicht gefunden" });
     }
 
-    if (user.banned) {
+    if (user.banned?.isBanned === true) {
       return res
         .status(403)
-        .json({ message: "Ihr Konto wurde gesperrt. Bitte wenden Sie sich an den Support." });
+        .json({
+          message:
+            "Ihr Konto wurde gesperrt. Bitte wenden Sie sich an den Support.",
+        });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
@@ -82,30 +85,163 @@ exports.register = async (req, res) => {
     await newUser.save();
 
     const token = jwt.sign(
-      { userId: newUser._id, email: newUser.email, role: newUser.role,},
+      { userId: newUser._id, email: newUser.email, role: newUser.role },
       process.env.JWT_SECRET_KEY,
       { expiresIn: "7d" }
     );
     const refreshToken = jwt.sign(
-      { userId: newUser._id, email: newUser.email, role: newUser.role,},
+      { userId: newUser._id, email: newUser.email, role: newUser.role },
       process.env.JWT_REFRESH_SECRET_KEY,
       { expiresIn: "7d" }
     );
 
-    res
-      .status(201)
-      .json({
-        message: "Benutzer erfolgreich registriert",
-        token: token,
-        refresh_token: refreshToken,
-      });
+    res.status(201).json({
+      message: "Benutzer erfolgreich registriert",
+      token: token,
+      refresh_token: refreshToken,
+    });
   } catch (error) {
     console.error("Fehler bei der Registrierung:", error);
+    res.status(500).json({
+      message: "Fehler bei der Registrierung. Bitte versuche es später erneut.",
+    });
+  }
+};
+
+exports.createUserByAdmin = async (req, res) => {
+  const {
+    vorname,
+    nachname,
+    spitzname,
+    email,
+    password,
+    role,
+    securityQuestion,
+    securityAnswer,
+  } = req.body;
+
+  try {
+    if (!req.user || req.user.role !== "admin") {
+      return res
+        .status(403)
+        .json({ message: "Nur Admins dürfen Benutzer anlegen." });
+    }
+
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: "Benutzer existiert bereits." });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedSecurityAnswer = await bcrypt.hash(securityAnswer, 10);
+
+    const newUser = new User({
+      vorname,
+      nachname,
+      spitzname,
+      email,
+      password: hashedPassword,
+      role,
+      securityQuestion,
+      securityAnswer: hashedSecurityAnswer,
+    });
+
+    await newUser.save();
+
     res
-      .status(500)
-      .json({
-        message:
-          "Fehler bei der Registrierung. Bitte versuche es später erneut.",
-      });
+      .status(201)
+      .json({ message: "Benutzer erfolgreich durch Admin erstellt" });
+  } catch (error) {
+    console.error("Fehler beim Admin-User-Erstellen:", error);
+    res.status(500).json({ message: "Fehler beim Erstellen des Benutzers." });
+  }
+};
+
+exports.softDeleteUser = async (req, res) => {
+  try {
+    const userId = req.params.id;
+
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { geloescht: true },
+      { new: true }
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: "Benutzer nicht gefunden" });
+    }
+
+    res.status(200).json({ message: "Benutzer wurde als gelöscht markiert" });
+  } catch (error) {
+    console.error("Fehler beim Soft-Delete:", error);
+    res.status(500).json({ message: "Interner Serverfehler beim Löschen" });
+  }
+};
+
+exports.banUser = async (req, res) => {
+  console.log('Bann aufgerufen');
+  try {
+    const userId = req.params.id;
+    console.log('userId:', userId);
+    console.log('req.body:', req.body);
+
+    const { isBanned, reason, until } = req.body.banned || {};
+
+    const bannedData = isBanned
+      ? {
+          isBanned: true,
+          reason: reason || '',
+          until: until || null,
+        }
+      : {
+          isBanned: false,
+          reason: '',
+          until: null,
+        };
+
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { $set: { banned: bannedData } },
+      { new: true }
+    );
+
+    if (!updatedUser)
+      return res.status(404).json({ message: 'User nicht gefunden' });
+
+    console.log('updatedUser.banned:', updatedUser.banned);
+
+    res.status(200).json({ message: isBanned ? 'User wurde gebannt' : 'User wurde entbannt' });
+  } catch (error) {
+    console.error('Fehler beim Bann:', error);
+    res.status(500).json({ message: 'Interner Serverfehler beim Bann' });
+  }
+};
+
+exports.checkUnbans = async (req, res) => {
+  try {
+    const users = await User.find({ 'banned.isBanned': true });
+
+    let unbannedCount = 0;
+
+    for (const user of users) {
+      if (
+        user.banned.until &&
+        new Date(user.banned.until) < new Date()
+      ) {
+        user.banned.isBanned = false;
+        user.banned.reason = '';
+        user.banned.until = null;
+        await user.save();
+        unbannedCount++;
+        console.log(`User entbannt: ${user._id}`);
+      }
+    }
+
+    res.status(200).json({
+      message: `${unbannedCount} User automatisch entbannt`
+    });
+  } catch (error) {
+    console.error('Fehler beim automatischen Entbannen:', error);
+    res.status(500).json({ message: 'Fehler beim automatischen Entbannen' });
   }
 };

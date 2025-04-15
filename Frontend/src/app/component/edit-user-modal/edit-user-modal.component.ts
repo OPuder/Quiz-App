@@ -24,22 +24,21 @@ import { User } from '../../shared/models/user.model';
 import { UserManagementService } from '../../services/admin/user-management.service';
 
 @Component({
-  selector: 'app-edit-user-modal',
-  standalone: true,
-  imports: [
-    FormsModule,
-    ReactiveFormsModule,
-    MatCardModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MatTableModule,
-    MatDialogModule,
-    MatDividerModule,
-  ],
-  templateUrl: './edit-user-modal.component.html',
-  styleUrl: './edit-user-modal.component.css',
+    selector: 'app-edit-user-modal',
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        MatCardModule,
+        MatButtonModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatSelectModule,
+        MatTableModule,
+        MatDialogModule,
+        MatDividerModule,
+    ],
+    templateUrl: './edit-user-modal.component.html',
+    styleUrl: './edit-user-modal.component.css'
 })
 export class EditUserModalComponent {
   editUserForm: FormGroup;

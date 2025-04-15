@@ -2,22 +2,24 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../../services/auth/AuthService/auth.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule, HttpClientModule,RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.css'],
 })
 export class LoginComponent {
   router = inject(Router);
   authService = inject(AuthService);
-  email: string = "";
-  password: string = "";
-  errorMessage: string = "";
+  email: string = '';
+  password: string = '';
+  errorMessage: string = '';
+  
+  constructor(private http: HttpClient) {}
 
   login(event: Event) {
     event.preventDefault();

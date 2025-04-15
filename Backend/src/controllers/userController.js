@@ -2,10 +2,22 @@ const User = require("../models/userModel");
 const bcrypt = require("bcryptjs");
 
 exports.updateProfile = async (req, res) => {
-  const { password, confirmPassword, vorname, nachname, spitzname, email, role, securityQuestion, securityAnswer } = req.body;
+  const {
+    password,
+    confirmPassword,
+    vorname,
+    nachname,
+    spitzname,
+    email,
+    role,
+    securityQuestion,
+    securityAnswer,
+  } = req.body;
 
   if (password && password !== confirmPassword) {
-    return res.status(400).json({ message: 'Die Passwörter stimmen nicht überein' });
+    return res
+      .status(400)
+      .json({ message: "Die Passwörter stimmen nicht überein" });
   }
 
   if (password) {
@@ -13,7 +25,9 @@ exports.updateProfile = async (req, res) => {
   }
 
   if (!vorname || !nachname || !spitzname) {
-    return res.status(400).json({ message: 'Vorname, Nachname und Spitzname sind erforderlich' });
+    return res
+      .status(400)
+      .json({ message: "Vorname, Nachname und Spitzname sind erforderlich" });
   }
 
   try {
@@ -26,7 +40,9 @@ exports.updateProfile = async (req, res) => {
         email: email || undefined,
         role: role || undefined,
         securityQuestion: securityQuestion || undefined,
-        securityAnswer: securityAnswer ? await bcrypt.hash(securityAnswer, 10) : undefined,
+        securityAnswer: securityAnswer
+          ? await bcrypt.hash(securityAnswer, 10)
+          : undefined,
         password: req.body.password || undefined,
       },
       {
@@ -35,13 +51,13 @@ exports.updateProfile = async (req, res) => {
     ).select("-password");
 
     if (!updatedUser) {
-      return res.status(404).json({ message: 'Benutzer nicht gefunden' });
+      return res.status(404).json({ message: "Benutzer nicht gefunden" });
     }
 
     res.json(updatedUser);
   } catch (error) {
-    console.error('Fehler beim Aktualisieren des Profils:', error);
-    res.status(500).json({ message: 'Fehler beim Aktualisieren des Profils' });
+    console.error("Fehler beim Aktualisieren des Profils:", error);
+    res.status(500).json({ message: "Fehler beim Aktualisieren des Profils" });
   }
 };
 
@@ -84,12 +100,10 @@ exports.verifySecurityAnswer = async (req, res) => {
     if (isAnswerCorrect) {
       return res.status(200).json({ valid: true });
     } else {
-      return res
-        .status(400)
-        .json({
-          valid: false,
-          message: "Falsche Antwort auf die Sicherheitsfrage",
-        });
+      return res.status(400).json({
+        valid: false,
+        message: "Falsche Antwort auf die Sicherheitsfrage",
+      });
     }
   } catch (error) {
     console.error("Fehler bei der Überprüfung der Sicherheitsantwort:", error);
@@ -119,7 +133,7 @@ exports.getSecurityQuestion = async (req, res) => {
 };
 
 exports.resetPassword = async (req, res) => {
-  const { email, newPassword } = req.body;
+  const { email, securityAnswer, newPassword } = req.body;
 
   try {
     const user = await User.findOne({ email });
@@ -138,11 +152,13 @@ exports.resetPassword = async (req, res) => {
 
 exports.getAllUsers = async (req, res) => {
   try {
-    if (req.user.role !== 'admin') {
-      return res.status(403).json({ message: "Zugriff nur für Admins erlaubt" });
+    if (req.user.role !== "admin") {
+      return res
+        .status(403)
+        .json({ message: "Zugriff nur für Admins erlaubt" });
     }
 
-    const users = await User.find({}).select("-password -securityAnswer");
+    const users = await User.find({ geloescht: false }).select("-password -securityAnswer");
 
     res.status(200).json(users);
   } catch (error) {

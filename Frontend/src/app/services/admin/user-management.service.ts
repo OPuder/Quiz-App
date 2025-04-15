@@ -27,17 +27,6 @@ export class UserManagementService {
     this.loadUserFromToken();
   }
 
-  addUser(newUser: any): Observable<any> {
-    return this.http.post('http://localhost:5000/api/auth/register', newUser).pipe(
-      catchError((error) => {
-        console.error('Fehler beim Hinzufügen des Benutzers', error);
-        return throwError(
-          () => new Error('Fehler beim Hinzufügen des Benutzers')
-        );
-      })
-    );
-  }
-
   updateUserProfile(userId: string, updatedData: any): Observable<any> {
     const token = localStorage.getItem('JWT_TOKEN');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
@@ -47,21 +36,10 @@ export class UserManagementService {
   }
 
   deleteUser(id: string): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}/user/${id}`).pipe(
+    return this.http.patch<any>(`/api/auth/${id}/soft-delete`, {}).pipe(
       catchError((error) => {
         console.error('Fehler beim Löschen des Benutzers', error);
         return throwError(() => new Error('Fehler beim Löschen des Benutzers'));
-      })
-    );
-  }
-
-  updateUserRole(id: string, role: string): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/user/${id}/role`, { role }).pipe(
-      catchError((error) => {
-        console.error('Fehler beim Ändern der Benutzerrolle', error);
-        return throwError(
-          () => new Error('Fehler beim Ändern der Benutzerrolle')
-        );
       })
     );
   }
@@ -81,6 +59,14 @@ export class UserManagementService {
 
   getUsers(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/get-AllUsers`);
+  }
+
+  updateUserBan(id: string, banData: any): Observable<any> {
+    return this.http.patch(`/api/auth/${id}/ban`, banData);
+  }
+  
+  checkUnbans() {
+    return this.http.post<{ message: string }>('/api/auth/check-unbans', {});
   }
 
   getCurrentUser(): any | null {

@@ -4,6 +4,7 @@
 /out-tsc
 /bazel-out
 .env
+.angular
 
 # Node
 /node_modules
@@ -40,3 +41,4 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+Frontend/.angular/cache/19.2.7/quizapp/.tsbuildinfo

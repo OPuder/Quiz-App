@@ -3,11 +3,10 @@ import { CommonModule } from '@angular/common';
 import { QuizlogicService } from '../../../features/quiz/services/quizlogic.service';
 
 @Component({
-  selector: 'app-quiz-Snipped',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './quiz-snipped.component.html',
-  styleUrl: './quiz-snipped.component.css'
+    selector: 'app-quiz-Snipped',
+    imports: [CommonModule],
+    templateUrl: './quiz-snipped.component.html',
+    styleUrl: './quiz-snipped.component.css'
 })
 export class QuizSnippedComponent implements OnInit {
   constructor(private quizlogicService: QuizlogicService) {}

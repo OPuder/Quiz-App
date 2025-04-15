@@ -6,9 +6,10 @@ const cors = require("cors");
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
 const { createDefaultAdmin } = require("./models/adminSetup");
+const { checkUnbansOnStart } = require('./utils/unban-check');
 
 const app = express();
-const port = process.env.PORT;
+
 
 app.use(express.json());
 
@@ -21,6 +22,7 @@ app.use(
 );
 
 createDefaultAdmin();
+checkUnbansOnStart();
 
 mongoose
   .connect(process.env.MONGODB_URI)
