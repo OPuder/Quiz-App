@@ -72,11 +72,7 @@ export class AuthService {
         }
       }),
       catchError((error) => {
-        console.error('Fehler beim Login:', error);
-        this.snackBar.open('Login fehlgeschlagen', 'Schließen', {
-          duration: 3000,
-        });
-        return throwError(() => new Error('Login fehlgeschlagen.'));
+        return throwError(() => error);
       })
     );
   }

@@ -3,27 +3,22 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/userModel");
 
 exports.login = async (req, res) => {
-  console.log('Login-Route aufgerufen mit:', req.body);
   const { email, password, } = req.body;
 
   try {
     let user = await User.findOne({ email });
-    console.log('Gefundener User:', user);
     if (!user)
       return res.status(401).json({ message: 'Benutzer nicht gefunden' });
 
     const isMatch = await bcrypt.compare(password, user.password);
-    console.log('Passwort korrekt?', isMatch);
     if (!isMatch)
       return res.status(401).json({ message: 'Falsches Passwort' });
 
-    // Bannstatus prüfen
     if (user.banned?.isBanned && user.banned.until) {
       const now = new Date();
       const banEnd = new Date(user.banned.until);
 
       if (banEnd < now) {
-        // Bann ist abgelaufen -> zurücksetzen
         user.banned = {
           isBanned: false,
           reason: '',
@@ -34,15 +29,17 @@ exports.login = async (req, res) => {
       }
     }
 
-    // Aktuellen Bannstatus prüfen (nach eventuellem Entbannen)
     if (user.banned?.isBanned) {
+      const until = user.banned.until 
+        ? new Date(user.banned.until).toLocaleString('de-DE') 
+        : 'auf unbestimmte Zeit';
+    
       return res.status(403).json({
-        message: 'Du bist gebannt',
+        message: `Du bist gebannt bis: ${until}`,
         banned: user.banned
       });
     }
 
-    // JWT erzeugen
     const token = jwt.sign(
       { userId: user._id, email: user.email, role: user.role },
       process.env.JWT_SECRET_KEY,
@@ -55,7 +52,6 @@ exports.login = async (req, res) => {
       { expiresIn: '7d' }
     );
 
-    // Erfolg zurücksenden
     res.status(200).json({
       message: 'Login erfolgreich',
       token,

@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../../services/auth/AuthService/auth.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-login',
@@ -19,7 +20,10 @@ export class LoginComponent {
   password: string = '';
   errorMessage: string = '';
   
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private snackBar: MatSnackBar
+  ) {}
 
   login(event: Event) {
     event.preventDefault();
@@ -31,7 +35,6 @@ export class LoginComponent {
       })
       .subscribe({
         next: (response) => {
-          console.log(response);
           const banned = response.banned;
           if (banned?.isBanned) {
             const now = new Date();
@@ -57,8 +60,11 @@ export class LoginComponent {
           }
         },
         error: (err) => {
-          this.errorMessage = err.message || 'Login fehlgeschlagen.';
-        },
+          this.errorMessage = err.error?.message || 'Login fehlgeschlagen.';
+          this.snackBar.open(this.errorMessage, 'OK', {
+            duration: 3000,
+          });
+        }
       });
   }
 
