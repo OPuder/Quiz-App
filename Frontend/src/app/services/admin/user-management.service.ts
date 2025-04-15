@@ -77,6 +77,10 @@ export class UserManagementService {
     return this.http.patch(`/api/auth/${id}/ban`, banData);
   }
   
+  checkUnbans() {
+    return this.http.post<{ message: string }>('/api/check-unbans', {});
+  }
+  
   getCurrentUser(): any | null {
     return this.currentUserSubject.value;
   }

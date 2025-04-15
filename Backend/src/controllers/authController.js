@@ -216,3 +216,32 @@ exports.banUser = async (req, res) => {
     res.status(500).json({ message: 'Interner Serverfehler beim Bann' });
   }
 };
+
+exports.checkUnbans = async (req, res) => {
+  try {
+    const users = await User.find({ 'banned.isBanned': true });
+
+    let unbannedCount = 0;
+
+    for (const user of users) {
+      if (
+        user.banned.until &&
+        new Date(user.banned.until) < new Date()
+      ) {
+        user.banned.isBanned = false;
+        user.banned.reason = '';
+        user.banned.until = null;
+        await user.save();
+        unbannedCount++;
+        console.log(`User entbannt: ${user._id}`);
+      }
+    }
+
+    res.status(200).json({
+      message: `${unbannedCount} User automatisch entbannt`
+    });
+  } catch (error) {
+    console.error('Fehler beim automatischen Entbannen:', error);
+    res.status(500).json({ message: 'Fehler beim automatischen Entbannen' });
+  }
+};

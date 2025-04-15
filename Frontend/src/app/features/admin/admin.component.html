@@ -2,8 +2,14 @@
   <h1 class="dashboard-title">Admin Dashboard</h1>
 
   <div class="button-container">
-    <button mat-raised-button color="primary" (click)="openAddUserDialog()">+ Neuen Benutzer hinzufügen</button>
+    <div>
+      <button mat-raised-button color="primary" (click)="openAddUserDialog()">Neuen Benutzer hinzufügen</button>
+    </div>
+    <div>
+      <button mat-raised-button color="warn" (click)="checkUnbans()">Banns prüfen & automatisch entbannen</button>
+    </div>
   </div>
+
 
   <div *ngIf="errorMessage" class="error-message mat-elevation-z2">
     {{ errorMessage }}
