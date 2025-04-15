@@ -45,7 +45,8 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 })
 export class BanUserModalComponent {
   banForm: FormGroup;
-
+  minDate: Date = new Date();
+  
   constructor(
     public dialogRef: MatDialogRef<BanUserModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -59,13 +60,38 @@ export class BanUserModalComponent {
       untilHour: [0],
       untilMinute: [0]
     });
+
+    if (this.banForm.get('isBanned')?.value && !this.banForm.get('untilDate')?.value) {
+      this.banForm.patchValue({ untilDate: new Date() });
+    }
+
+    this.banForm.get('isBanned')?.valueChanges.subscribe((banned: boolean) => {
+      if (banned) {
+        this.banForm.patchValue({ untilDate: new Date() });
+      } else {
+        this.banForm.patchValue({
+          untilDate: null,
+          untilHour: 0,
+          untilMinute: 0
+        });
+      }
+    });
   }
 
   submitBan(): void {
     const formValue = this.banForm.value;
-    
+
     console.log('formValue', formValue);
-    
+
+    if (
+      formValue.isBanned &&
+      formValue.untilDate &&
+      new Date(formValue.untilDate) < this.minDate
+    ) {
+      alert('Das Bann-Enddatum darf nicht in der Vergangenheit liegen.');
+      return;
+    }
+
     let until: Date | null = null;
     if (formValue.isBanned && formValue.untilDate) {
       until = new Date(formValue.untilDate);
