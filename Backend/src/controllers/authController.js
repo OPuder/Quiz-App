@@ -179,28 +179,40 @@ exports.softDeleteUser = async (req, res) => {
 };
 
 exports.banUser = async (req, res) => {
+  console.log('Bann aufgerufen');
   try {
     const userId = req.params.id;
-    const { isBanned, reason, until } = req.body;
+    console.log('userId:', userId);
+    console.log('req.body:', req.body);
+
+    const { isBanned, reason, until } = req.body.ban || {};
+
+    const bannedData = isBanned
+      ? {
+          isBanned: true,
+          reason: reason || '',
+          until: until || null,
+        }
+      : {
+          isBanned: false,
+          reason: '',
+          until: null,
+        };
 
     const updatedUser = await User.findByIdAndUpdate(
       userId,
-      {
-        banned: {
-          isBanned,
-          reason,
-          until,
-        },
-      },
+      { $set: { banned: bannedData } },
       { new: true }
     );
 
     if (!updatedUser)
-      return res.status(404).json({ message: "User nicht gefunden" });
+      return res.status(404).json({ message: 'User nicht gefunden' });
 
-    res.status(200).json({ message: "User wurde gebannt" });
+    console.log('updatedUser.banned:', updatedUser.banned);
+
+    res.status(200).json({ message: isBanned ? 'User wurde gebannt' : 'User wurde entbannt' });
   } catch (error) {
-    console.error("Fehler beim Bann:", error);
-    res.status(500).json({ message: "Interner Serverfehler beim Bann" });
+    console.error('Fehler beim Bann:', error);
+    res.status(500).json({ message: 'Interner Serverfehler beim Bann' });
   }
 };

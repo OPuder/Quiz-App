@@ -16,7 +16,7 @@
 
       <mat-form-field appearance="fill">
         <mat-label>Gebannt bis</mat-label>
-        <input matInput [matDatepicker]="picker" formControlName="until">
+        <input matInput [matDatepicker]="picker" formControlName="until" placeholder="DD.MM.JJJJ">
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
         <mat-hint>Leer lassen für permanenten Bann</mat-hint>

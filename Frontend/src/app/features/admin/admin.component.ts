@@ -53,7 +53,14 @@ export class AdminComponent {
     private authService: AuthService,
     private userManagementService: UserManagementService,
     private dialog: MatDialog
-  ) {}
+  ) {
+    this.dialog.afterOpened.subscribe(() => {
+      const appRoot = document.querySelector('app-root');
+      if (appRoot?.getAttribute('aria-hidden') === 'true') {
+        appRoot.removeAttribute('aria-hidden');
+      }
+    });
+  }
   ngOnInit() {
     this.loadUserList();
   }
@@ -65,7 +72,7 @@ export class AdminComponent {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.loadUserList(); // ✅ nur Liste neu laden
+        this.loadUserList();
       }
     });
   }
@@ -82,6 +89,20 @@ export class AdminComponent {
       }
     });
   }
+  
+  openBanDialog(user: any): void {
+    const dialogRef = this.dialog.open(BanUserModalComponent, {
+      width: '400px',
+      data: { user }
+    });
+  
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loadUserList();
+      }
+    });
+  }
+
   loadUserList(): void {
     this.userManagementService.getUsers().subscribe({
       next: (response) => {
@@ -111,18 +132,5 @@ export class AdminComponent {
   editUser(user: any): void {
     this.selectedUser = { ...user };
     this.openEditUserModal(this.selectedUser);
-  }
-
-  openBanDialog(user: any): void {
-    const dialogRef = this.dialog.open(BanUserModalComponent, {
-      width: '400px',
-      data: { user }
-    });
-  
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.loadUserList();
-      }
-    });
   }
 }

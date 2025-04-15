@@ -73,6 +73,7 @@ export class UserManagementService {
   }
 
   updateUserBan(id: string, banData: any): Observable<any> {
+    console.log('Bann aufgerufen', id, banData);
     return this.http.patch(`/api/auth/${id}/ban`, banData);
   }
   
