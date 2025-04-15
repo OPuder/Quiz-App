@@ -7,6 +7,7 @@ import { authInterceptor } from '../services/auth/AuthService/auth.interceptor';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
 import { provideMatDatepicker } from '@angular/material/datepicker';
+import { ReactiveFormsModule } from '@angular/forms';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -18,6 +19,7 @@ export const appConfig: ApplicationConfig = {
     ),
     provideAnimationsAsync(),
     provideMatDatepicker(),
+    ReactiveFormsModule,
     MatNativeDateModule,
     { provide: MAT_DATE_LOCALE, useValue: 'de-DE' },
   ]

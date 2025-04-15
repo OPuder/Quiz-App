@@ -1,6 +1,16 @@
 import { Component, Inject } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import {
+  FormGroup,
+  FormBuilder,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule
+} from '@angular/forms';
+import {
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+  MatDialogModule
+} from '@angular/material/dialog';
 import { UserManagementService } from '../../services/admin/user-management.service';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
@@ -11,21 +21,25 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @Component({
-    selector: 'app-bann-user-modal',
-    imports: [
-        CommonModule,
-        ReactiveFormsModule,
-        FormsModule,
-        MatDialogModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatButtonModule,
-        MatNativeDateModule,
-        MatDatepickerModule,
-        MatSlideToggleModule
-    ],
-    templateUrl: './bann-user-modal.component.html',
-    styleUrl: './bann-user-modal.component.css'
+  selector: 'app-bann-user-modal',
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    FormsModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatNativeDateModule,
+    MatDatepickerModule,
+    MatSlideToggleModule
+  ],
+  providers: [
+    { provide: MAT_DATE_LOCALE, useValue: 'de-DE' }
+  ],
+  templateUrl: './bann-user-modal.component.html',
+  styleUrl: './bann-user-modal.component.css'
 })
 export class BanUserModalComponent {
   banForm: FormGroup;
@@ -37,7 +51,7 @@ export class BanUserModalComponent {
     private userService: UserManagementService
   ) {
     this.banForm = this.fb.group({
-      isBanned: [this.data.user?.ban?.isBanned || false],
+      isBanned: [this.data.user?.banned?.isBanned || false],
       reason: [''],
       until: [null]
     });
@@ -47,11 +61,9 @@ export class BanUserModalComponent {
     const isBanned = this.banForm.value.isBanned;
 
     const banData = {
-      ban: {
-        isBanned,
-        reason: isBanned ? this.banForm.value.reason : '',
-        until: isBanned ? this.banForm.value.until : null
-      }
+      isBanned,
+      reason: isBanned ? this.banForm.value.reason : '',
+      until: isBanned ? this.banForm.value.until : null
     };
 
     this.userService.updateUserBan(this.data.user._id, banData).subscribe({
