@@ -31,6 +31,7 @@ mongoose
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
 
+console.log('checkUnbansOnStart');
 checkUnbansOnStart();
 
 app.listen(process.env.PORT, () => {

@@ -9,6 +9,6 @@ router.post('/register', authController.register);
 router.post("/create", authenticateToken, authController.createUserByAdmin);
 router.patch('/:id/soft-delete', authenticateToken, authController.softDeleteUser);
 router.patch('/:id/ban', authenticateToken, authController.banUser);
-router.post('/check-unbans', userController.checkUnbans);
+router.post('/check-unbans', authController.checkUnbans);
 
 module.exports = router; 
