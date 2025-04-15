@@ -2,25 +2,24 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import {} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../../services/auth/AuthService/auth.service';
 
 @Component({
-    selector: 'app-login',
-    imports: [CommonModule, FormsModule,
-        // TODO: `HttpClientModule` should not be imported into a component directly.
-        // Please refactor the code to add `provideHttpClient()` call to the provider list in the
-        // application bootstrap logic and remove the `HttpClientModule` import from this component.
-        HttpClientModule, RouterModule],
-    templateUrl: './login.component.html',
-    styleUrls: ['./login.component.css']
+  selector: 'app-login',
+  standalone: true,
+  imports: [CommonModule, FormsModule, RouterModule],
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css'],
 })
 export class LoginComponent {
   router = inject(Router);
   authService = inject(AuthService);
-  email: string = "";
-  password: string = "";
-  errorMessage: string = "";
+  email: string = '';
+  password: string = '';
+  errorMessage: string = '';
+  
+  constructor(private http: HttpClient) {}
 
   login(event: Event) {
     event.preventDefault();
