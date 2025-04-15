@@ -2,7 +2,7 @@ import { createRequire } from 'module';const require = createRequire(import.meta
 import {
   BrowserDomAdapter,
   BrowserModule
-} from "./chunk-VQB3EQ2N.js";
+} from "./chunk-7KF2CIZU.js";
 import {
   EVENT_MANAGER_PLUGINS,
   EventManagerPlugin
@@ -16910,4 +16910,4 @@ export {
    * License: MIT
    *)
 */
-//# sourceMappingURL=chunk-O3NUXI35.js.map
+//# sourceMappingURL=chunk-HJ5IBWMW.js.map

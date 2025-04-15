@@ -1,4 +1,7 @@
 import {
+  _MatInternalFormField
+} from "./chunk-6CVUCUAY.js";
+import {
   MAT_OPTGROUP,
   MAT_OPTION_PARENT_COMPONENT,
   MatOptgroup,
@@ -22,9 +25,6 @@ import {
   ShowOnDirtyErrorStateMatcher,
   _ErrorStateTracker
 } from "./chunk-KTKFOWBY.js";
-import {
-  _MatInternalFormField
-} from "./chunk-6CVUCUAY.js";
 import {
   MatRippleLoader
 } from "./chunk-AF2OHAHY.js";

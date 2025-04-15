@@ -4,9 +4,6 @@ import {
   setClassMetadata,
   ɵɵdefineInjectable
 } from "./chunk-EOS55Q6Z.js";
-import "./chunk-WPM5VTLQ.js";
-import "./chunk-PEBH6BBU.js";
-import "./chunk-4S3KYZTJ.js";
 import {
   __objRest,
   __spreadValues
@@ -4329,28 +4326,29 @@ var AnimationRendererFactory = class {
     this.delegate.componentReplaced?.(componentId);
   }
 };
+
 export {
-  AnimationDriver,
+  getParentElement,
+  validateStyleProperty,
+  validateWebAnimatableStyleProperty,
+  containsElement,
+  invokeQuery,
+  normalizeKeyframes,
+  camelCaseToDashCase,
+  allowPreviousPlayerStylesMerge,
   NoopAnimationDriver,
-  Animation as ɵAnimation,
-  AnimationEngine as ɵAnimationEngine,
-  AnimationRenderer as ɵAnimationRenderer,
-  AnimationRendererFactory as ɵAnimationRendererFactory,
-  AnimationStyleNormalizer as ɵAnimationStyleNormalizer,
-  BaseAnimationRenderer as ɵBaseAnimationRenderer,
-  NoopAnimationStyleNormalizer as ɵNoopAnimationStyleNormalizer,
-  WebAnimationsDriver as ɵWebAnimationsDriver,
-  WebAnimationsPlayer as ɵWebAnimationsPlayer,
-  WebAnimationsStyleNormalizer as ɵWebAnimationsStyleNormalizer,
-  allowPreviousPlayerStylesMerge as ɵallowPreviousPlayerStylesMerge,
-  camelCaseToDashCase as ɵcamelCaseToDashCase,
-  containsElement as ɵcontainsElement,
-  createEngine as ɵcreateEngine,
-  getParentElement as ɵgetParentElement,
-  invokeQuery as ɵinvokeQuery,
-  normalizeKeyframes as ɵnormalizeKeyframes,
-  validateStyleProperty as ɵvalidateStyleProperty,
-  validateWebAnimatableStyleProperty as ɵvalidateWebAnimatableStyleProperty
+  AnimationDriver,
+  AnimationStyleNormalizer,
+  NoopAnimationStyleNormalizer,
+  WebAnimationsStyleNormalizer,
+  AnimationEngine,
+  WebAnimationsPlayer,
+  WebAnimationsDriver,
+  createEngine,
+  Animation,
+  BaseAnimationRenderer,
+  AnimationRenderer,
+  AnimationRendererFactory
 };
 /*! Bundled license information:
 
@@ -4375,4 +4373,4 @@ export {
    * License: MIT
    *)
 */
-//# sourceMappingURL=browser-PZLAP537.js.map
+//# sourceMappingURL=chunk-UKPDLPPM.js.map

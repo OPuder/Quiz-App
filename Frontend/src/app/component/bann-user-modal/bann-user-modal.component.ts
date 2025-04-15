@@ -33,29 +33,29 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     MatButtonModule,
     MatNativeDateModule,
     MatDatepickerModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
   ],
   providers: [
+    MatDatepickerModule,
+    MatNativeDateModule,
     { provide: MAT_DATE_LOCALE, useValue: 'de-DE' }
   ],
   templateUrl: './bann-user-modal.component.html',
   styleUrl: './bann-user-modal.component.css'
 })
 export class BanUserModalComponent {
-  banForm: FormGroup;
+  banForm = this.fb.group({
+    isBanned: [false],
+    reason: [''],
+    until: [null]
+  });
 
   constructor(
+    private userService: UserManagementService,
     public dialogRef: MatDialogRef<BanUserModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private fb: FormBuilder,
-    private userService: UserManagementService
-  ) {
-    this.banForm = this.fb.group({
-      isBanned: [this.data.user?.banned?.isBanned || false],
-      reason: [''],
-      until: [null]
-    });
-  }
+    private fb: FormBuilder
+  ) {}
 
   submitBan(): void {
     const isBanned = this.banForm.value.isBanned;
