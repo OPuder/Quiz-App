@@ -44,17 +44,6 @@ export class UserManagementService {
     );
   }
 
-  updateUserRole(id: string, role: string): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/user/${id}/role`, { role }).pipe(
-      catchError((error) => {
-        console.error('Fehler beim Ändern der Benutzerrolle', error);
-        return throwError(
-          () => new Error('Fehler beim Ändern der Benutzerrolle')
-        );
-      })
-    );
-  }
-
   changePassword(oldPassword: string, newPassword: string): Observable<any> {
     return this.http
       .post(`${this.apiUrl}/change-password`, { oldPassword, newPassword })

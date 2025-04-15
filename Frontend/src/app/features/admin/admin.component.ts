@@ -61,7 +61,6 @@ export class AdminComponent {
     });
   }
   ngOnInit() {
-    this.loadUserList();
     this.checkUnbans();
   }
 
@@ -114,6 +113,7 @@ export class AdminComponent {
       }
     });
   }
+
   loadUserList(): void {
     this.userManagementService.getUsers().subscribe({
       next: (response) => {
