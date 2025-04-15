@@ -3,51 +3,69 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/userModel");
 
 exports.login = async (req, res) => {
-  const { email, password } = req.body;
-
-  if (!email || !password) {
-    return res
-      .status(400)
-      .json({ message: "E-Mail und Passwort sind erforderlich" });
-  }
+  console.log('Login-Route aufgerufen mit:', req.body);
+  const { email, password, } = req.body;
 
   try {
-    const user = await User.findOne({ email });
-
-    if (!user) {
-      return res.status(401).json({ message: "Benutzer nicht gefunden" });
-    }
-
-    if (user.banned?.isBanned === true) {
-      return res
-        .status(403)
-        .json({
-          message:
-            "Ihr Konto wurde gesperrt. Bitte wenden Sie sich an den Support.",
-        });
-    }
+    let user = await User.findOne({ email });
+    console.log('Gefundener User:', user);
+    if (!user)
+      return res.status(401).json({ message: 'Benutzer nicht gefunden' });
 
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(401).json({ message: "Falsches Passwort" });
+    console.log('Passwort korrekt?', isMatch);
+    if (!isMatch)
+      return res.status(401).json({ message: 'Falsches Passwort' });
+
+    // Bannstatus prüfen
+    if (user.banned?.isBanned && user.banned.until) {
+      const now = new Date();
+      const banEnd = new Date(user.banned.until);
+
+      if (banEnd < now) {
+        // Bann ist abgelaufen -> zurücksetzen
+        user.banned = {
+          isBanned: false,
+          reason: '',
+          until: null
+        };
+        await user.save();
+        user = await User.findById(user._id);
+      }
     }
 
+    // Aktuellen Bannstatus prüfen (nach eventuellem Entbannen)
+    if (user.banned?.isBanned) {
+      return res.status(403).json({
+        message: 'Du bist gebannt',
+        banned: user.banned
+      });
+    }
+
+    // JWT erzeugen
     const token = jwt.sign(
       { userId: user._id, email: user.email, role: user.role },
       process.env.JWT_SECRET_KEY,
-      { expiresIn: "1h" }
+      { expiresIn: '7d' }
     );
 
-    res.json({
-      access_token: token,
-      refresh_token: process.env.JWT_REFRESH_SECRET_KEY,
+    const refreshToken = jwt.sign(
+      { userId: user._id, email: user.email, role: user.role },
+      process.env.JWT_REFRESH_SECRET_KEY,
+      { expiresIn: '7d' }
+    );
+
+    // Erfolg zurücksenden
+    res.status(200).json({
+      message: 'Login erfolgreich',
+      token,
+      refresh_token: refreshToken,
       role: user.role,
+      banned: user.banned
     });
   } catch (error) {
-    console.error("Fehler beim Login:", error);
-    res.status(500).json({
-      message: "Fehler beim Login. Bitte versuchen Sie es später erneut.",
-    });
+    console.error('Fehler beim Login:', error);
+    res.status(500).json({ message: 'Interner Serverfehler beim Login' });
   }
 };
 

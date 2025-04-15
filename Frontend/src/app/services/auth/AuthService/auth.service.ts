@@ -52,13 +52,13 @@ export class AuthService {
   login(user: { email: string; password: string }): Observable<any> {
     return this.http.post('http://localhost:5000/api/auth/login', user).pipe(
       tap((tokens: any) => {
-        if (tokens?.access_token) {
+        if (tokens?.token) {
           this.storeJwtToken(tokens);
           this.storeRefreshToken(tokens.refresh_token);
           this.isAuthenticated.next(true);
           this.loggedUser = user.email;
 
-          const decodedToken: any = jwtDecode(tokens.access_token);
+          const decodedToken: any = jwtDecode(tokens.token);
           this.userManagementService.setCurrentUser({
             id: decodedToken.id,
             email: decodedToken.email,

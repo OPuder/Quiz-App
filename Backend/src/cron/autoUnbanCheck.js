@@ -11,7 +11,7 @@ function startUnbanCronjob() {
       { $set: { 'banned.isBanned': false, 'banned.reason': '', 'banned.until': null } }
     );
 
-    console.log(`✅ ${result.modifiedCount} User automatisch entbannt`);
+    console.log(`${result.modifiedCount} User automatisch entbannt`);
   });
 }
 

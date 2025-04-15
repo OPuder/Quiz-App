@@ -31,6 +31,24 @@ export class LoginComponent {
       })
       .subscribe({
         next: (response) => {
+          console.log(response);
+          const banned = response.banned;
+          if (banned?.isBanned) {
+            const now = new Date();
+            const until = banned.until ? new Date(banned.until) : null;
+    
+            if (!until || now < until) {
+              const banInfo = banned.reason 
+                ? `Grund: ${banned.reason}` 
+                : 'Du bist derzeit gebannt.';
+              const untilInfo = until 
+                ? `Bis: ${until.toLocaleString('de-DE')}` 
+                : '(permanent)';
+              this.errorMessage = `Login gesperrt. ${banInfo} ${untilInfo}`;
+              return;
+            }
+          }
+
           const userRole = response.role;
           if (userRole === 'admin') {
             this.router.navigate(['/app-admin']);

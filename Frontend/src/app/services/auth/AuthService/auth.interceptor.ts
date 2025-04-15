@@ -26,7 +26,7 @@ function getJwtToken(): string | null {
   }
 
   try {
-    const token = JSON.parse(tokens).access_token;
+    const token = JSON.parse(tokens).token;
     if (isTokenExpired(token)) {
       return null;
     }
