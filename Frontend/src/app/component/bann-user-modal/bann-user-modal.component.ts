@@ -44,26 +44,43 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
   styleUrl: './bann-user-modal.component.css'
 })
 export class BanUserModalComponent {
-  banForm = this.fb.group({
-    isBanned: [false],
-    reason: [''],
-    until: [null]
-  });
+  banForm: FormGroup;
 
   constructor(
-    private userService: UserManagementService,
     public dialogRef: MatDialogRef<BanUserModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private fb: FormBuilder
-  ) {}
+    private fb: FormBuilder,
+    private userService: UserManagementService
+  ) {
+    this.banForm = this.fb.group({
+      isBanned: [this.data.user?.banned?.isBanned || false],
+      reason: [this.data.user?.banned?.reason || ''],
+      untilDate: [this.data.user?.banned?.until ? new Date(this.data.user.banned.until) : null],
+      untilHour: [0],
+      untilMinute: [0]
+    });
+  }
 
   submitBan(): void {
-    const isBanned = this.banForm.value.isBanned;
+    const formValue = this.banForm.value;
+    
+    console.log('formValue', formValue);
+    
+    let until: Date | null = null;
+    if (formValue.isBanned && formValue.untilDate) {
+      until = new Date(formValue.untilDate);
+      until.setHours(formValue.untilHour || 0);
+      until.setMinutes(formValue.untilMinute || 0);
+      until.setSeconds(0);
+      until.setMilliseconds(0);
+    }
 
     const banData = {
-      isBanned,
-      reason: isBanned ? this.banForm.value.reason : '',
-      until: isBanned ? this.banForm.value.until : null
+      banned: {
+        isBanned: formValue.isBanned,
+        reason: formValue.isBanned ? formValue.reason : '',
+        until: formValue.isBanned ? until : null
+      }
     };
 
     this.userService.updateUserBan(this.data.user._id, banData).subscribe({

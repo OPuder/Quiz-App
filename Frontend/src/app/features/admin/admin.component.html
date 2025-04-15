@@ -49,7 +49,7 @@
           Bann
           <span *ngIf="user.banned.reason">({{ user.banned.reason }})</span>
           <span *ngIf="user.banned.until">
-            – bis {{ user.banned.until | date: 'shortDate' }}
+            – bis {{ user.banned.until | date: 'short' }}
           </span>
         </span>
       </td>
