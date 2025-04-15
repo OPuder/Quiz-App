@@ -8,7 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { AuthService } from '../../services/auth/AuthService/auth.service';
-import { NewUser, User } from '../../shared/models/user.model';
+import { NewUser } from '../../shared/models/user.model';
 import { UserManagementService } from '../../services/admin/user-management.service';
 
 @Component({

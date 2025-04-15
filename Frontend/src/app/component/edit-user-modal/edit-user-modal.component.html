@@ -1,4 +1,4 @@
-<h2 mat-dialog-title>Benutzer bearbeiten</h2>
+<h1 mat-dialog-title>Benutzer bearbeiten</h1>
 
 <form [formGroup]="editUserForm" (ngSubmit)="submit()" class="edit-user-form" autocomplete="off">
   <!-- 🔹 Vorname -->
@@ -36,8 +36,14 @@
 
   <!-- 🔹 Sicherheitsfrage -->
   <mat-form-field appearance="outline" class="full-width">
-    <mat-label>Geheimfrage</mat-label>
-    <input matInput formControlName="securityQuestion" />
+    <mat-label>Sicherheitsfrage</mat-label>
+    <mat-select formControlName="securityQuestion" required>
+      <mat-option value="Your first pet's name">Name Ihres ersten Haustiers</mat-option>
+      <mat-option value="Mother's name">Name der Mutter</mat-option>
+      <mat-option value="Favorite color">Lieblingsfarbe</mat-option>
+      <mat-option value="City of birth">Geburtsstadt</mat-option>
+      <mat-option value="First school name">Name der ersten Schule</mat-option>
+    </mat-select>
   </mat-form-field>
 
   <!-- 🔹 Sicherheitsantwort -->
