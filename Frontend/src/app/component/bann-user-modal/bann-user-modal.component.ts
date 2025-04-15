@@ -20,6 +20,14 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
+export interface BanPayload {
+  banned: {
+    isBanned: boolean;
+    reason: string;
+    until: Date | null;
+  };
+}
+
 @Component({
   selector: 'app-bann-user-modal',
   standalone: true,
@@ -43,6 +51,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
   templateUrl: './bann-user-modal.component.html',
   styleUrl: './bann-user-modal.component.css'
 })
+
 export class BanUserModalComponent {
   banForm: FormGroup;
   minDate: Date = new Date();
@@ -78,10 +87,19 @@ export class BanUserModalComponent {
     });
   }
 
+  private combineDateTime(formValue: any): Date | null {
+    if (!formValue.isBanned) return null;
+  
+    const now = new Date();
+    const totalMinutes = (formValue.untilHour || 0) * 60 + (formValue.untilMinute || 0);
+  
+    if (totalMinutes === 0) return null;
+  
+    return new Date(now.getTime() + totalMinutes * 60000);
+  }
+
   submitBan(): void {
     const formValue = this.banForm.value;
-
-    console.log('formValue', formValue);
 
     if (
       formValue.isBanned &&
@@ -92,20 +110,11 @@ export class BanUserModalComponent {
       return;
     }
 
-    let until: Date | null = null;
-    if (formValue.isBanned && formValue.untilDate) {
-      until = new Date(formValue.untilDate);
-      until.setHours(formValue.untilHour || 0);
-      until.setMinutes(formValue.untilMinute || 0);
-      until.setSeconds(0);
-      until.setMilliseconds(0);
-    }
-
-    const banData = {
+    const banData: BanPayload = {
       banned: {
         isBanned: formValue.isBanned,
         reason: formValue.isBanned ? formValue.reason : '',
-        until: formValue.isBanned ? until : null
+        until: formValue.isBanned ? this.combineDateTime(formValue) : null
       }
     };
 

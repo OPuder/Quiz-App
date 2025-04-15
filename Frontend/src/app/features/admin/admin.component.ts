@@ -62,6 +62,7 @@ export class AdminComponent {
   }
   ngOnInit() {
     this.loadUserList();
+    this.checkUnbans();
   }
 
   openAddUserDialog(): void {
@@ -105,7 +106,7 @@ export class AdminComponent {
   checkUnbans(): void {
     this.userManagementService.checkUnbans().subscribe({
       next: (res) => {
-        alert(res.message); // oder Snackbar/Toastr
+        this.loadUserList();
       },
       error: (err) => {
         console.error('Fehler beim Entbann-Check:', err);
