@@ -45,11 +45,11 @@
     <ng-container matColumnDef="banned">
       <th mat-header-cell *matHeaderCellDef> Gebannt </th>
       <td mat-cell *matCellDef="let user">
-        <span *ngIf="user.ban?.isBanned" style="color: red; font-weight: bold;">
-          Ja
-          <span *ngIf="user.ban.reason">({{ user.ban.reason }})</span>
-          <span *ngIf="user.ban.until">
-            – bis {{ user.ban.until | date: 'shortDate' }}
+        <span *ngIf="user.banned?.isBanned" style="color: red; font-weight: bold;">
+          Bann
+          <span *ngIf="user.banned.reason">({{ user.banned.reason }})</span>
+          <span *ngIf="user.banned.until">
+            – bis {{ user.banned.until | date: 'shortDate' }}
           </span>
         </span>
       </td>

@@ -8,6 +8,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @Component({
   selector: 'app-bann-user-modal',
@@ -22,6 +23,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
     MatButtonModule,
     MatNativeDateModule,
     MatDatepickerModule,
+    MatSlideToggleModule
   ],
   templateUrl: './bann-user-modal.component.html',
   styleUrl: './bann-user-modal.component.css'
