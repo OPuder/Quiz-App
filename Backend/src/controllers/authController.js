@@ -21,7 +21,10 @@ exports.login = async (req, res) => {
     if (user.banned?.isBanned === true) {
       return res
         .status(403)
-        .json({ message: "Ihr Konto wurde gesperrt. Bitte wenden Sie sich an den Support." });
+        .json({
+          message:
+            "Ihr Konto wurde gesperrt. Bitte wenden Sie sich an den Support.",
+        });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
@@ -82,31 +85,26 @@ exports.register = async (req, res) => {
     await newUser.save();
 
     const token = jwt.sign(
-      { userId: newUser._id, email: newUser.email, role: newUser.role,},
+      { userId: newUser._id, email: newUser.email, role: newUser.role },
       process.env.JWT_SECRET_KEY,
       { expiresIn: "7d" }
     );
     const refreshToken = jwt.sign(
-      { userId: newUser._id, email: newUser.email, role: newUser.role,},
+      { userId: newUser._id, email: newUser.email, role: newUser.role },
       process.env.JWT_REFRESH_SECRET_KEY,
       { expiresIn: "7d" }
     );
 
-    res
-      .status(201)
-      .json({
-        message: "Benutzer erfolgreich registriert",
-        token: token,
-        refresh_token: refreshToken,
-      });
+    res.status(201).json({
+      message: "Benutzer erfolgreich registriert",
+      token: token,
+      refresh_token: refreshToken,
+    });
   } catch (error) {
     console.error("Fehler bei der Registrierung:", error);
-    res
-      .status(500)
-      .json({
-        message:
-          "Fehler bei der Registrierung. Bitte versuche es später erneut.",
-      });
+    res.status(500).json({
+      message: "Fehler bei der Registrierung. Bitte versuche es später erneut.",
+    });
   }
 };
 
@@ -124,7 +122,9 @@ exports.createUserByAdmin = async (req, res) => {
 
   try {
     if (!req.user || req.user.role !== "admin") {
-      return res.status(403).json({ message: "Nur Admins dürfen Benutzer anlegen." });
+      return res
+        .status(403)
+        .json({ message: "Nur Admins dürfen Benutzer anlegen." });
     }
 
     const existingUser = await User.findOne({ email });
@@ -148,7 +148,9 @@ exports.createUserByAdmin = async (req, res) => {
 
     await newUser.save();
 
-    res.status(201).json({ message: "Benutzer erfolgreich durch Admin erstellt" });
+    res
+      .status(201)
+      .json({ message: "Benutzer erfolgreich durch Admin erstellt" });
   } catch (error) {
     console.error("Fehler beim Admin-User-Erstellen:", error);
     res.status(500).json({ message: "Fehler beim Erstellen des Benutzers." });
@@ -158,9 +160,12 @@ exports.createUserByAdmin = async (req, res) => {
 exports.softDeleteUser = async (req, res) => {
   try {
     const userId = req.params.id;
-    console.log('Soft-Delete aufgerufen mit ID:', userId);
 
-    const user = await User.findByIdAndUpdate(userId, { geloescht: true }, { new: true });
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { geloescht: true },
+      { new: true }
+    );
 
     if (!user) {
       return res.status(404).json({ message: "Benutzer nicht gefunden" });
@@ -176,15 +181,26 @@ exports.softDeleteUser = async (req, res) => {
 exports.banUser = async (req, res) => {
   try {
     const userId = req.params.id;
-    const { ban } = req.body;
+    const { isBanned, reason, until } = req.body;
 
-    const updatedUser = await User.findByIdAndUpdate(userId, { ban }, { new: true });
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      {
+        banned: {
+          isBanned,
+          reason,
+          until,
+        },
+      },
+      { new: true }
+    );
 
-    if (!updatedUser) return res.status(404).json({ message: 'User nicht gefunden' });
+    if (!updatedUser)
+      return res.status(404).json({ message: "User nicht gefunden" });
 
-    res.status(200).json({ message: 'User wurde gebannt' });
+    res.status(200).json({ message: "User wurde gebannt" });
   } catch (error) {
-    console.error('Fehler beim Bann:', error);
-    res.status(500).json({ message: 'Interner Serverfehler beim Bann' });
+    console.error("Fehler beim Bann:", error);
+    res.status(500).json({ message: "Interner Serverfehler beim Bann" });
   }
 };
