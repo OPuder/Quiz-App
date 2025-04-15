@@ -1,1 +1,37 @@
-/* You can add global styles to this file, and also import other style files */
+/* Zentriert Inhalte in allen Angular Material Dialogen */
+.mat-dialog-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 24px ;
+    overflow: hidden;
+  }
+  
+  /* Zentriert das Formular und begrenzt die Breite */
+  form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 500px;
+  }
+  
+  /* Einheitliches Styling für Formularfelder */
+  .mat-form-field.full-width {
+    width: 100%;
+    margin-bottom: 16px;
+  }
+  
+  /* Buttons einheitlich mittig mit Abstand */
+  .button-row {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 24px;
+  }
+  /* Optional: h3 Überschriften optisch trennen */
+  form h3 {
+    margin-bottom: 12px;
+  }
+  

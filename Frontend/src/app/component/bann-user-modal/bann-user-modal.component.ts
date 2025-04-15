@@ -2,7 +2,6 @@ import { Component, Inject } from '@angular/core';
 import {
   FormGroup,
   FormBuilder,
-  Validators,
   FormsModule,
   ReactiveFormsModule
 } from '@angular/forms';
@@ -19,6 +18,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+
 
 export interface BanPayload {
   banned: {
@@ -46,7 +46,7 @@ export interface BanPayload {
   providers: [
     MatDatepickerModule,
     MatNativeDateModule,
-    { provide: MAT_DATE_LOCALE, useValue: 'de-DE' }
+    { provide: MAT_DATE_LOCALE, useValue: 'de-DE' },
   ],
   templateUrl: './bann-user-modal.component.html',
   styleUrl: './bann-user-modal.component.css'
@@ -65,21 +65,17 @@ export class BanUserModalComponent {
     this.banForm = this.fb.group({
       isBanned: [this.data.user?.banned?.isBanned || false],
       reason: [this.data.user?.banned?.reason || ''],
-      untilDate: [this.data.user?.banned?.until ? new Date(this.data.user.banned.until) : null],
+      untilDate: [this.data.user?.banned?.until ? new Date(this.data.user.banned.until) : new Date()],
       untilHour: [0],
       untilMinute: [0]
     });
-
-    if (this.banForm.get('isBanned')?.value && !this.banForm.get('untilDate')?.value) {
-      this.banForm.patchValue({ untilDate: new Date() });
-    }
 
     this.banForm.get('isBanned')?.valueChanges.subscribe((banned: boolean) => {
       if (banned) {
         this.banForm.patchValue({ untilDate: new Date() });
       } else {
         this.banForm.patchValue({
-          untilDate: null,
+          untilDate: new Date(),
           untilHour: 0,
           untilMinute: 0
         });
@@ -88,8 +84,9 @@ export class BanUserModalComponent {
   }
 
   private combineDateTime(formValue: any): Date | null {
-    if (!formValue.isBanned) return null;
-  
+    console.log(formValue);
+    if (formValue.isBanned) return null;
+    
     const now = new Date();
     const totalMinutes = (formValue.untilHour || 0) * 60 + (formValue.untilMinute || 0);
   
@@ -102,7 +99,7 @@ export class BanUserModalComponent {
     const formValue = this.banForm.value;
 
     if (
-      formValue.isBanned &&
+      !formValue.isBanned &&
       formValue.untilDate &&
       new Date(formValue.untilDate) < this.minDate
     ) {
@@ -112,9 +109,9 @@ export class BanUserModalComponent {
 
     const banData: BanPayload = {
       banned: {
-        isBanned: formValue.isBanned,
-        reason: formValue.isBanned ? formValue.reason : '',
-        until: formValue.isBanned ? this.combineDateTime(formValue) : null
+        isBanned: !formValue.isBanned,
+        reason: !formValue.isBanned ? formValue.reason : '',
+        until: !formValue.isBanned ? this.combineDateTime(formValue) : null
       }
     };
 
