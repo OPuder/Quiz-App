@@ -41,7 +41,6 @@ export class PasswordResetComponent {
   }
 
   checkEmail() {
-    console.log('Email check eingeleitet:', this.email);
     this.emailError = '';
     this.authService.checkEmailExists(this.email).subscribe({
       next: (response) => {
@@ -93,10 +92,9 @@ export class PasswordResetComponent {
       return;
     }
 
-    this.authService.resetPassword(this.email, this.newPassword).subscribe({
+    this.authService.resetPassword(this.email, this.securityAnswer, this.newPassword).subscribe({
       next: (response) => {
-        const returnUrl = this.router.routerState.snapshot.root.queryParams['returnUrl'] || '/';
-        this.router.navigate([returnUrl]);
+        this.router.navigate(['/app-login']);
       },
       error: (error) => {
         this.passwordError = 'Fehler beim Zurücksetzen des Passworts';

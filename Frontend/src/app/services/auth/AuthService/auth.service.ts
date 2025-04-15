@@ -187,10 +187,11 @@ export class AuthService {
       );
   }
 
-  resetPassword(email: string, newPassword: string): Observable<any> {
+  resetPassword(email: string, securityAnswer: string, newPassword: string): Observable<any> {
     return this.http
-      .post<any>('http://localhost:5000/api/reset-password', {
+      .post<any>('http://localhost:5000/api/user/reset-password', {
         email,
+        securityAnswer,
         newPassword,
       })
       .pipe(

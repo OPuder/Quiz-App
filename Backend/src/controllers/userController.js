@@ -133,7 +133,7 @@ exports.getSecurityQuestion = async (req, res) => {
 };
 
 exports.resetPassword = async (req, res) => {
-  const { email, newPassword } = req.body;
+  const { email, securityAnswer, newPassword } = req.body;
 
   try {
     const user = await User.findOne({ email });
