@@ -5,7 +5,7 @@ import { routes } from '../app.routes';
 import { provideClientHydration } from '@angular/platform-browser';
 import { authInterceptor } from '../services/auth/AuthService/auth.interceptor';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MatNativeDateModule, MAT_DATE_LOCALE, provideNativeDateAdapter } from '@angular/material/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { provideAnimations } from '@angular/platform-browser/animations';
 
@@ -18,6 +18,7 @@ export const appConfig: ApplicationConfig = {
       withInterceptors([authInterceptor])
     ),
     // provideAnimationsAsync(),
+    provideNativeDateAdapter(),
     provideAnimations(),
     ReactiveFormsModule,
     MatNativeDateModule,

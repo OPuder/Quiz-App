@@ -66,7 +66,7 @@ export class AdminComponent {
 
   openAddUserDialog(): void {
     const dialogRef = this.dialog.open(AddUserModalComponent, {
-      width: '400px',
+      width: '350px',
     });
 
     dialogRef.afterClosed().subscribe((result) => {
@@ -78,7 +78,7 @@ export class AdminComponent {
 
   openEditUserModal(user: User): void {
     const dialogRef = this.dialog.open(EditUserModalComponent, {
-      width: '400px',
+      width: '350px',
       data: user,
     });
 
@@ -91,7 +91,7 @@ export class AdminComponent {
   
   openBanDialog(user: any): void {
     const dialogRef = this.dialog.open(BanUserModalComponent, {
-      width: '400px',
+      width: '500px',
       data: { user }
     });
   

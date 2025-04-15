@@ -69,8 +69,6 @@
       <th mat-header-cell *matHeaderCellDef> Aktionen </th>
       <td mat-cell *matCellDef="let user">
         <button mat-stroked-button color="accent" (click)="editUser(user)">Bearbeiten</button>
-        <button mat-stroked-button color="warn" (click)="removeUser(user._id)">Löschen</button>
-    
         <button
           mat-stroked-button
           color="warn"
@@ -87,6 +85,7 @@
         >
           Entbannen
         </button>
+        <button mat-stroked-button color="warn" (click)="removeUser(user._id)">Löschen</button>
       </td>
     </ng-container>
   

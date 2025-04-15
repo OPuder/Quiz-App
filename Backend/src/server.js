@@ -5,8 +5,9 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
-const { createDefaultAdmin } = require("./models/adminSetup");
 const { checkUnbansOnStart } = require('./utils/unban-check');
+const { createDefaultAdmin } = require("./models/adminSetup");
+const startUnbanCronjob = require('./cron/autoUnbanCheck');
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.use(
 );
 
 createDefaultAdmin();
+startUnbanCronjob();
 checkUnbansOnStart();
 
 mongoose
