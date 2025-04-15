@@ -20,7 +20,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDividerModule } from '@angular/material/divider';
 
-import { User } from '../../shared/models/user.model';
+import { UserUpdatePayload } from '../../shared/models/user.model';
 import { UserManagementService } from '../../services/admin/user-management.service';
 
 @Component({
@@ -45,7 +45,7 @@ export class EditUserModalComponent {
 
   constructor(
     public dialogRef: MatDialogRef<EditUserModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: User,
+    @Inject(MAT_DIALOG_DATA) public data: UserUpdatePayload,
     private fb: FormBuilder,
     private userManagementService: UserManagementService,
     private snackBar: MatSnackBar
@@ -54,18 +54,19 @@ export class EditUserModalComponent {
       vorname: ['', Validators.required],
       nachname: ['', Validators.required],
       spitzname: ['', Validators.required],
-      email: [''],
+      email: ['', Validators.required],
       role: ['user', Validators.required],
       securityQuestion: ['', Validators.required],
       securityAnswer: ['', Validators.required],
-      password: [''],
-      confirmPassword: [''],
+      password: ['', [Validators.minLength(6)]],
+      confirmPassword: ['', [Validators.minLength(6)]],
     });
 
     this.editUserForm.patchValue({
       vorname: this.data.vorname,
       nachname: this.data.nachname,
       spitzname: this.data.spitzname,
+      email: this.data.email,
       role: this.data.role,
       securityQuestion: this.data.securityQuestion,
       securityAnswer: this.data.securityAnswer,
