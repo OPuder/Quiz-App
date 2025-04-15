@@ -20,26 +20,24 @@ import {
   withI18nSupport,
   withIncrementalHydration,
   withNoHttpTransferCache
-} from "./chunk-X6VDTN3S.js";
+} from "./chunk-DHMWPUPG.js";
 import {
   BrowserDomAdapter,
   BrowserGetTestability,
   BrowserModule,
   DomEventsPlugin,
-  KeyEventsPlugin,
-  bootstrapApplication,
-  createApplication,
-  platformBrowser,
-  provideProtractorTestingSupport
-} from "./chunk-7KF2CIZU.js";
-import {
   DomRendererFactory2,
   EVENT_MANAGER_PLUGINS,
   EventManager,
   EventManagerPlugin,
+  KeyEventsPlugin,
   REMOVE_STYLES_ON_COMPONENT_DESTROY,
-  SharedStylesHost
-} from "./chunk-XUB5D3ZH.js";
+  SharedStylesHost,
+  bootstrapApplication,
+  createApplication,
+  platformBrowser,
+  provideProtractorTestingSupport
+} from "./chunk-SNNMK2KQ.js";
 import "./chunk-QAYHET5Z.js";
 import {
   getDOM

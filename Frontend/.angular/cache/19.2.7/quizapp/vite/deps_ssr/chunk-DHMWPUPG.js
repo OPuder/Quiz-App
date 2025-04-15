@@ -2,7 +2,7 @@ import { createRequire } from 'module';const require = createRequire(import.meta
 import {
   EVENT_MANAGER_PLUGINS,
   EventManagerPlugin
-} from "./chunk-XUB5D3ZH.js";
+} from "./chunk-SNNMK2KQ.js";
 import {
   withHttpTransferCache
 } from "./chunk-QAYHET5Z.js";
@@ -821,4 +821,4 @@ export {
    * License: MIT
    *)
 */
-//# sourceMappingURL=chunk-X6VDTN3S.js.map
+//# sourceMappingURL=chunk-DHMWPUPG.js.map

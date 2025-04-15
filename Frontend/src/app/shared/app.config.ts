@@ -17,7 +17,7 @@ export const appConfig: ApplicationConfig = {
       withFetch(),
       withInterceptors([authInterceptor])
     ),
-    provideAnimationsAsync(),
+    // provideAnimationsAsync(),
     provideAnimations(),
     ReactiveFormsModule,
     MatNativeDateModule,

@@ -1,12 +1,10 @@
 import { createRequire } from 'module';const require = createRequire(import.meta.url);
 import {
   BrowserDomAdapter,
-  BrowserModule
-} from "./chunk-7KF2CIZU.js";
-import {
+  BrowserModule,
   EVENT_MANAGER_PLUGINS,
   EventManagerPlugin
-} from "./chunk-XUB5D3ZH.js";
+} from "./chunk-SNNMK2KQ.js";
 import {
   HTTP_ROOT_INTERCEPTOR_FNS
 } from "./chunk-QAYHET5Z.js";
@@ -16910,4 +16908,4 @@ export {
    * License: MIT
    *)
 */
-//# sourceMappingURL=chunk-HJ5IBWMW.js.map
+//# sourceMappingURL=chunk-J2R4X5CK.js.map
