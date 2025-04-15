@@ -79,6 +79,7 @@ export class AdminComponent {
   openEditUserModal(user: User): void {
     const dialogRef = this.dialog.open(EditUserModalComponent, {
       width: '400px',
+      height: '600px',
       data: user,
     });
 

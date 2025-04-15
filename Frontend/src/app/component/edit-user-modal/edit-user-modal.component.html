@@ -1,57 +1,66 @@
-<h2>Benutzer bearbeiten</h2>
+<h2 mat-dialog-title>Benutzer bearbeiten</h2>
 
-<form [formGroup]="editUserForm" (ngSubmit)="submit()" class="edit-user-form">
-  <mat-form-field appearance="fill" class="full-width">
+<form [formGroup]="editUserForm" (ngSubmit)="submit()" class="edit-user-form" autocomplete="off">
+  <!-- 🔹 Vorname -->
+  <mat-form-field appearance="outline" class="full-width">
     <mat-label>Vorname</mat-label>
-    <input matInput formControlName="vorname" required />
+    <input matInput formControlName="vorname" />
   </mat-form-field>
 
-  <mat-form-field appearance="fill" class="full-width">
+  <!-- 🔹 Nachname -->
+  <mat-form-field appearance="outline" class="full-width">
     <mat-label>Nachname</mat-label>
-    <input matInput formControlName="nachname" required />
+    <input matInput formControlName="nachname" />
   </mat-form-field>
 
-  <mat-form-field appearance="fill" class="full-width">
+  <!-- 🔹 Spitzname -->
+  <mat-form-field appearance="outline" class="full-width">
     <mat-label>Spitzname</mat-label>
-    <input matInput formControlName="spitzname" required />
+    <input matInput formControlName="spitzname" />
   </mat-form-field>
 
-  <mat-form-field appearance="fill" class="full-width">
-    <mat-label>Email (optional)</mat-label>
-    <input matInput formControlName="email" placeholder="Neue Email eintragen" />
+  <!-- 🔹 Email -->
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>E-Mail (optional)</mat-label>
+    <input matInput formControlName="email" type="email" placeholder="Neue E-Mail eintragen" />
   </mat-form-field>
 
-  <mat-form-field appearance="fill" class="full-width">
+  <!-- 🔹 Rolle -->
+  <mat-form-field appearance="outline" class="full-width">
     <mat-label>Rolle</mat-label>
-    <mat-select formControlName="role" required>
+    <mat-select formControlName="role">
       <mat-option value="user">User</mat-option>
       <mat-option value="admin">Admin</mat-option>
     </mat-select>
   </mat-form-field>
 
-  <mat-form-field appearance="fill" class="full-width">
+  <!-- 🔹 Sicherheitsfrage -->
+  <mat-form-field appearance="outline" class="full-width">
     <mat-label>Geheimfrage</mat-label>
-    <input matInput formControlName="securityQuestion" required />
+    <input matInput formControlName="securityQuestion" />
   </mat-form-field>
 
-  <mat-form-field appearance="fill" class="full-width">
+  <!-- 🔹 Sicherheitsantwort -->
+  <mat-form-field appearance="outline" class="full-width">
     <mat-label>Antwort</mat-label>
-    <input matInput formControlName="securityAnswer" required />
+    <input matInput formControlName="securityAnswer" />
   </mat-form-field>
 
-  <mat-divider></mat-divider>
+  <!-- 🔹 Passwort -->
+  <mat-divider class="my-4"></mat-divider>
   <h3>Optional: Passwort ändern</h3>
 
-  <mat-form-field appearance="fill" class="full-width">
+  <mat-form-field appearance="outline" class="full-width">
     <mat-label>Neues Passwort</mat-label>
-    <input matInput type="password" formControlName="password" />
+    <input matInput type="password" formControlName="password" autocomplete="new-password" />
   </mat-form-field>
 
-  <mat-form-field appearance="fill" class="full-width">
+  <mat-form-field appearance="outline" class="full-width">
     <mat-label>Passwort bestätigen</mat-label>
-    <input matInput type="password" formControlName="confirmPassword" />
+    <input matInput type="password" formControlName="confirmPassword" autocomplete="new-password" />
   </mat-form-field>
 
+  <!-- 🔹 Buttons -->
   <div class="button-row">
     <button mat-raised-button color="primary" type="submit" [disabled]="editUserForm.invalid">
       Speichern

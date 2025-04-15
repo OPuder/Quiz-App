@@ -30,7 +30,7 @@ export class UserManagementService {
   updateUserProfile(userId: string, updatedData: any): Observable<any> {
     const token = localStorage.getItem('JWT_TOKEN');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    const url = `${this.apiUrl}/user/${userId}`;
+    const url = `${this.apiUrl}/${userId}/update-profile`;
   
     return this.http.put(url, updatedData, { headers });
   }

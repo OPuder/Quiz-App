@@ -51,25 +51,15 @@ export class EditUserModalComponent {
     private snackBar: MatSnackBar
   ) {
     this.editUserForm = this.fb.group({
-      vorname: ['', Validators.required],
-      nachname: ['', Validators.required],
-      spitzname: ['', Validators.required],
-      email: ['', Validators.required],
-      role: ['user', Validators.required],
-      securityQuestion: ['', Validators.required],
-      securityAnswer: ['', Validators.required],
-      password: ['', [Validators.minLength(6)]],
-      confirmPassword: ['', [Validators.minLength(6)]],
-    });
-
-    this.editUserForm.patchValue({
-      vorname: this.data.vorname,
-      nachname: this.data.nachname,
-      spitzname: this.data.spitzname,
-      email: this.data.email,
-      role: this.data.role,
-      securityQuestion: this.data.securityQuestion,
-      securityAnswer: this.data.securityAnswer,
+      vorname: [this.data.vorname],
+      nachname: [this.data.nachname],
+      spitzname: [this.data.spitzname],
+      email: [this.data.email],
+      role: [this.data.role],
+      securityQuestion: [this.data.securityQuestion],
+      securityAnswer: [this.data.securityAnswer],
+      password: [''],
+      confirmPassword: ['']
     });
   }
 
@@ -77,6 +67,11 @@ export class EditUserModalComponent {
     if (this.editUserForm.invalid) return;
 
     const formValue = this.editUserForm.value;
+
+    if (!this.editUserForm.dirty && !formValue.password && !formValue.confirmPassword) {
+      this.snackBar.open('Keine Änderungen erkannt', 'OK', { duration: 2000 });
+      return;
+    }
 
     if (formValue.password || formValue.confirmPassword) {
       if (formValue.password !== formValue.confirmPassword) {
@@ -87,18 +82,16 @@ export class EditUserModalComponent {
       }
     }
 
-    const updatedUser: any = {
-      vorname: formValue.vorname,
-      nachname: formValue.nachname,
-      spitzname: formValue.spitzname,
-      role: formValue.role,
-      securityQuestion: formValue.securityQuestion,
-      securityAnswer: formValue.securityAnswer,
-    };
-
-    if (formValue.email && formValue.email.trim() !== '') {
-      updatedUser.email = formValue.email;
-    }
+  const updatedUser: UserUpdatePayload = {
+    _id: this.data._id,
+    vorname: formValue.vorname,
+    nachname: formValue.nachname,
+    spitzname: formValue.spitzname,
+    email: formValue.email,
+    role: formValue.role,
+    securityQuestion: formValue.securityQuestion,
+    securityAnswer: formValue.securityAnswer
+  };
 
     if (formValue.password) {
       updatedUser.password = formValue.password;
@@ -109,7 +102,6 @@ export class EditUserModalComponent {
 
     this.userManagementService.updateUserProfile(userId, updatedUser).subscribe({
       next: (response) => {
-        console.log('Benutzer aktualisiert:', response);
         this.dialogRef.close(response);
       },
       error: (err) => {

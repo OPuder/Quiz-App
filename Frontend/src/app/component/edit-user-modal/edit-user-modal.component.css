@@ -1,19 +1,19 @@
 .edit-user-form {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    padding: 16px;
-    max-width: 500px;
-    margin: auto;
-  }
-  
-  .full-width {
-    width: 100%;
-  }
-  
-  .button-row {
-    display: flex;
-    justify-content: flex-end;
-    gap: 8px;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.button-row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.my-4 {
+  margin: 24px 0;
+}
