@@ -10,7 +10,11 @@ export interface User {
     securityQuestion: string;
     securityAnswer: string;
     geloescht: boolean;
-    banned: boolean;
+    banned: {
+      isBanned: boolean;
+      reason: string;
+      until: Date | null;
+    };
   }
 
   export interface NewUser {
@@ -24,7 +28,11 @@ export interface User {
     securityQuestion: string;
     securityAnswer: string;
     geloescht?: boolean;
-    banned?: boolean;
+    banned?: {
+      isBanned: boolean;
+      reason: string;
+      until: Date | null;
+    };
   }
 
   export interface UserUpdatePayload {
@@ -38,5 +46,9 @@ export interface User {
     password?: string;
     confirmPassword?: string;
     geloescht?: boolean;
-    banned?: boolean;
+    banned?: {
+      isBanned: boolean;
+      reason: string;
+      until: Date | null;
+    };
   }

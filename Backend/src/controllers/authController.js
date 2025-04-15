@@ -18,7 +18,7 @@ exports.login = async (req, res) => {
       return res.status(401).json({ message: "Benutzer nicht gefunden" });
     }
 
-    if (user.banned) {
+    if (user.banned?.isBanned === true) {
       return res
         .status(403)
         .json({ message: "Ihr Konto wurde gesperrt. Bitte wenden Sie sich an den Support." });
