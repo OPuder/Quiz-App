@@ -4,11 +4,10 @@ import { RouterLink } from '@angular/router';
 import { QuizlogicService } from '../../quiz/services/quizlogic.service';
 
 @Component({
-  selector: 'app-type-script-startseite',
-  standalone: true,
-  imports: [CommonModule,RouterLink ],
-  templateUrl: './type-script-startseite.component.html',
-  styleUrl: './type-script-startseite.component.css'
+    selector: 'app-type-script-startseite',
+    imports: [CommonModule, RouterLink],
+    templateUrl: './type-script-startseite.component.html',
+    styleUrl: './type-script-startseite.component.css'
 })
 export class TypeScriptStartseiteComponent {
 

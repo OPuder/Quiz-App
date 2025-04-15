@@ -16,21 +16,20 @@ import { AuthService } from '../../services/auth/AuthService/auth.service';
 import { BanUserModalComponent } from '../../component/bann-user-modal/bann-user-modal.component';
 
 @Component({
-  selector: 'app-admin',
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatCardModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MatTableModule,
-  ],
-  templateUrl: './admin.component.html',
-  styleUrls: ['./admin.component.css'],
+    selector: 'app-admin',
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatCardModule,
+        MatButtonModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatSelectModule,
+        MatTableModule,
+    ],
+    templateUrl: './admin.component.html',
+    styleUrls: ['./admin.component.css']
 })
 export class AdminComponent {
   displayedColumns: string[] = [

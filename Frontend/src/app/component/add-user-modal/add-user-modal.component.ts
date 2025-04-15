@@ -12,21 +12,20 @@ import { NewUser, User } from '../../shared/models/user.model';
 import { UserManagementService } from '../../services/admin/user-management.service';
 
 @Component({
-  selector: 'app-add-user-modal',
-  standalone: true,
-  imports: [
-    FormsModule,
-    ReactiveFormsModule,
-    MatCardModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MatTableModule,
-    MatDialogModule,
-  ],
-  templateUrl: './add-user-modal.component.html',
-  styleUrl: './add-user-modal.component.css'
+    selector: 'app-add-user-modal',
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        MatCardModule,
+        MatButtonModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatSelectModule,
+        MatTableModule,
+        MatDialogModule,
+    ],
+    templateUrl: './add-user-modal.component.html',
+    styleUrl: './add-user-modal.component.css'
 })
 export class AddUserModalComponent {
   newUser: NewUser = {

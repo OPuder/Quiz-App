@@ -11,22 +11,21 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @Component({
-  selector: 'app-bann-user-modal',
-  standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    FormsModule,
-    MatDialogModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatNativeDateModule,
-    MatDatepickerModule,
-    MatSlideToggleModule
-  ],
-  templateUrl: './bann-user-modal.component.html',
-  styleUrl: './bann-user-modal.component.css'
+    selector: 'app-bann-user-modal',
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        FormsModule,
+        MatDialogModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatButtonModule,
+        MatNativeDateModule,
+        MatDatepickerModule,
+        MatSlideToggleModule
+    ],
+    templateUrl: './bann-user-modal.component.html',
+    styleUrl: './bann-user-modal.component.css'
 })
 export class BanUserModalComponent {
   banForm: FormGroup;
