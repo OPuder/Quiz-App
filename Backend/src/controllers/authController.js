@@ -179,11 +179,8 @@ exports.softDeleteUser = async (req, res) => {
 };
 
 exports.banUser = async (req, res) => {
-  console.log('Bann aufgerufen');
   try {
     const userId = req.params.id;
-    console.log('userId:', userId);
-    console.log('req.body:', req.body);
 
     const { isBanned, reason, until } = req.body.banned || {};
 
@@ -208,8 +205,6 @@ exports.banUser = async (req, res) => {
     if (!updatedUser)
       return res.status(404).json({ message: 'User nicht gefunden' });
 
-    console.log('updatedUser.banned:', updatedUser.banned);
-
     res.status(200).json({ message: isBanned ? 'User wurde gebannt' : 'User wurde entbannt' });
   } catch (error) {
     console.error('Fehler beim Bann:', error);
@@ -233,7 +228,6 @@ exports.checkUnbans = async (req, res) => {
         user.banned.until = null;
         await user.save();
         unbannedCount++;
-        console.log(`User entbannt: ${user._id}`);
       }
     }
 
