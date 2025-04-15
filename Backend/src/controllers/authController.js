@@ -185,7 +185,7 @@ exports.banUser = async (req, res) => {
     console.log('userId:', userId);
     console.log('req.body:', req.body);
 
-    const { isBanned, reason, until } = req.body.ban || {};
+    const { isBanned, reason, until } = req.body || {};
 
     const bannedData = isBanned
       ? {
