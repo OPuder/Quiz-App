@@ -84,7 +84,6 @@ export class BanUserModalComponent {
   }
 
   private combineDateTime(formValue: any): Date | null {
-    console.log(formValue);
     if (formValue.isBanned) return null;
     
     const now = new Date();
