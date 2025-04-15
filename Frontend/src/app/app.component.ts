@@ -1,7 +1,7 @@
 import { RouterLink, RouterModule } from '@angular/router';
 import { Component, inject, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { TranslationService } from './services/translation/translation-service.service';
 import { AuthService } from './services/auth/AuthService/auth.service';
 import { Router } from '@angular/router';
@@ -10,7 +10,11 @@ import { UserManagementService } from './services/admin/user-management.service'
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterModule, HttpClientModule,],
+  imports: [CommonModule, RouterLink, RouterModule, 
+// TODO: `HttpClientModule` should not be imported into a component directly.
+// Please refactor the code to add `provideHttpClient()` call to the provider list in the
+// application bootstrap logic and remove the `HttpClientModule` import from this component.
+HttpClientModule,],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
