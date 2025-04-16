@@ -2,10 +2,7 @@ import { Injectable } from '@angular/core';
 import { TranslationService } from '../../../services/translation/translation-service.service';
 import { map } from 'rxjs/operators';
 import { Fragen } from './../../../../app/features/quiz/models/fragen';
-import { jEasy, jMidd, jHard,
-  tEasy, tMidd, tHard,
-  aEasy, aMidd, aHard, qSnipped
-} from '../../../shared/data/fragenSammlung';
+import { forkJoin } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -28,59 +25,53 @@ export class QuizlogicService {
 
   constructor(private translationService: TranslationService) {}
 
-toggleQuiz(selectedCase: number) {
-    let fragenSet: Fragen[] = [];
+  toggleQuiz(selectedCase: number) {
+    const keyMap: { [key: number]: string } = {
+      0: 'qSnipped',
+      1: 'topicJ.easy', 2: 'topicJ.medium', 3: 'topicJ.hard',
+      5: 'topicT.easy', 6: 'topicT.medium', 7: 'topicT.hard',
+      9: 'topicA.easy', 10: 'topicA.medium', 11: 'topicA.hard'
+    };
 
-    if (selectedCase === 15) {
-      this.translationService.getTranslation('qSnipped',)
+    const mixMap: { [key: number]: string } = {
+      4: 'topicJ', 8: 'topicT', 12: 'topicA'
+    };
+
+    const topic = mixMap[selectedCase];
+    if (topic) {
+      forkJoin({
+        easy: this.translationService.getTranslation(`${topic}.easy`).pipe(map((f: Fragen[]) => f ?? [])),
+        medium: this.translationService.getTranslation(`${topic}.medium`).pipe(map((f: Fragen[]) => f ?? [])),
+        hard: this.translationService.getTranslation(`${topic}.hard`).pipe(map((f: Fragen[]) => f ?? []))
+      }).subscribe({
+        next: ({ easy, medium, hard }) => {
+          const mix = [
+            ...this.pickRandom(easy, 5),
+            ...this.pickRandom(medium, 5),
+            ...this.pickRandom(hard, 5)
+          ].sort(() => Math.random() - 0.5);
+          this.zufallsFragen = mix;
+          this.prepareQuiz();
+        },
+        error: err => console.error('Fehler beim Laden gemischter Fragen:', err)
+      });
+    } else {
+      const key = keyMap[selectedCase];
+      if (!key) return console.error('Ungültiger Fall:', selectedCase);
+      this.translationService.getTranslation(key)
         .pipe(map((fragen: Fragen[]) => fragen ?? []))
         .subscribe({
           next: (fragen) => {
             this.zufallsFragen = [...fragen];
             this.prepareQuiz();
           },
-          error: (err) => console.error('Fehler beim Laden der Übersetzungen:', err)
+          error: (err) => console.error(`Fehler beim Laden der Fragen für ${key}:`, err)
         });
-      return;
     }
-
-    fragenSet = this.getFragenSetByCase(selectedCase);
-    this.zufallsFragen = [...fragenSet];
-    this.prepareQuiz();
   }
 
-  private getFragenSetByCase(selectedCase: number): Fragen[] {
-    switch (selectedCase) {
-      case 0: return qSnipped;
-      case 1: return jEasy;
-      case 2: return jMidd;
-      case 3: return jHard;
-      case 4:  {
-        const easy = [...jEasy].sort(() => Math.random() - 0.5).slice(0, 5);
-        const midd = [...jMidd].sort(() => Math.random() - 0.5).slice(0, 5);
-        const hard = [...jHard].sort(() => Math.random() - 0.5).slice(0, 5);
-        return [...easy, ...midd, ...hard].sort(() => Math.random() - 0.5);
-      };
-      case 5: return tEasy;
-      case 6: return tMidd;
-      case 7: return tHard;
-      case 8: {
-        const easy = [...tEasy].sort(() => Math.random() - 0.5).slice(0, 5);
-        const midd = [...tMidd].sort(() => Math.random() - 0.5).slice(0, 5);
-        const hard = [...tHard].sort(() => Math.random() - 0.5).slice(0, 5);
-        return [...easy, ...midd, ...hard].sort(() => Math.random() - 0.5);
-      };
-      case 9: return aEasy;
-      case 10: return aMidd;
-      case 11: return aHard;
-      case 12: {
-        const easy = [...aEasy].sort(() => Math.random() - 0.5).slice(0, 5);
-        const midd = [...aMidd].sort(() => Math.random() - 0.5).slice(0, 5);
-        const hard = [...aHard].sort(() => Math.random() - 0.5).slice(0, 5);
-        return [...easy, ...midd, ...hard].sort(() => Math.random() - 0.5);
-      };
-      default: throw new Error('Ungültiger Fall ausgewählt');
-    }
+  private pickRandom(array: Fragen[], count: number): Fragen[] {
+    return [...array].sort(() => Math.random() - 0.5).slice(0, count);
   }
 
   private prepareQuiz() {
