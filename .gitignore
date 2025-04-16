@@ -43,4 +43,5 @@ testem.log
 Thumbs.db
 Frontend/*.tsbuildinfo
 *.tsbuildinfo
-Frontend/.angular/cache/**/*.js.map
+Frontend/.angular/**/*.js.map
+Frontend/.angular/**/*.js
