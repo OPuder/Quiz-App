@@ -19,8 +19,15 @@ exports.login = async (req, res) => {
         if (!user.banned?.isBanned) {
           await banUserTemporarily(user._id, 'Zu viele Loginversuche', 10);
         }
+        const updatedUser = await User.findOne({ email });
+
+        const until = updatedUser.banned?.until
+          ? new Date(updatedUser.banned.until).toLocaleString('de-DE')
+          : 'unbekannt';
+    
         return res.status(429).json({
-          message: 'Zu viele Fehlversuche. Du wurdest temporär gebannt.'
+          message: `Zu viele Fehlversuche. Du wurdest temporär gebannt bis: ${until}`,
+          banned: updatedUser.banned
         });
       }
 
