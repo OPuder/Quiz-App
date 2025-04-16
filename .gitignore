@@ -4,7 +4,7 @@
 /out-tsc
 /bazel-out
 .env
-.angular
+.angular/*
 
 # Node
 /node_modules
@@ -43,3 +43,4 @@ testem.log
 Thumbs.db
 Frontend/*.tsbuildinfo
 *.tsbuildinfo
+Frontend/.angular/cache/19.2.7/quizapp/vite/deps/@angular_material_snack-bar.js.map
