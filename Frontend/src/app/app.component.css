@@ -93,6 +93,13 @@ nav.custom-navbar {
   background-color: #343a40;
 }
 
+.nav-icon {
+  width: 18px;
+  height: 18px;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+
 .dropdown-menu {
   background-color: #343a40;
   border-radius: 10px;

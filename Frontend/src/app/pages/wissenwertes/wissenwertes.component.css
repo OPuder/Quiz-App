@@ -1,3 +1,106 @@
+.header-title {
+  font-size: 2rem;
+  text-align: center;
+  margin-top: 40px;
+  margin-bottom: 30px;
+  color: #333;
+}
+
+.info-grid {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 0 20px;
+  margin-bottom: 50px;
+}
+
+.info-card {
+  flex: 1 1 300px;
+  background: #f7f9fc;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+
+.info-card:hover {
+  transform: translateY(-5px);
+}
+
+.info-card h3 {
+  font-size: 1.4rem;
+  color: #222;
+  margin-bottom: 10px;
+}
+
+.info-card.js {
+  border-top: 4px solid #f0db4f;
+}
+
+.info-card.ts {
+  border-top: 4px solid #3178c6;
+}
+
+.info-card.ng {
+  border-top: 4px solid #dd1b16;
+}
+
+.info-card p {
+  color: #555;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.deep-dive {
+  max-width: 800px;
+  margin: 0 auto 50px;
+  padding: 0 20px;
+}
+
+.deep-dive h2 {
+  font-size: 1.6rem;
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.deep-dive ul {
+  list-style: none;
+  padding: 0;
+}
+
+.deep-dive li {
+  background: #fff;
+  padding: 12px 18px;
+  margin-bottom: 12px;
+  border-left: 4px solid #007bff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+.main-intro {
+  max-width: 700px;
+  margin: 0 auto 60px;
+  padding: 0 20px;
+  text-align: center;
+}
+
+.main-intro h2 {
+  font-size: 1.6rem;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.main-intro p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #444;
+  margin-bottom: 15px;
+}
+
 /* Allgemeine Layout-Styles */
 .container {
   max-width: 1200px;
