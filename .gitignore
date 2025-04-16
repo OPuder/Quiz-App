@@ -43,4 +43,4 @@ testem.log
 Thumbs.db
 Frontend/*.tsbuildinfo
 *.tsbuildinfo
-Frontend/.angular/cache/19.2.7/quizapp/vite/deps/@angular_material_snack-bar.js.map
+Frontend/.angular/cache/**/*.js.map
