@@ -19,6 +19,12 @@ export class QuizComponent implements OnInit {
     return this.quizlogicService.skipRunde;
   }
 
+  get aktiveFrage() {
+    return this.quizlogicService.skipRunde
+      ? this.quizlogicService.unbeantworteteFragen[this.quizlogicService.skipFragenIndex]
+      : this.quizlogicService.fragen[this.quizlogicService.aktuelleFrageIndex];
+  }
+  
   ngOnInit(): void {
     this.quizlogicService.initializeQuiz();
   }

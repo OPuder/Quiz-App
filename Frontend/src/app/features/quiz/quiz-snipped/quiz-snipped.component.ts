@@ -3,8 +3,7 @@ import { CommonModule } from '@angular/common';
 import { QuizlogicService } from '../../../features/quiz/services/quizlogic.service';
 import { AuthService } from '../../../services/auth/AuthService/auth.service';
 import { UserManagementService } from '../../../services/admin/user-management.service';
-import { ScoreBoardComponent } from '../../score-board/score-board.component';
-@ViewChild(ScoreBoardComponent)
+
 @Component({
     selector: 'app-quiz-Snipped',
     imports: [CommonModule],
@@ -13,7 +12,6 @@ import { ScoreBoardComponent } from '../../score-board/score-board.component';
 })
 
 export class QuizSnippedComponent implements OnInit {
-  scoreBoardComponent!: ScoreBoardComponent;
 
   constructor(
     private userManagementService: UserManagementService,
@@ -29,6 +27,12 @@ export class QuizSnippedComponent implements OnInit {
     this.quizlogicService.initializeQuiz();
   }
 
+  get aktiveFrage() {
+    return this.quizlogicService.skipRunde
+      ? this.quizlogicService.unbeantworteteFragen[this.quizlogicService.skipFragenIndex]
+      : this.quizlogicService.fragen[this.quizlogicService.aktuelleFrageIndex];
+  }
+  
   fragenAnzahl() {
     return this.quizlogicService.fragenAnzahl;
   }
