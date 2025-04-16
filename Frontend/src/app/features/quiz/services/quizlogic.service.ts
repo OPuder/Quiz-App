@@ -2,10 +2,9 @@ import { Injectable } from '@angular/core';
 import { TranslationService } from '../../../services/translation/translation-service.service';
 import { map } from 'rxjs/operators';
 import { Fragen } from './../../../../app/features/quiz/models/fragen';
-import {
-  testFragen, jEasy, jMidd, jHard, jZufall,
-  tEasy, tMidd, tHard, tZufall,
-  aEasy, aMidd, aHard, aZufall
+import { jEasy, jMidd, jHard,
+  tEasy, tMidd, tHard,
+  aEasy, aMidd, aHard, qSnipped
 } from '../../../shared/data/fragenSammlung';
 
 @Injectable({
@@ -33,7 +32,7 @@ toggleQuiz(selectedCase: number) {
     let fragenSet: Fragen[] = [];
 
     if (selectedCase === 15) {
-      this.translationService.getTranslation('qSnipped')
+      this.translationService.getTranslation('qSnipped',)
         .pipe(map((fragen: Fragen[]) => fragen ?? []))
         .subscribe({
           next: (fragen) => {
@@ -52,19 +51,34 @@ toggleQuiz(selectedCase: number) {
 
   private getFragenSetByCase(selectedCase: number): Fragen[] {
     switch (selectedCase) {
-      case 0: return testFragen;
+      case 0: return qSnipped;
       case 1: return jEasy;
       case 2: return jMidd;
       case 3: return jHard;
-      case 4: return jZufall;
+      case 4:  {
+        const easy = [...jEasy].sort(() => Math.random() - 0.5).slice(0, 5);
+        const midd = [...jMidd].sort(() => Math.random() - 0.5).slice(0, 5);
+        const hard = [...jHard].sort(() => Math.random() - 0.5).slice(0, 5);
+        return [...easy, ...midd, ...hard].sort(() => Math.random() - 0.5);
+      };
       case 5: return tEasy;
       case 6: return tMidd;
       case 7: return tHard;
-      case 8: return tZufall;
+      case 8: {
+        const easy = [...tEasy].sort(() => Math.random() - 0.5).slice(0, 5);
+        const midd = [...tMidd].sort(() => Math.random() - 0.5).slice(0, 5);
+        const hard = [...tHard].sort(() => Math.random() - 0.5).slice(0, 5);
+        return [...easy, ...midd, ...hard].sort(() => Math.random() - 0.5);
+      };
       case 9: return aEasy;
       case 10: return aMidd;
       case 11: return aHard;
-      case 12: return aZufall;
+      case 12: {
+        const easy = [...aEasy].sort(() => Math.random() - 0.5).slice(0, 5);
+        const midd = [...aMidd].sort(() => Math.random() - 0.5).slice(0, 5);
+        const hard = [...aHard].sort(() => Math.random() - 0.5).slice(0, 5);
+        return [...easy, ...midd, ...hard].sort(() => Math.random() - 0.5);
+      };
       default: throw new Error('Ungültiger Fall ausgewählt');
     }
   }
