@@ -1,5 +1,7 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const { recordFailedLogin, clearAttempts } = require('../utils/loginAttemptTracker');
+const { banUserTemporarily } = require('../utils/autoBan');
 const User = require("../models/userModel");
 
 exports.login = async (req, res) => {
@@ -11,9 +13,31 @@ exports.login = async (req, res) => {
       return res.status(401).json({ message: 'Benutzer nicht gefunden' });
 
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch)
-      return res.status(401).json({ message: 'Falsches Passwort' });
+    if (!isMatch) {
+      const failedCount = recordFailedLogin(email);
+      if (failedCount >= 5) {
+        if (!user.banned?.isBanned) {
+          await banUserTemporarily(user._id, 'Zu viele Loginversuche', 10);
+        }
+        const updatedUser = await User.findOne({ email });
 
+        const until = updatedUser.banned?.until
+          ? new Date(updatedUser.banned.until).toLocaleString('de-DE')
+          : 'unbekannt';
+    
+        return res.status(429).json({
+          message: `Zu viele Fehlversuche. Du wurdest temporär gebannt bis: ${until}`,
+          banned: updatedUser.banned
+        });
+      }
+
+      return res.status(401).json({ message: 'Falsches Passwort' });
+    }
+
+    // Bei erfolgreichem Login: Versuche zurücksetzen
+    clearAttempts(email);
+
+    // Auto-Entbannung bei abgelaufenem Bann
     if (user.banned?.isBanned && user.banned.until) {
       const now = new Date();
       const banEnd = new Date(user.banned.until);
@@ -29,6 +53,7 @@ exports.login = async (req, res) => {
       }
     }
 
+// Wenn Benutzer noch gebannt ist
     if (user.banned?.isBanned) {
       const until = user.banned.until 
         ? new Date(user.banned.until).toLocaleString('de-DE') 
