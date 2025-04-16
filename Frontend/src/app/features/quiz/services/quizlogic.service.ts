@@ -3,6 +3,7 @@ import { TranslationService } from '../../../services/translation/translation-se
 import { map } from 'rxjs/operators';
 import { Fragen } from './../../../../app/features/quiz/models/fragen';
 import { forkJoin } from 'rxjs';
+import { AuthService } from '../../../services/auth/AuthService/auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -17,13 +18,17 @@ export class QuizlogicService {
   skipFrage: string = '';
 
   punktzahl = 0;
+  fragenAnzahl = 0;
   aktuelleFrageIndex = 0;
   skipFragenIndex = 0;
   antwortIndex = 0;
   quizAbgeschlossen = false;
   skipRunde = false;
 
-  constructor(private translationService: TranslationService) {}
+  constructor(
+    private translationService: TranslationService,
+    private authService: AuthService,
+  ) {}
 
   toggleQuiz(selectedCase: number) {
     const keyMap: { [key: number]: string } = {
@@ -84,6 +89,7 @@ export class QuizlogicService {
     this.aktuelleFrageIndex = 0;
     this.skipFragenIndex = 0;
     this.punktzahl = 0;
+    this.fragenAnzahl = 0;
     this.quizAbgeschlossen = false;
     this.skipRunde = false;
     this.unbeantworteteFragen = [];
@@ -110,7 +116,10 @@ export class QuizlogicService {
       ? this.unbeantworteteFragen[this.skipFragenIndex]
       : this.fragen[this.aktuelleFrageIndex];
 
-    if (frage.correctAntwort === index) this.punktzahl++;
+    if (frage.correctAntwort === index) this.fragenAnzahl++;
+    if (frage.correctAntwort === index && this.authService.isLoggedIn()) {
+      this.punktzahl += frage.points ?? 0;
+    }
 
     istSkip ? this.skipFragenIndex++ : this.aktuelleFrageIndex++;
     istSkip ? this.skipFragen() : this.ladeFrage();
@@ -150,7 +159,9 @@ export class QuizlogicService {
     this.unbeantworteteFragen = [];
     this.aktuelleFrageIndex = 0;
     this.skipFragenIndex = 0;
+    this.fragenAnzahl = 0;
     this.punktzahl = 0;
+    
     this.fragen = [...this.fragen].sort(() => Math.random() - 0.5);
     this.ladeFrage();
   }

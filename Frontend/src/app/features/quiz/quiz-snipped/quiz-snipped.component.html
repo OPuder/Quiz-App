@@ -11,6 +11,12 @@
       <div id="Fragennummer"><h2>{{ fragenNummer() }}</h2></div>
       <!-- Anzeige der aktuellen Frage -->
       <div id="Frage"><p>{{ aktuelleFrage() }}</p></div>
+      <!-- Punkte nur anzeigen, wenn eingeloggt -->
+      <div *ngIf="authService.isLoggedIn()" class="frage-punkte">
+        <small class="text-muted">
+          Diese Frage ist {{ quizlogicService.fragen[quizlogicService.aktuelleFrageIndex].points }} Punkte wert
+        </small>
+      </div>
     </div>
     <!-- Auswahlmöglichkeiten für die Frage -->
     <div class="card-body" >
@@ -35,7 +41,16 @@
 
   <!-- Anzeige der Punktzahl -->
   <div class="card-body">
-    <p>Du hast {{ punktzahl() }} von 4 Fragen richtig beantwortet.</p>
+    <p>Du hast {{ fragenAnzahl() }} von {{ gesamtFragenAnzahl() }} Fragen richtig beantwortet.</p>
+          <!-- Punkte nur anzeigen, wenn eingeloggt -->
+    <div class="card-body">
+      <p *ngIf="authService.isLoggedIn(); else keinePunkte">
+        Du hast {{ punktzahl() }} Punkte von möglichen {{ maxPunktzahl() }} Punkterreicht.
+      </p>
+      <ng-template #keinePunkte>
+        <p>Logge dich ein, um deine Punkte zu sehen und ins Scoreboard einzutragen.</p>
+      </ng-template>
+    </div>
   </div>
 
   <!-- Button zum Neustarten des Quiz -->

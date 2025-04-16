@@ -6,6 +6,7 @@ import { QuizSnippedComponent } from '../../features/quiz/quiz-snipped/quiz-snip
 
 @Component({
     selector: 'app-startseite',
+    standalone: true,
     templateUrl: './startseite.component.html',
     styleUrl: './startseite.component.css',
     imports: [CommonModule, QuizSnippedComponent]

@@ -3,5 +3,6 @@ export interface Fragen {
   antwort: string[];
   correctAntwort: number;
   uebersprungen: boolean;
+  points: number;
 }
 
