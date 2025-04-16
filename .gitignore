@@ -41,5 +41,5 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
-Frontend/.angular/cache/19.2.7/quizapp/.tsbuildinfo
-.tsbuildinfo
+Frontend/*.tsbuildinfo
+*.tsbuildinfo
