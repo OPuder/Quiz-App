@@ -4,7 +4,7 @@
 /out-tsc
 /bazel-out
 .env
-.angular/*
+.@angular/*
 
 # Node
 /node_modules
