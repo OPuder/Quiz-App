@@ -24,7 +24,7 @@ export class QuizComponent implements OnInit {
       ? this.quizlogicService.unbeantworteteFragen[this.quizlogicService.skipFragenIndex]
       : this.quizlogicService.fragen[this.quizlogicService.aktuelleFrageIndex];
   }
-  
+
   ngOnInit(): void {
     this.quizlogicService.initializeQuiz();
   }
@@ -42,7 +42,7 @@ export class QuizComponent implements OnInit {
   }
 
   maxPunktzahl(): number {
-    return this.quizlogicService.fragen.reduce((sum, frage) => sum + (frage.points ?? 0), 0);
+    return this.quizlogicService.maxPunktzahl();
   }
 
   fragenNummer(): number | string {

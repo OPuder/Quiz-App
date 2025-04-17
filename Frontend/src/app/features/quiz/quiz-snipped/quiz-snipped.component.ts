@@ -32,7 +32,7 @@ export class QuizSnippedComponent implements OnInit {
       ? this.quizlogicService.unbeantworteteFragen[this.quizlogicService.skipFragenIndex]
       : this.quizlogicService.fragen[this.quizlogicService.aktuelleFrageIndex];
   }
-  
+
   fragenAnzahl() {
     return this.quizlogicService.fragenAnzahl;
   }
@@ -46,7 +46,7 @@ export class QuizSnippedComponent implements OnInit {
   }
 
   maxPunktzahl(): number {
-    return this.quizlogicService.fragen.reduce((sum, frage) => sum + (frage.points ?? 0), 0);
+    return this.quizlogicService.maxPunktzahl();
   }
 
   fragenNummer(): number | string {
