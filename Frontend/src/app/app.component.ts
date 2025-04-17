@@ -1,16 +1,15 @@
 import { RouterLink, RouterModule } from '@angular/router';
-import { Component, inject, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { TranslationService } from './services/translation/translation-service.service';
 import { AuthService } from './services/auth/AuthService/auth.service';
 import { Router } from '@angular/router';
-import { UserManagementService } from './services/admin/user-management.service'; 
+import { UserManagementService } from './services/admin/user-management.service';
 
 @Component({
   selector: 'app-root',
-  standalone: true,
-  imports: [CommonModule, RouterLink, RouterModule, HttpClientModule,],
+  imports: [CommonModule, RouterLink, RouterModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })

@@ -8,46 +8,43 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { AuthService } from '../../services/auth/AuthService/auth.service';
-import { NewUser, User } from '../../shared/models/user.model';
+import { NewUser } from '../../shared/models/user.model';
+import { UserManagementService } from '../../services/admin/user-management.service';
 
 @Component({
-  selector: 'app-add-user-modal',
-  standalone: true,
-  imports: [
-    FormsModule,
-    ReactiveFormsModule,
-    MatCardModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MatTableModule,
-    MatDialogModule,
-  ],
-  templateUrl: './add-user-modal.component.html',
-  styleUrl: './add-user-modal.component.css'
+    selector: 'app-add-user-modal',
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        MatCardModule,
+        MatButtonModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatSelectModule,
+        MatTableModule,
+        MatDialogModule,
+    ],
+    templateUrl: './add-user-modal.component.html',
+    styleUrl: './add-user-modal.component.css'
 })
 export class AddUserModalComponent {
-  defultUser: NewUser = {
+  newUser: NewUser = {
     vorname: '',
     nachname: '',
     spitzname: '',
     email: '',
     password: '',
+    confirmPassword: '',
     role: 'user',
     securityQuestion: '',
     securityAnswer: ''
   };
 
-  newUser: any = {
-    ...this.defultUser,
-    comfirmPassword: '',
-  }
-
   constructor(
     public dialogRef: MatDialogRef<AddUserModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private authService: AuthService
+    private authService: AuthService,
+    private userManagementService: UserManagementService
   ) {}
 
   submitForm() {
@@ -60,19 +57,16 @@ export class AddUserModalComponent {
       console.error('Es fehlen erforderliche Felder.');
       return;
     }
-  
-    console.log('Benutzer wird registriert:', this.newUser);
-  
-    this.authService.register(this.newUser).subscribe({
+
+    this.authService.createUserByAdmin(this.newUser).subscribe({
       next: (response) => {
-        console.log('Benutzer erfolgreich registriert', response);
         this.dialogRef.close(response);
       },
       error: (err) => {
         console.error('Fehler bei der Registrierung:', err);
       }
     });
-  }
+  }  
   
   cancel(): void {
     this.dialogRef.close();

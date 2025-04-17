@@ -6,11 +6,10 @@ import { AuthService } from '../../../services/auth/AuthService/auth.service';
 import { User } from '../../../shared/models/user.model';
 
 @Component({
-  selector: 'app-register',
-  standalone: true,
-  imports: [CommonModule, FormsModule],
-  templateUrl: './register.component.html',
-  styleUrl: './register.component.css',
+    selector: 'app-register',
+    imports: [CommonModule, FormsModule],
+    templateUrl: './register.component.html',
+    styleUrl: './register.component.css'
 })
 export class RegisterComponent {
   email: string = '';
@@ -57,6 +56,7 @@ export class RegisterComponent {
         spitzname: this.spitzname,
         email: this.email,
         password: this.password,
+        confirmPassword: this.confirmPassword,
         role: this.role,
         securityQuestion: this.securityQuestion,
         securityAnswer: this.securityAnswer,

@@ -4,6 +4,7 @@
 /out-tsc
 /bazel-out
 .env
+.angular
 
 # Node
 /node_modules
@@ -40,3 +41,5 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+Frontend/*.tsbuildinfo
+*.tsbuildinfo

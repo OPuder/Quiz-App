@@ -5,10 +5,12 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
+const { checkUnbansOnStart } = require('./utils/unban-check');
 const { createDefaultAdmin } = require("./models/adminSetup");
+const startUnbanCronjob = require('./cron/autoUnbanCheck');
 
 const app = express();
-const port = process.env.PORT;
+
 
 app.use(express.json());
 
@@ -21,6 +23,8 @@ app.use(
 );
 
 createDefaultAdmin();
+startUnbanCronjob();
+checkUnbansOnStart();
 
 mongoose
   .connect(process.env.MONGODB_URI)

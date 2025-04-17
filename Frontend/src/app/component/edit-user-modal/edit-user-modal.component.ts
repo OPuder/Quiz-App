@@ -20,56 +20,46 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDividerModule } from '@angular/material/divider';
 
-import { User } from '../../shared/models/user.model';
+import { UserUpdatePayload } from '../../shared/models/user.model';
 import { UserManagementService } from '../../services/admin/user-management.service';
 
 @Component({
-  selector: 'app-edit-user-modal',
-  standalone: true,
-  imports: [
-    FormsModule,
-    ReactiveFormsModule,
-    MatCardModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MatTableModule,
-    MatDialogModule,
-    MatDividerModule,
-  ],
-  templateUrl: './edit-user-modal.component.html',
-  styleUrl: './edit-user-modal.component.css',
+    selector: 'app-edit-user-modal',
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        MatCardModule,
+        MatButtonModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatSelectModule,
+        MatTableModule,
+        MatDialogModule,
+        MatDividerModule,
+    ],
+    templateUrl: './edit-user-modal.component.html',
+    styleUrl: './edit-user-modal.component.css'
 })
 export class EditUserModalComponent {
   editUserForm: FormGroup;
 
   constructor(
     public dialogRef: MatDialogRef<EditUserModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: User,
+    @Inject(MAT_DIALOG_DATA) public data: UserUpdatePayload,
     private fb: FormBuilder,
     private userManagementService: UserManagementService,
     private snackBar: MatSnackBar
   ) {
     this.editUserForm = this.fb.group({
-      vorname: ['', Validators.required],
-      nachname: ['', Validators.required],
-      spitzname: ['', Validators.required],
-      email: [''],
-      role: ['user', Validators.required],
-      securityQuestion: ['', Validators.required],
-      securityAnswer: ['', Validators.required],
+      vorname: [this.data.vorname],
+      nachname: [this.data.nachname],
+      spitzname: [this.data.spitzname],
+      email: [this.data.email],
+      role: [this.data.role],
+      securityQuestion: [this.data.securityQuestion],
+      securityAnswer: [this.data.securityAnswer],
       password: [''],
-      confirmPassword: [''],
-    });
-
-    this.editUserForm.patchValue({
-      vorname: this.data.vorname,
-      nachname: this.data.nachname,
-      spitzname: this.data.spitzname,
-      role: this.data.role,
-      securityQuestion: this.data.securityQuestion,
-      securityAnswer: this.data.securityAnswer,
+      confirmPassword: ['']
     });
   }
 
@@ -77,6 +67,11 @@ export class EditUserModalComponent {
     if (this.editUserForm.invalid) return;
 
     const formValue = this.editUserForm.value;
+
+    if (!this.editUserForm.dirty && !formValue.password && !formValue.confirmPassword) {
+      this.snackBar.open('Keine Änderungen erkannt', 'OK', { duration: 2000 });
+      return;
+    }
 
     if (formValue.password || formValue.confirmPassword) {
       if (formValue.password !== formValue.confirmPassword) {
@@ -87,18 +82,16 @@ export class EditUserModalComponent {
       }
     }
 
-    const updatedUser: any = {
-      vorname: formValue.vorname,
-      nachname: formValue.nachname,
-      spitzname: formValue.spitzname,
-      role: formValue.role,
-      securityQuestion: formValue.securityQuestion,
-      securityAnswer: formValue.securityAnswer,
-    };
-
-    if (formValue.email && formValue.email.trim() !== '') {
-      updatedUser.email = formValue.email;
-    }
+  const updatedUser: UserUpdatePayload = {
+    _id: this.data._id,
+    vorname: formValue.vorname,
+    nachname: formValue.nachname,
+    spitzname: formValue.spitzname,
+    email: formValue.email,
+    role: formValue.role,
+    securityQuestion: formValue.securityQuestion,
+    securityAnswer: formValue.securityAnswer
+  };
 
     if (formValue.password) {
       updatedUser.password = formValue.password;
@@ -109,7 +102,6 @@ export class EditUserModalComponent {
 
     this.userManagementService.updateUserProfile(userId, updatedUser).subscribe({
       next: (response) => {
-        console.log('Benutzer aktualisiert:', response);
         this.dialogRef.close(response);
       },
       error: (err) => {

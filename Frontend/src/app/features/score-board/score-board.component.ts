@@ -3,11 +3,10 @@ import { Component, inject } from '@angular/core';
 import { AuthService } from '../../services/auth/AuthService/auth.service';
 
 @Component({
-  selector: 'app-score-board',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './score-board.component.html',
-  styleUrl: './score-board.component.css'
+    selector: 'app-score-board',
+    imports: [CommonModule],
+    templateUrl: './score-board.component.html',
+    styleUrl: './score-board.component.css'
 })
 export class ScoreBoardComponent{
 

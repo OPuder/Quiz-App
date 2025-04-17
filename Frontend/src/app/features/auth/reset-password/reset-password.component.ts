@@ -5,11 +5,10 @@ import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../services/auth/AuthService/auth.service';
 
 @Component({
-  selector: 'app-password-reset',
-  standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
-  templateUrl: './reset-password.component.html',
-  styleUrls: ['./reset-password.component.css']
+    selector: 'app-password-reset',
+    imports: [CommonModule, FormsModule, RouterModule],
+    templateUrl: './reset-password.component.html',
+    styleUrls: ['./reset-password.component.css']
 })
 
 export class PasswordResetComponent {
@@ -42,7 +41,6 @@ export class PasswordResetComponent {
   }
 
   checkEmail() {
-    console.log('Email check eingeleitet:', this.email);
     this.emailError = '';
     this.authService.checkEmailExists(this.email).subscribe({
       next: (response) => {
@@ -94,10 +92,9 @@ export class PasswordResetComponent {
       return;
     }
 
-    this.authService.resetPassword(this.email, this.newPassword).subscribe({
+    this.authService.resetPassword(this.email, this.securityAnswer, this.newPassword).subscribe({
       next: (response) => {
-        const returnUrl = this.router.routerState.snapshot.root.queryParams['returnUrl'] || '/';
-        this.router.navigate([returnUrl]);
+        this.router.navigate(['/app-login']);
       },
       error: (error) => {
         this.passwordError = 'Fehler beim Zurücksetzen des Passworts';
