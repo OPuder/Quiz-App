@@ -6,380 +6,381 @@
         "antwort": ["let", "Get", "set", "LETT"],
         "correctAntwort": 0,
         "uebersprungen": false,
-        "points": 5
+        "points": 2
       },
       {
         "frage": "Welche Klammern werden für eine Methode verwendet?",
         "antwort": ["()", "{}", "[]", "keine"],
         "correctAntwort": 1,
         "uebersprungen": false,
-        "points": 5
+        "points": 1
       },
       {
         "frage": "Was ist die erste Nummer in einem Array?",
         "antwort": ["6", "1", "10", "0"],
         "correctAntwort": 3,
         "uebersprungen": false,
-        "points": 5
+        "points": 2
       },
       {
         "frage": "Sind Java und JavaScript dasselbe?",
         "antwort": ["Nein", "Ähnlich", "Ja", "Egal"],
         "correctAntwort": 0,
         "uebersprungen": false,
-        "points": 5
+        "points": 3
       }
     ],
     "topicJ.easy": [
       {
-        "frage": "Wie deklariert man eine Konstante in JavaScript?",
-        "antwort": ["a) var", "b) constant", "c) const", "d) let"],
-        "correctAntwort": 2,
-        "uebersprungen": false,
-        "points": 5
-      },
-      {
-        "frage": "Wie deklariert man eine Konstante in JavaScript?",
-        "antwort": ["a) constant", "b) const", "c) let", "d) var"],
-        "correctAntwort": 1,
-        "uebersprungen": false,
-        "points": 10
-      },
-      {
-        "frage": "Wie deklariert man eine Konstante in JavaScript?",
-        "antwort": ["a) constant", "b) let", "c) const", "d) var"],
-        "correctAntwort": 2,
-        "uebersprungen": false,
-        "points": 5
-      },
-      {
-        "frage": "Wie deklariert man eine Konstante in JavaScript?",
-        "antwort": ["a) let", "b) const", "c) var", "d) constant"],
-        "correctAntwort": 1,
-        "uebersprungen": false,
-        "points": 5
-      },
-      {
-        "frage": "Wie deklariert man eine Konstante in JavaScript?",
-        "antwort": ["a) const", "b) var", "c) constant", "d) let"],
+        "frage": "Wie gibt man in JavaScript Text in der Konsole aus?",
+        "antwort": ["console.log()", "print()", "echo()", "write()"],
         "correctAntwort": 0,
         "uebersprungen": false,
-        "points": 10
+        "points": 1
       },
       {
-        "frage": "Wie deklariert man eine Konstante in JavaScript?",
-        "antwort": ["a) constant", "b) var", "c) const", "d) let"],
-        "correctAntwort": 2,
-        "uebersprungen": false,
-        "points": 10
-      },
-      {
-        "frage": "Wie deklariert man eine Konstante in JavaScript?",
-        "antwort": ["a) var", "b) let", "c) constant", "d) const"],
-        "correctAntwort": 3,
-        "uebersprungen": false,
-        "points": 10
-      },
-      {
-        "frage": "Wie deklariert man eine Konstante in JavaScript?",
-        "antwort": ["a) let", "b) var", "c) constant", "d) const"],
-        "correctAntwort": 3,
-        "uebersprungen": false,
-        "points": 6
-      },
-      {
-        "frage": "Wie deklariert man eine Konstante in JavaScript?",
-        "antwort": ["a) constant", "b) var", "c) const", "d) let"],
-        "correctAntwort": 2,
-        "uebersprungen": false,
-        "points": 9
-      },
-      {
-        "frage": "Wie deklariert man eine Konstante in JavaScript?",
-        "antwort": ["a) const", "b) constant", "c) var", "d) let"],
-        "correctAntwort": 0,
-        "uebersprungen": false,
-        "points": 10
-      },
-      {
-        "frage": "Wie deklariert man eine Konstante in JavaScript?",
-        "antwort": ["a) var", "b) constant", "c) let", "d) const"],
-        "correctAntwort": 3,
-        "uebersprungen": false,
-        "points": 5
-      },
-      {
-        "frage": "Wie deklariert man eine Konstante in JavaScript?",
-        "antwort": ["a) const", "b) var", "c) let", "d) constant"],
-        "correctAntwort": 0,
-        "uebersprungen": false,
-        "points": 9
-      },
-      {
-        "frage": "Wie deklariert man eine Konstante in JavaScript?",
-        "antwort": ["a) const", "b) let", "c) var", "d) constant"],
-        "correctAntwort": 0,
-        "uebersprungen": false,
-        "points": 7
-      },
-      {
-        "frage": "Wie deklariert man eine Konstante in JavaScript?",
-        "antwort": ["a) let", "b) const", "c) constant", "d) var"],
+        "frage": "Mit welchem Zeichen beendet man eine Anweisung normalerweise in JavaScript?",
+        "antwort": [".", ";", ":", "–"],
         "correctAntwort": 1,
         "uebersprungen": false,
-        "points": 9
+        "points": 1
       },
       {
-        "frage": "Wie deklariert man eine Konstante in JavaScript?",
-        "antwort": ["a) let", "b) var", "c) constant", "d) const"],
-        "correctAntwort": 3,
-        "uebersprungen": false,
-        "points": 10
-      },
-      {
-        "frage": "Wie deklariert man eine Konstante in JavaScript?",
-        "antwort": ["a) var", "b) constant", "c) let", "d) const"],
-        "correctAntwort": 3,
-        "uebersprungen": false,
-        "points": 6
-      },
-      {
-        "frage": "Wie deklariert man eine Konstante in JavaScript?",
-        "antwort": ["a) let", "b) constant", "c) var", "d) const"],
-        "correctAntwort": 3,
-        "uebersprungen": false,
-        "points": 8
-      },
-      {
-        "frage": "Wie deklariert man eine Konstante in JavaScript?",
-        "antwort": ["a) var", "b) constant", "c) let", "d) const"],
-        "correctAntwort": 3,
-        "uebersprungen": false,
-        "points": 5
-      },
-      {
-        "frage": "Wie deklariert man eine Konstante in JavaScript?",
-        "antwort": ["a) constant", "b) let", "c) var", "d) const"],
-        "correctAntwort": 3,
-        "uebersprungen": false,
-        "points": 10
-      },
-      {
-        "frage": "Wie deklariert man eine Konstante in JavaScript?",
-        "antwort": ["a) var", "b) constant", "c) const", "d) let"],
+        "frage": "Welches Schlüsselwort benutzt man, um eine Variable zu deklarieren?",
+        "antwort": ["define", "letus", "var", "declare"],
         "correctAntwort": 2,
         "uebersprungen": false,
-        "points": 5
+        "points": 1
       },
       {
-        "frage": "Wie deklariert man eine Konstante in JavaScript?",
-        "antwort": ["a) let", "b) constant", "c) var", "d) const"],
+        "frage": "Welcher Datentyp steht für Text in JavaScript?",
+        "antwort": ["number", "boolean", "object", "string"],
         "correctAntwort": 3,
         "uebersprungen": false,
-        "points": 9
+        "points": 1
       },
       {
-        "frage": "Wie deklariert man eine Konstante in JavaScript?",
-        "antwort": ["a) const", "b) var", "c) let", "d) constant"],
+        "frage": "Welchen Wert bekommt `typeof 42` zurück?",
+        "antwort": ["\"number\"", "\"string\"", "\"boolean\"", "\"undefined\""],
         "correctAntwort": 0,
         "uebersprungen": false,
-        "points": 6
+        "points": 1
       },
       {
-        "frage": "Wie deklariert man eine Konstante in JavaScript?",
-        "antwort": ["a) let", "b) var", "c) const", "d) constant"],
-        "correctAntwort": 2,
-        "uebersprungen": false,
-        "points": 9
-      },
-      {
-        "frage": "Wie deklariert man eine Konstante in JavaScript?",
-        "antwort": ["a) const", "b) var", "c) let", "d) constant"],
-        "correctAntwort": 0,
-        "uebersprungen": false,
-        "points": 8
-      },
-      {
-        "frage": "Wie deklariert man eine Konstante in JavaScript?",
-        "antwort": ["a) var", "b) constant", "c) const", "d) let"],
-        "correctAntwort": 2,
-        "uebersprungen": false,
-        "points": 6
-      },
-      {
-        "frage": "Wie deklariert man eine Konstante in JavaScript?",
-        "antwort": ["a) let", "b) constant", "c) const", "d) var"],
-        "correctAntwort": 2,
-        "uebersprungen": false,
-        "points": 5
-      },
-      {
-        "frage": "Wie deklariert man eine Konstante in JavaScript?",
-        "antwort": ["a) const", "b) let", "c) var", "d) constant"],
-        "correctAntwort": 0,
-        "uebersprungen": false,
-        "points": 6
-      },
-      {
-        "frage": "Wie deklariert man eine Konstante in JavaScript?",
-        "antwort": ["a) const", "b) let", "c) constant", "d) var"],
-        "correctAntwort": 0,
-        "uebersprungen": false,
-        "points": 8
-      },
-      {
-        "frage": "Wie deklariert man eine Konstante in JavaScript?",
-        "antwort": ["a) let", "b) const", "c) var", "d) constant"],
+        "frage": "Wie schreibt man einen Kommentar, der nur eine Zeile umfasst?",
+        "antwort": ["# so", "// so", "/* so */", "<!-- so -->"],
         "correctAntwort": 1,
         "uebersprungen": false,
-        "points": 9
+        "points": 1
       },
       {
-        "frage": "Wie deklariert man eine Konstante in JavaScript?",
-        "antwort": ["a) constant", "b) var", "c) let", "d) const"],
+        "frage": "Wie sieht eine leere Array‑Deklaration aus?",
+        "antwort": ["{}", "()", "[]", "<[]>"],
+        "correctAntwort": 2,
+        "uebersprungen": false,
+        "points": 1
+      },
+      {
+        "frage": "Welches dieser Werte ist in JavaScript **nicht** falsch (truthy)?",
+        "antwort": ["0", "", "null", "true"],
         "correctAntwort": 3,
         "uebersprungen": false,
-        "points": 9
+        "points": 1
       },
       {
-        "frage": "Wie deklariert man eine Konstante in JavaScript?",
-        "antwort": ["a) constant", "b) let", "c) const", "d) var"],
-        "correctAntwort": 2,
-        "uebersprungen": false,
-        "points": 8
-      },
-      {
-        "frage": "Wie deklariert man eine Konstante in JavaScript?",
-        "antwort": ["a) var", "b) const", "c) let", "d) constant"],
-        "correctAntwort": 1,
-        "uebersprungen": false,
-        "points": 6
-      },
-      {
-        "frage": "Wie deklariert man eine Konstante in JavaScript?",
-        "antwort": ["a) let", "b) constant", "c) const", "d) var"],
-        "correctAntwort": 2,
-        "uebersprungen": false,
-        "points": 7
-      },
-      {
-        "frage": "Wie deklariert man eine Konstante in JavaScript?",
-        "antwort": ["a) const", "b) var", "c) constant", "d) let"],
+        "frage": "Wie beginnt man eine bedingte Anweisung?",
+        "antwort": ["if", "for", "while", "switch"],
         "correctAntwort": 0,
         "uebersprungen": false,
-        "points": 8
+        "points": 1
       },
       {
-        "frage": "Wie deklariert man eine Konstante in JavaScript?",
-        "antwort": ["a) constant", "b) const", "c) var", "d) let"],
+        "frage": "Wofür steht `NaN` in JavaScript?",
+        "antwort": [
+          "Not a Node",
+          "Not a Number",
+          "Null and Null",
+          "Name as Null"
+        ],
         "correctAntwort": 1,
         "uebersprungen": false,
-        "points": 8
-      },
-      {
-        "frage": "Wie deklariert man eine Konstante in JavaScript?",
-        "antwort": ["a) const", "b) var", "c) let", "d) constant"],
+        "points": 1
+      },{
+        "frage": "Welches Zeichen benutzt man in JavaScript für die Addition?",
+        "antwort": ["+", "-", "*", "/"],
         "correctAntwort": 0,
         "uebersprungen": false,
-        "points": 7
+        "points": 1
       },
       {
-        "frage": "Wie deklariert man eine Konstante in JavaScript?",
-        "antwort": ["a) let", "b) var", "c) constant", "d) const"],
+        "frage": "Wie deklariert man eine Funktion namens 'hello'?",
+        "antwort": ["func hello() {}", "def hello() {}", "fn hello() {}", "function hello() {}"],
         "correctAntwort": 3,
         "uebersprungen": false,
-        "points": 8
+        "points": 1
       },
       {
-        "frage": "Wie deklariert man eine Konstante in JavaScript?",
-        "antwort": ["a) constant", "b) var", "c) const", "d) let"],
+        "frage": "Mit welchem Befehl zeigt man ein Popup-Fenster mit einer Nachricht an?",
+        "antwort": ["prompt('Hi')", "popup('Hi')", "alert('Hi')", "console.log('Hi')"],
         "correctAntwort": 2,
         "uebersprungen": false,
-        "points": 10
+        "points": 1
       },
       {
-        "frage": "Wie deklariert man eine Konstante in JavaScript?",
-        "antwort": ["a) var", "b) const", "c) constant", "d) let"],
+        "frage": "Wie bestimmt man die Länge eines Arrays 'arr'?",
+        "antwort": ["arr.len", "arr.length", "len(arr)", "arr.size"],
         "correctAntwort": 1,
         "uebersprungen": false,
-        "points": 7
+        "points": 1
       },
       {
-        "frage": "Wie deklariert man eine Konstante in JavaScript?",
-        "antwort": ["a) let", "b) var", "c) const", "d) constant"],
-        "correctAntwort": 2,
-        "uebersprungen": false,
-        "points": 10
-      },
-      {
-        "frage": "Wie deklariert man eine Konstante in JavaScript?",
-        "antwort": ["a) constant", "b) const", "c) let", "d) var"],
-        "correctAntwort": 1,
-        "uebersprungen": false,
-        "points": 9
-      },
-      {
-        "frage": "Wie deklariert man eine Konstante in JavaScript?",
-        "antwort": ["a) constant", "b) var", "c) const", "d) let"],
-        "correctAntwort": 2,
-        "uebersprungen": false,
-        "points": 6
-      },
-      {
-        "frage": "Wie deklariert man eine Konstante in JavaScript?",
-        "antwort": ["a) let", "b) const", "c) var", "d) constant"],
-        "correctAntwort": 1,
-        "uebersprungen": false,
-        "points": 8
-      },
-      {
-        "frage": "Wie deklariert man eine Konstante in JavaScript?",
-        "antwort": ["a) let", "b) const", "c) constant", "d) var"],
-        "correctAntwort": 1,
-        "uebersprungen": false,
-        "points": 6
-      },
-      {
-        "frage": "Wie deklariert man eine Konstante in JavaScript?",
-        "antwort": ["a) let", "b) const", "c) constant", "d) var"],
-        "correctAntwort": 1,
-        "uebersprungen": false,
-        "points": 9
-      },
-      {
-        "frage": "Wie deklariert man eine Konstante in JavaScript?",
-        "antwort": ["a) constant", "b) let", "c) var", "d) const"],
-        "correctAntwort": 3,
-        "uebersprungen": false,
-        "points": 5
-      },
-      {
-        "frage": "Wie deklariert man eine Konstante in JavaScript?",
-        "antwort": ["a) const", "b) constant", "c) let", "d) var"],
+        "frage": "Welcher Operator überprüft auf strikte Gleichheit (Wert und Typ)?",
+        "antwort": ["===", "==", "!=", "!=="],
         "correctAntwort": 0,
         "uebersprungen": false,
-        "points": 7
+        "points": 1
       },
       {
-        "frage": "Wie deklariert man eine Konstante in JavaScript?",
-        "antwort": ["a) constant", "b) const", "c) let", "d) var"],
+        "frage": "Wie wandelt man den String '123' in eine Zahl um?",
+        "antwort": ["String('123')", "toNumber('123')", "Number('123')", "makeInt('123')"],
+        "correctAntwort": 2,
+        "uebersprungen": false,
+        "points": 1
+      },
+      {
+        "frage": "Wie greift man auf das erste Element eines Arrays 'arr' zu?",
+        "antwort": ["arr[1]", "arr.first", "arr[first]", "arr[0]"],
+        "correctAntwort": 3,
+        "uebersprungen": false,
+        "points": 1
+      },
+      {
+        "frage": "Wie kommentiert man in JavaScript mehrere Zeilen?",
+        "antwort": ["// Zeile1\n// Zeile2", "# Zeile1\n# Zeile2", "<!-- Zeile1 -->", "/* Zeile1\n   Zeile2 */"],
+        "correctAntwort": 3,
+        "uebersprungen": false,
+        "points": 1
+      },
+      {
+        "frage": "Welchen Wert liefert der Ausdruck '5' + 3?",
+        "antwort": ["Error", "53", "8", "NaN"],
         "correctAntwort": 1,
         "uebersprungen": false,
-        "points": 5
+        "points": 1
       },
       {
-        "frage": "Wie deklariert man eine Konstante in JavaScript?",
-        "antwort": ["a) var", "b) let", "c) constant", "d) const"],
-        "correctAntwort": 3,
+        "frage": "Wie findet man ein Element mit der ID 'main' im Browser?",
+        "antwort": ["document.querySelector('#main')", "window.getElementById('main')", "document.getElementById('main')", "document.find('#main')"],
+        "correctAntwort": 2,
         "uebersprungen": false,
-        "points": 7
+        "points": 1
+      },{
+        "frage": "Wie verbindet man in JavaScript zwei Strings?",
+        "antwort": ["concat()", "+", "/", "."],
+        "correctAntwort": 1,
+        "uebersprungen": false,
+        "points": 1
       },
       {
-        "frage": "Wie deklariert man eine Konstante in JavaScript?",
-        "antwort": ["a) var", "b) let", "c) constant", "d) const"],
+        "frage": "Wie deklariert man in JavaScript ein leeres Objekt?",
+        "antwort": ["{}", "()", "[]", "<>"],
+        "correctAntwort": 0,
+        "uebersprungen": false,
+        "points": 1
+      },
+      {
+        "frage": "Welches Schlüsselwort erstellt eine unveränderliche Konstante?",
+        "antwort": ["let", "var", "constant", "const"],
         "correctAntwort": 3,
         "uebersprungen": false,
-        "points": 6
+        "points": 1
+      },
+      {
+        "frage": "Welche Methode wandelt einen JSON‑String in ein Objekt um?",
+        "antwort": ["JSON.stringify()", "JSON.parse()", "toJSON()", "parse()"],
+        "correctAntwort": 1,
+        "uebersprungen": false,
+        "points": 1
+      },
+      {
+        "frage": "Mit welchem Befehl verzögert man eine Funktion um eine bestimmte Zeit?",
+        "antwort": ["wait()", "delay()", "setTimeout()", "timer()"],
+        "correctAntwort": 2,
+        "uebersprungen": false,
+        "points": 1
+      },
+      {
+        "frage": "Welcher Operator testet auf Ungleichheit?",
+        "antwort": ["x != 5", "x !== 5", "x <> 5", "x not 5"],
+        "correctAntwort": 0,
+        "uebersprungen": false,
+        "points": 1
+      },
+      {
+        "frage": "Welchen Rückgabewert liefert `typeof true`?",
+        "antwort": ["\"string\"", "\"object\"", "\"boolean\"", "\"number\""],
+        "correctAntwort": 2,
+        "uebersprungen": false,
+        "points": 1
+      },
+      {
+        "frage": "Wie fügt man ein Element ans Ende eines Arrays `arr` an?",
+        "antwort": ["arr.unshift()", "arr.add()", "arr.push()", "arr.append()"],
+        "correctAntwort": 2,
+        "uebersprungen": false,
+        "points": 1
+      },
+      {
+        "frage": "Wie entfernt man das letzte Element aus einem Array `arr`?",
+        "antwort": ["arr.shift()", "arr.unshift()", "arr.push()", "arr.pop()"],
+        "correctAntwort": 3,
+        "uebersprungen": false,
+        "points": 1
+      },
+      {
+        "frage": "Welche Methode erzeugt eine Zufallszahl zwischen 0 und 1?",
+        "antwort": ["rand()", "Math.rand()", "random()", "Math.random()"],
+        "correctAntwort": 3,
+        "uebersprungen": false,
+        "points": 1
+      }, {
+        "frage": "Wie überprüft man in JavaScript, ob 5 gleich '5' ist?",
+        "antwort": ["==", "===", "!=", "!=="],
+        "correctAntwort": 0,
+        "uebersprungen": false,
+        "points": 1
+      },
+      {
+        "frage": "Wie rufst du eine Funktion namens `sayHello` auf?",
+        "antwort": ["sayHello;", "call sayHello()", "sayHello()", "function sayHello() {}"],
+        "correctAntwort": 2,
+        "uebersprungen": false,
+        "points": 1
+      },
+      {
+        "frage": "Mit welchem Befehl brichst du eine Schleife vorzeitig ab?",
+        "antwort": ["stop", "break", "exit", "return"],
+        "correctAntwort": 1,
+        "uebersprungen": false,
+        "points": 1
+      },
+      {
+        "frage": "Welche Methode verbindet zwei Arrays `arr1` und `arr2`?",
+        "antwort": ["arr1.join(arr2)", "arr1.concat(arr2)", "arr1.append(arr2)", "arr1.add(arr2)"],
+        "correctAntwort": 1,
+        "uebersprungen": false,
+        "points": 1
+      },
+      {
+        "frage": "Welches Zeichen verwendet man für den Modulo‑Operator (Restwert)?",
+        "antwort": ["#", "%", "&", "$"],
+        "correctAntwort": 1,
+        "uebersprungen": false,
+        "points": 1
+      },
+      {
+        "frage": "Wie greifst du auf das dritte Element eines Arrays `arr` zu?",
+        "antwort": ["arr[2]", "arr(2)", "arr{2}", "arr.2"],
+        "correctAntwort": 0,
+        "uebersprungen": false,
+        "points": 1
+      },
+      {
+        "frage": "Welches Schlüsselwort startest du, um eine Schleife auszuführen?",
+        "antwort": ["loop", "for", "while", "foreach"],
+        "correctAntwort": 1,
+        "uebersprungen": false,
+        "points": 1
+      },
+      {
+        "frage": "Wie zeigst du ein Popup-Fenster mit einer Nachricht an?",
+        "antwort": ["alert('Hi')", "console.log('Hi')", "document.write('Hi')", "prompt('Hi')"],
+        "correctAntwort": 0,
+        "uebersprungen": false,
+        "points": 1
+      },
+      {
+        "frage": "Wie formulierst du eine if‑Anweisung, die prüft, ob x kleiner als y ist?",
+        "antwort": ["if x < y", "if (x < y)", "if x.less(y)", "if x | y"],
+        "correctAntwort": 1,
+        "uebersprungen": false,
+        "points": 1
+      },
+      {
+        "frage": "Welches Schlüsselwort beendet eine Funktion und gibt einen Wert zurück?",
+        "antwort": ["stop", "exit", "break", "return"],
+        "correctAntwort": 3,
+        "uebersprungen": false,
+        "points": 1
+      }, {
+        "frage": "Wie schreibt man in JavaScript eine Ausgabe in die Konsole?",
+        "antwort": ["console.log()", "print()", "show()", "display()"],
+        "correctAntwort": 0,
+        "uebersprungen": false,
+        "points": 1
+      },
+      {
+        "frage": "Mit welchem Zeichen startet man einen Einzeiler‑Kommentar?",
+        "antwort": ["//", "/*", "#", "<!--"],
+        "correctAntwort": 0,
+        "uebersprungen": false,
+        "points": 1
+      },
+      {
+        "frage": "Wie endet man normalerweise eine JavaScript‑Anweisung?",
+        "antwort": [";", ":", ".", "!"],
+        "correctAntwort": 0,
+        "uebersprungen": false,
+        "points": 1
+      },
+      {
+        "frage": "Mit welchem Wort legt man eine Variable an?",
+        "antwort": ["var", "let", "const", "new"],
+        "correctAntwort": 0,
+        "uebersprungen": false,
+        "points": 1
+      },
+      {
+        "frage": "Welcher Datentyp ist Text?",
+        "antwort": ["string", "number", "boolean", "object"],
+        "correctAntwort": 0,
+        "uebersprungen": false,
+        "points": 1
+      },
+      {
+        "frage": "Wie schreibt man ein leeres Array?",
+        "antwort": ["[]", "{}", "()","<>"],
+        "correctAntwort": 0,
+        "uebersprungen": false,
+        "points": 1
+      },
+      {
+        "frage": "Wie prüft man, ob x größer als y ist?",
+        "antwort": ["if (x > y)", "if x > y", "check(x > y)", "when x > y"],
+        "correctAntwort": 0,
+        "uebersprungen": false,
+        "points": 1
+      },
+      {
+        "frage": "Welcher Wert kommt bei typeof true?",
+        "antwort": ["\"boolean\"", "\"string\"", "\"number\"", "\"object\""],
+        "correctAntwort": 0,
+        "uebersprungen": false,
+        "points": 1
+      },
+      {
+        "frage": "Wie ruft man eine Funktion namens test auf?",
+        "antwort": ["test()", "call test", "run test()", "execute test()"],
+        "correctAntwort": 0,
+        "uebersprungen": false,
+        "points": 1
+      },
+      {
+        "frage": "Welches Zeichen verbindet zwei Zeichenketten (Strings)?",
+        "antwort": ["+", "-", "*", "/"],
+        "correctAntwort": 0,
+        "uebersprungen": false,
+        "points": 1
       }
     ],
     "topicJ.medium": [
