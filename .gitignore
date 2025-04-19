@@ -4,7 +4,7 @@
 /out-tsc
 /bazel-out
 .env
-.angular
+.@angular/*
 
 # Node
 /node_modules
@@ -22,6 +22,7 @@ yarn-error.log
 *.sublime-workspace
 
 # Visual Studio Code
+/.vscode
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
@@ -43,3 +44,4 @@ testem.log
 Thumbs.db
 Frontend/*.tsbuildinfo
 *.tsbuildinfo
+Frontend/.angular/

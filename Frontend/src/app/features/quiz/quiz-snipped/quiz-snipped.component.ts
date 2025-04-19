@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { QuizlogicService } from '../../../features/quiz/services/quizlogic.service';
+import { AuthService } from '../../../services/auth/AuthService/auth.service';
+import { UserManagementService } from '../../../services/admin/user-management.service';
 
 @Component({
     selector: 'app-quiz-Snipped',
@@ -8,8 +10,14 @@ import { QuizlogicService } from '../../../features/quiz/services/quizlogic.serv
     templateUrl: './quiz-snipped.component.html',
     styleUrl: './quiz-snipped.component.css'
 })
+
 export class QuizSnippedComponent implements OnInit {
-  constructor(private quizlogicService: QuizlogicService) {}
+
+  constructor(
+    private userManagementService: UserManagementService,
+    public quizlogicService: QuizlogicService,
+    public authService: AuthService,
+  ) {}
 
   get skipRunde(): boolean {
     return this.quizlogicService.skipRunde;
@@ -19,8 +27,26 @@ export class QuizSnippedComponent implements OnInit {
     this.quizlogicService.initializeQuiz();
   }
 
+  get aktiveFrage() {
+    return this.quizlogicService.skipRunde
+      ? this.quizlogicService.unbeantworteteFragen[this.quizlogicService.skipFragenIndex]
+      : this.quizlogicService.fragen[this.quizlogicService.aktuelleFrageIndex];
+  }
+
+  fragenAnzahl() {
+    return this.quizlogicService.fragenAnzahl;
+  }
+
+  gesamtFragenAnzahl(): number {
+    return this.quizlogicService.fragen.length;
+  }
+
   punktzahl() {
     return this.quizlogicService.punktzahl;
+  }
+
+  maxPunktzahl(): number {
+    return this.quizlogicService.maxPunktzahl();
   }
 
   fragenNummer(): number | string {

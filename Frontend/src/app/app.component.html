@@ -13,9 +13,22 @@
           🧩 Quiz Auswahl
         </a>
         <ul class="dropdown-menu">
-          <li><a class="dropdown-item" routerLink="/app-java-script-startseite">📜 JavaScript</a></li>
-          <li><a class="dropdown-item" routerLink="/app-type-script-startseite">⚙️ TypeScript</a></li>
-          <li><a class="dropdown-item" routerLink="/app-angular-startseite">🅰️ Angular</a></li>
+          <li>
+            <a class="dropdown-item" routerLink="/app-java-script-startseite">
+              <img src="https://cdn.worldvectorlogo.com/logos/logo-javascript.svg" alt="JS" class="nav-icon" />
+              JavaScript
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item" routerLink="/app-type-script-startseite">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/4/4c/Typescript_logo_2020.svg" alt="TS" class="nav-icon" />
+              TypeScript
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item" routerLink="/app-angular-startseite">
+              <img src="https://angular.io/assets/images/logos/angular/angular.svg" alt="AN" class="nav-icon" />
+              Angular</a></li>
         </ul>
       </li>
       <a *ngIf="authService.isLoggedIn()" routerLink="/app-score-board">🏆 Scoreboard</a>

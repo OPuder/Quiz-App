@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { QuizlogicService } from '../../../features/quiz/services/quizlogic.service';
+import { AuthService } from '../../../services/auth/AuthService/auth.service';
 
 @Component({
     selector: 'app-quiz',
@@ -9,18 +10,39 @@ import { QuizlogicService } from '../../../features/quiz/services/quizlogic.serv
     styleUrl: './quiz.component.css'
 })
 export class QuizComponent implements OnInit {
-  constructor(private quizlogicService: QuizlogicService) {}
+  constructor(
+    public quizlogicService: QuizlogicService,
+    public authService: AuthService
+  ) {}
 
   get skipRunde(): boolean {
     return this.quizlogicService.skipRunde;
+  }
+
+  get aktiveFrage() {
+    return this.quizlogicService.skipRunde
+      ? this.quizlogicService.unbeantworteteFragen[this.quizlogicService.skipFragenIndex]
+      : this.quizlogicService.fragen[this.quizlogicService.aktuelleFrageIndex];
   }
 
   ngOnInit(): void {
     this.quizlogicService.initializeQuiz();
   }
 
+  fragenAnzahl() {
+    return this.quizlogicService.fragenAnzahl;
+  }
+
+  gesamtFragenAnzahl() {
+    return this.quizlogicService.fragen.length;
+  }
+  
   punktzahl() {
     return this.quizlogicService.punktzahl;
+  }
+
+  maxPunktzahl(): number {
+    return this.quizlogicService.maxPunktzahl();
   }
 
   fragenNummer(): number | string {
